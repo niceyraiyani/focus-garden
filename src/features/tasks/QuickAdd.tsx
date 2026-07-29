@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { createTask } from '../../data/tasks'
-import { Icon } from '../../components/Icon'
+import { Icon, captureIconFor } from '../../components/Icon'
+import { useSettings } from '../../app/SettingsContext'
 import type { ID } from '../../domain/types'
 
 interface QuickAddProps {
@@ -13,6 +14,7 @@ interface QuickAddProps {
 
 /** Fast capture: type a title, press Enter, keep going. */
 export function QuickAdd({ listId, placeholder, autoFocus, onAdded }: QuickAddProps) {
+  const { settings } = useSettings()
   const [title, setTitle] = useState('')
 
   async function submit(e: FormEvent) {
@@ -27,7 +29,7 @@ export function QuickAdd({ listId, placeholder, autoFocus, onAdded }: QuickAddPr
   return (
     <form className="quick-add" onSubmit={submit}>
       <span className="quick-add-icon" aria-hidden="true">
-        <Icon name="seedling" />
+        <Icon name={captureIconFor(settings.vibe)} />
       </span>
       <input
         className="quick-add-input"

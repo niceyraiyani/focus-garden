@@ -9,7 +9,7 @@ import { QuickAdd } from '../tasks/QuickAdd'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
 import { Flourish } from '../../components/Flourish'
 import { Burst } from '../../components/Burst'
-import { Icon } from '../../components/Icon'
+import { Icon, greetingIconFor } from '../../components/Icon'
 import { InboxTriage } from './InboxTriage'
 import { todayFocusedMs, currentStreak } from '../insights/aggregations'
 import { formatMinutes } from '../../lib/time'
@@ -60,7 +60,7 @@ export function HomePage() {
       <div className="home-hero">
         <div>
           <h1 className="home-greeting">
-            {greeting()} <Icon name="flower" className="wave" />
+            {greeting()} <Icon name={greetingIconFor(settings.vibe)} className="wave" />
           </h1>
           <p className="home-sub">
             {focusedMs > 0

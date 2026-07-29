@@ -8,7 +8,7 @@ Capture the swirl of thoughts in your head, organize them when you're ready,
 pick a few things to focus on, and lock in with a gentle timer that flexes to
 your flow. Private, local-first, and yours.
 
-**[▶ Open the live app](https://niceyraiyani.github.io/focus-garden/)**  ·  **[⬇ Download desktop](https://github.com/niceyraiyani/focus-garden/releases/latest)**
+**[▶ Open the live app](https://niceyraiyani.github.io/lock.in/)**  ·  **[⬇ Download desktop](https://github.com/niceyraiyani/lock.in/releases/latest)**
 
 ![lock.in — Today](docs/screenshots/today.png)
 
@@ -107,12 +107,12 @@ click *Install* to run it in its own window like a native app.
 ## ⬇ Get lock.in
 
 ### Use it in your browser (nothing to install)
-Just open **<https://niceyraiyani.github.io/focus-garden/>**. To keep it handy,
+Just open **<https://niceyraiyani.github.io/lock.in/>**. To keep it handy,
 click the install icon in your address bar to pin it as an app.
 
 ### Download the desktop app (adds real site blocking)
 Grab the latest installer from the
-**[Releases page](https://github.com/niceyraiyani/focus-garden/releases/latest)**:
+**[Releases page](https://github.com/niceyraiyani/lock.in/releases/latest)**:
 
 - **macOS** — the universal `.dmg`
 - **Windows** — the `.exe` (or `.msi`) installer

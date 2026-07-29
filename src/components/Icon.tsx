@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
+import type { Vibe } from '../domain/types'
 
 export type IconName =
   | 'sun'
@@ -36,6 +37,8 @@ export type IconName =
   | 'tulip'
   | 'sparkle'
   | 'bookmark'
+  | 'bolt'
+  | 'cpu'
 
 const PATHS: Record<IconName, ReactNode> = {
   sun: (
@@ -181,6 +184,14 @@ const PATHS: Record<IconName, ReactNode> = {
   ),
   sparkle: <path d="M12 3c.7 4.2 2.1 5.6 6.3 6.3-4.2.7-5.6 2.1-6.3 6.3-.7-4.2-2.1-5.6-6.3-6.3C9.9 8.6 11.3 7.2 12 3z" />,
   bookmark: <path d="M7 4h10v16l-5-3.6L7 20z" />,
+  bolt: <path d="M13 2 4.5 13.2a.6.6 0 0 0 .48.95H11l-1 8 8.5-11.2a.6.6 0 0 0-.48-.95H12z" />,
+  cpu: (
+    <>
+      <rect x="7" y="7" width="10" height="10" rx="2" />
+      <path d="M10 2.5V5M14 2.5V5M10 19v2.5M14 19v2.5M2.5 10H5M2.5 14H5M19 10h2.5M19 14h2.5" />
+      <rect x="10.5" y="10.5" width="3" height="3" rx="0.6" fill="currentColor" stroke="none" />
+    </>
+  ),
 }
 
 interface IconProps {
@@ -222,4 +233,26 @@ export function isIconName(value: string): value is IconName {
 export function ListGlyph({ icon, className }: { icon: string; className?: string }) {
   if (isIconName(icon)) return <Icon name={icon} className={className} />
   return <span className={className}>{icon}</span>
+}
+
+// --- Vibe-aware icon choices (keep motifs on-theme per vibe) ---
+
+/** The unit icon for the 1–5 effort rating. */
+export function effortIconFor(vibe: Vibe | undefined): IconName {
+  return vibe === 'robot' ? 'bolt' : vibe === 'plain' ? 'star' : 'flower'
+}
+
+/** The little decorative icon beside the Today greeting. */
+export function greetingIconFor(vibe: Vibe | undefined): IconName {
+  return vibe === 'robot' ? 'sparkle' : vibe === 'plain' ? 'sun' : 'flower'
+}
+
+/** The leading icon in the quick-capture box. */
+export function captureIconFor(vibe: Vibe | undefined): IconName {
+  return vibe === 'robot' ? 'sparkle' : vibe === 'plain' ? 'plus' : 'seedling'
+}
+
+/** The icon for the "Needs a home" triage card. */
+export function needsHomeIconFor(vibe: Vibe | undefined): IconName {
+  return vibe === 'flowers' ? 'plant' : 'inbox'
 }

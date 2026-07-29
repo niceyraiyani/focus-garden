@@ -5,8 +5,9 @@ import { updateTask } from '../../data/tasks'
 import { localDateKey } from '../../lib/date'
 import { TaskRow } from '../tasks/TaskRow'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
-import { Icon } from '../../components/Icon'
+import { Icon, needsHomeIconFor } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
+import { useSettings } from '../../app/SettingsContext'
 
 const MAX_SHOWN = 5
 
@@ -22,6 +23,7 @@ function ageDays(createdAt: number): number {
  */
 export function InboxTriage({ tasks, lists, tags }: { tasks: Task[]; lists: List[]; tags: Tag[] }) {
   const { toast } = useToast()
+  const { settings } = useSettings()
   const [openTask, setOpenTask] = useState<Task | null>(null)
 
   if (tasks.length === 0) return null
@@ -41,7 +43,7 @@ export function InboxTriage({ tasks, lists, tags }: { tasks: Task[]; lists: List
   return (
     <section className="card triage">
       <div className="triage-head">
-        <h2 className="group-title"><Icon name="plant" /> Needs a home ({tasks.length})</h2>
+        <h2 className="group-title"><Icon name={needsHomeIconFor(settings.vibe)} /> Needs a home ({tasks.length})</h2>
         <Link to="/inbox" className="triage-link">
           organize all →
         </Link>

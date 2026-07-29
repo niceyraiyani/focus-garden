@@ -8,7 +8,7 @@ import react from '@vitejs/plugin-react'
 //  - GitHub Pages project site is served from '/<repo>/'
 // Override with the VITE_BASE env var (e.g. '/' for a user/organization page).
 export default defineConfig(({ command }) => ({
-  base: process.env.VITE_BASE ?? (command === 'build' ? '/focus-garden/' : '/'),
+  base: process.env.VITE_BASE ?? (command === 'build' ? '/lock.in/' : '/'),
   plugins: [react()],
   test: {
     environment: 'jsdom',

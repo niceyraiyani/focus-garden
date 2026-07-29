@@ -1,6 +1,7 @@
 import type { EffortLevel } from '../domain/types'
 import { EFFORT_LEVELS, effortMeta } from '../domain/effort'
-import { Icon } from './Icon'
+import { Icon, effortIconFor } from './Icon'
+import { useSettings } from '../app/SettingsContext'
 
 interface EffortFlowersProps {
   value: EffortLevel
@@ -8,8 +9,14 @@ interface EffortFlowersProps {
   readOnly?: boolean
 }
 
-/** 1-5 flower effort control, or read-only display. */
+/**
+ * 1–5 effort control. The unit icon follows the current vibe: flowers for the
+ * floral vibe, a bolt for robot, a star for plain. Filled units = the level.
+ */
 export function EffortFlowers({ value, onChange, readOnly }: EffortFlowersProps) {
+  const { settings } = useSettings()
+  const icon = effortIconFor(settings.vibe)
+
   if (readOnly) {
     if (!value) return null
     const meta = effortMeta(value)
@@ -17,7 +24,7 @@ export function EffortFlowers({ value, onChange, readOnly }: EffortFlowersProps)
       <span className="flowers" title={meta ? `Effort: ${meta.label}` : undefined} aria-label={meta ? `Effort ${meta.label}` : 'No effort set'}>
         {EFFORT_LEVELS.map((e) => (
           <span key={e.level} className={`flower-btn ${e.level <= value ? 'flower-btn--on' : ''}`}>
-            <Icon name="flower" filled={e.level <= value} />
+            <Icon name={icon} filled={e.level <= value} />
           </span>
         ))}
       </span>
@@ -35,7 +42,7 @@ export function EffortFlowers({ value, onChange, readOnly }: EffortFlowersProps)
           title={`${e.label} — ${e.hint}`}
           onClick={() => onChange?.(e.level === value ? (0 as EffortLevel) : e.level)}
         >
-          <Icon name="flower" filled={e.level <= value} />
+          <Icon name={icon} filled={e.level <= value} />
         </button>
       ))}
     </span>
