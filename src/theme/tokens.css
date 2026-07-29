@@ -8,90 +8,91 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  /* Flat blue-black base + raised surfaces. */
-  --bg: #0d1117;
-  --surface: #141b2d;
-  --surface-2: #1b2438;
-  --surface-3: #222c44;
-  --border: #2b3550;
-  --border-strong: #3a4568;
+  /* Warm espresso base + raised surfaces (no blue). */
+  --bg: #17130f;
+  --surface: #211b15;
+  --surface-2: #2b241b;
+  --surface-3: #372e23;
+  --border: #3c3227;
+  --border-strong: #4e4133;
 
-  /* Body text: soft lavender-white, never pure white. */
-  --fg: #e8e4f6;
-  --fg-muted: #aab2cc;
-  --fg-subtle: #737c99;
+  /* Body text: warm cream, never pure white. */
+  --fg: #efe6d6;
+  --fg-muted: #b8aa93;
+  --fg-subtle: #877962;
 
-  /* Flat pastel accents. */
-  --accent-lavender: #c4b5fd;
-  --accent-pink: #f9a8d4;
-  --accent-mint: #a7f3d0;
-  --accent-blue: #93c5fd;
-  --accent-peach: #fecdc5;
-  --accent-yellow: #fde68a;
+  /* Flat earthy accents (no blue). */
+  --accent-lavender: #d3a67d; /* warm clay (primary tone) */
+  --accent-pink: #e1a49c; /* dusty rose */
+  --accent-mint: #a9c8a3; /* sage */
+  --accent-blue: #97b98f; /* soft moss (replaces blue) */
+  --accent-peach: #edb28d;
+  --accent-yellow: #e4c67d; /* honey */
 
   /* Primary interactive (flat, hard hover swap). */
-  --primary: #c4b5fd;
-  --primary-fg: #171326;
-  --primary-hover: #d8ccff;
+  --primary: #d3a67d;
+  --primary-fg: #241a12;
+  --primary-hover: #e4b88f;
 
   /* Emphasis ring that replaces glow (flat, semi-transparent). */
-  --ring: rgba(196, 181, 253, 0.55);
+  --ring: rgba(211, 166, 125, 0.5);
 
   /* Chip/soft accent fills (flat translucent). */
-  --soft-lavender: rgba(196, 181, 253, 0.16);
-  --soft-pink: rgba(249, 168, 212, 0.16);
-  --soft-mint: rgba(167, 243, 208, 0.16);
-  --soft-blue: rgba(147, 197, 253, 0.16);
-  --soft-peach: rgba(254, 205, 197, 0.16);
-  --soft-yellow: rgba(253, 230, 138, 0.16);
+  --soft-lavender: rgba(211, 166, 125, 0.16);
+  --soft-pink: rgba(225, 164, 156, 0.16);
+  --soft-mint: rgba(169, 200, 163, 0.16);
+  --soft-blue: rgba(151, 185, 143, 0.16);
+  --soft-peach: rgba(237, 178, 141, 0.16);
+  --soft-yellow: rgba(228, 198, 125, 0.16);
 
-  --danger: #f9a8d4;
-  --success: #a7f3d0;
+  --danger: #e0897c;
+  --success: #a9c8a3;
 
-  /* Subtle star/grid texture dot color. */
-  --texture-dot: rgba(196, 181, 253, 0.06);
+  /* Subtle texture dot color. */
+  --texture-dot: rgba(211, 166, 125, 0.06);
 }
 
 [data-theme='light'] {
   color-scheme: light;
 
-  --bg: #f7f4fd;
-  --surface: #ffffff;
-  --surface-2: #f2ecfb;
-  --surface-3: #eae4f7;
-  --border: #e5ddf3;
-  --border-strong: #d3c7ec;
+  /* Warm cream, no blue. */
+  --bg: #f7f0e5;
+  --surface: #fffdf8;
+  --surface-2: #f3ead9;
+  --surface-3: #ece0ca;
+  --border: #e7dcc6;
+  --border-strong: #d8c8ab;
 
-  /* Dark lavender-charcoal, not pure black. */
-  --fg: #2b2542;
-  --fg-muted: #5e5878;
-  --fg-subtle: #8a84a3;
+  /* Warm dark brown text, not pure black. */
+  --fg: #3a3125;
+  --fg-muted: #6c6250;
+  --fg-subtle: #968a75;
 
-  /* Same pastel identity; used for line art, chips, accents. */
-  --accent-lavender: #a78bfa;
-  --accent-pink: #ec6fb8;
-  --accent-mint: #34d399;
-  --accent-blue: #60a5fa;
-  --accent-peach: #fb9d8f;
-  --accent-yellow: #eab308;
+  /* Same earthy identity, deepened for contrast on cream. */
+  --accent-lavender: #b87c4b; /* clay */
+  --accent-pink: #cf7d73;
+  --accent-mint: #6f9d68;
+  --accent-blue: #789e6b; /* moss (replaces blue) */
+  --accent-peach: #cf885c;
+  --accent-yellow: #bf963c;
 
-  --primary: #7c5cff;
-  --primary-fg: #ffffff;
-  --primary-hover: #6a49f0;
+  --primary: #b87c4b;
+  --primary-fg: #fffdf8;
+  --primary-hover: #a56b3d;
 
-  --ring: rgba(124, 92, 255, 0.35);
+  --ring: rgba(184, 124, 75, 0.35);
 
-  --soft-lavender: rgba(124, 92, 255, 0.12);
-  --soft-pink: rgba(236, 111, 184, 0.12);
-  --soft-mint: rgba(52, 211, 153, 0.14);
-  --soft-blue: rgba(96, 165, 250, 0.12);
-  --soft-peach: rgba(251, 157, 143, 0.14);
-  --soft-yellow: rgba(234, 179, 8, 0.14);
+  --soft-lavender: rgba(184, 124, 75, 0.14);
+  --soft-pink: rgba(207, 125, 115, 0.14);
+  --soft-mint: rgba(111, 157, 104, 0.16);
+  --soft-blue: rgba(120, 158, 107, 0.16);
+  --soft-peach: rgba(207, 136, 92, 0.16);
+  --soft-yellow: rgba(191, 150, 60, 0.16);
 
-  --danger: #e5578f;
-  --success: #10b981;
+  --danger: #cf6a5c;
+  --success: #4f8a48;
 
-  --texture-dot: rgba(124, 92, 255, 0.05);
+  --texture-dot: rgba(184, 124, 75, 0.05);
 }
 
 :root {

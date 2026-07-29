@@ -5,14 +5,14 @@ import { createList } from '../data/lists'
 import { useActiveSession } from '../features/focus/useFocusSession'
 import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { Flourish } from '../components/Flourish'
+import { Icon, ListGlyph } from '../components/Icon'
+import type { IconName } from '../components/Icon'
 import { MeadowBackground } from '../components/MeadowBackground'
 
-function NavItem({ to, icon, label, end }: { to: string; icon: string; label: string; end?: boolean }) {
+function NavItem({ to, icon, label, end }: { to: string; icon: IconName; label: string; end?: boolean }) {
   return (
     <NavLink to={to} end={end} className={({ isActive }) => `nav-item ${isActive ? 'nav-item--on' : ''}`}>
-      <span className="nav-icon" aria-hidden="true">
-        {icon}
-      </span>
+      <Icon name={icon} className="nav-icon" />
       <span>{label}</span>
     </NavLink>
   )
@@ -50,18 +50,18 @@ export function Layout() {
         </div>
 
         <nav className="nav">
-          <NavItem to="/" icon="🌞" label="Today" end />
-          <NavItem to="/inbox" icon="📥" label="Inbox" />
-          <NavItem to="/calendar" icon="🗓️" label="Calendar" />
-          <NavItem to="/all" icon="🌼" label="All tasks" />
-          <NavItem to="/completed" icon="🏆" label="Completed" />
+          <NavItem to="/" icon="sun" label="Today" end />
+          <NavItem to="/inbox" icon="inbox" label="Inbox" />
+          <NavItem to="/calendar" icon="calendar" label="Calendar" />
+          <NavItem to="/all" icon="flower" label="All tasks" />
+          <NavItem to="/completed" icon="trophy" label="Completed" />
         </nav>
 
         <div className="nav-section">
           <div className="nav-section-head">
             <span>Lists</span>
             <button className="icon-btn icon-btn--tiny" aria-label="New list" onClick={() => setAdding(true)}>
-              ＋
+              <Icon name="plus" />
             </button>
           </div>
           <nav className="nav">
@@ -71,9 +71,7 @@ export function Layout() {
                 to={`/list/${l.id}`}
                 className={({ isActive }) => `nav-item ${isActive ? 'nav-item--on' : ''}`}
               >
-                <span className="nav-icon" aria-hidden="true">
-                  {l.icon}
-                </span>
+                <ListGlyph icon={l.icon} className="nav-icon" />
                 <span className="nav-list-name">{l.name}</span>
                 <span className="chip-dot" style={{ background: l.color }} />
               </NavLink>
@@ -100,13 +98,13 @@ export function Layout() {
 
         <div className="sidebar-bottom">
           <NavLink to="/focus" className={({ isActive }) => `focus-cta ${isActive ? 'focus-cta--on' : ''}`}>
-            <span aria-hidden="true">🎯</span>
+            <Icon name="target" />
             <span>Focus</span>
             {session && <span className="focus-live" aria-label="Session in progress" />}
           </NavLink>
           <div className="nav">
-            <NavItem to="/insights" icon="📊" label="Insights" />
-            <NavItem to="/settings" icon="⚙️" label="Settings" />
+            <NavItem to="/insights" icon="chart" label="Insights" />
+            <NavItem to="/settings" icon="gear" label="Settings" />
           </div>
         </div>
       </aside>

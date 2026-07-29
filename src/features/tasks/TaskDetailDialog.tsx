@@ -11,6 +11,7 @@ import {
 import { createTag } from '../../data/tags'
 import { Dialog } from '../../components/Dialog'
 import { Button, IconButton } from '../../components/Button'
+import { Icon } from '../../components/Icon'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { useConfirm } from '../../components/ConfirmContext'
 import { useSubtasks } from './hooks'
@@ -93,10 +94,10 @@ export function TaskDetailDialog({ task, lists, tags, onClose }: Props) {
               value={task.listId ?? ''}
               onChange={(e) => moveTaskToList(task.id, e.target.value || null)}
             >
-              <option value="">📥 Inbox</option>
+              <option value="">Inbox</option>
               {activeLists.map((l) => (
                 <option key={l.id} value={l.id}>
-                  {l.icon} {l.name}
+                  {l.name}
                 </option>
               ))}
             </select>
@@ -172,11 +173,11 @@ export function TaskDetailDialog({ task, lists, tags, onClose }: Props) {
                   aria-label={`Complete step ${s.title}`}
                   onClick={() => updateSubtask(s.id, { done: !s.done })}
                 >
-                  {s.done && <span className="checkbox-tick">✓</span>}
+                  {s.done && <Icon name="check" className="checkbox-tick" />}
                 </button>
                 <span className={s.done ? 'subtask-done' : ''}>{s.title}</span>
                 <IconButton label="Delete step" className="subtask-del" onClick={() => deleteSubtask(s.id)}>
-                  ✕
+                  <Icon name="close" />
                 </IconButton>
               </li>
             ))}

@@ -1,22 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0d1117"/>
+  <rect width="512" height="512" rx="112" fill="#17130f"/>
   <!-- stem -->
-  <path d="M256 392V236" fill="none" stroke="#a7f3d0" stroke-width="12" stroke-linecap="round"/>
+  <path d="M256 392V236" fill="none" stroke="#a9c8a3" stroke-width="12" stroke-linecap="round"/>
   <!-- leaves -->
   <path d="M256 300c-40-6-70-40-64-84 44-4 74 26 74 62M256 320c40-6 70-40 64-84-44-4-74 26-74 62"
-        fill="none" stroke="#a7f3d0" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        fill="none" stroke="#a9c8a3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
   <!-- flower petals -->
-  <g fill="none" stroke="#f9a8d4" stroke-width="12" stroke-linejoin="round">
-    <circle cx="256" cy="176" r="34" fill="#f9a8d4" fill-opacity="0.18"/>
+  <g fill="none" stroke="#e1a49c" stroke-width="12" stroke-linejoin="round">
+    <circle cx="256" cy="176" r="34" fill="#e1a49c" fill-opacity="0.18"/>
     <path d="M256 142c0-34 26-58 60-52-4 34-28 52-60 52Z"/>
     <path d="M256 142c0-34-26-58-60-52 4 34 28 52 60 52Z"/>
     <path d="M256 210c0 34 26 58 60 52-4-34-28-52-60-52Z"/>
     <path d="M256 210c0 34-26 58-60 52 4-34 28-52 60-52Z"/>
   </g>
-  <!-- little cyber cursor -->
-  <g stroke="#c4b5fd" stroke-width="12" stroke-linecap="round">
+  <!-- little accent -->
+  <g stroke="#d3a67d" stroke-width="12" stroke-linecap="round">
     <path d="M150 402h56"/>
-    <path d="M362 402h0" stroke="#fde68a"/>
+    <path d="M362 402h0" stroke="#e4c67d"/>
   </g>
-  <rect x="330" y="392" width="24" height="20" rx="4" fill="#fde68a"/>
+  <rect x="330" y="392" width="24" height="20" rx="4" fill="#e4c67d"/>
 </svg>

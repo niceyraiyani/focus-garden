@@ -4,6 +4,7 @@ import type { Task, List, Tag } from '../../domain/types'
 import { setTaskComplete } from '../../data/tasks'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { Burst } from '../../components/Burst'
+import { Icon, ListGlyph } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useSubtaskCounts } from './hooks'
 import { localDateKey } from '../../lib/date'
@@ -65,7 +66,7 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
     // Let the bounce + petal play before the row leaves the open list.
     window.setTimeout(async () => {
       await setTaskComplete(task.id, true)
-      toast('Nice — one done 🌸', {
+      toast('Nice — one done', {
         label: 'Undo',
         onClick: () => setTaskComplete(task.id, false),
       })
@@ -85,7 +86,7 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
         onClick={onCheck}
       >
         <Burst trigger={burst} variant="star" />
-        {(completing || isDone) && <span className="checkbox-tick">✓</span>}
+        {(completing || isDone) && <Icon name="check" className="checkbox-tick" />}
       </button>
 
       <button className="task-main" onClick={() => onOpen(task)}>
@@ -94,12 +95,12 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
           {showList && list && (
             <span className="chip" style={{ background: 'var(--soft-lavender)' }}>
               <span className="chip-dot" style={{ background: list.color }} />
-              {list.icon} {list.name}
+              <ListGlyph icon={list.icon} /> {list.name}
             </span>
           )}
           {due && (
             <span className={`due ${due.overdue ? 'due--over' : ''} ${due.soon ? 'due--soon' : ''}`}>
-              🗓 {due.text}
+              <Icon name="calendar" /> {due.text}
             </span>
           )}
           {task.priority !== 'none' && (
@@ -109,7 +110,7 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
           )}
           {counts.total > 0 && (
             <span className="subcount">
-              ☑ {counts.done}/{counts.total}
+              <Icon name="check" /> {counts.done}/{counts.total}
             </span>
           )}
           {task.effort > 0 && <EffortFlowers value={task.effort} readOnly />}

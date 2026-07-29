@@ -80,9 +80,15 @@
   color: var(--fg);
 }
 .nav-icon {
-  font-size: 1.05rem;
-  width: 1.4rem;
-  text-align: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  flex: none;
+}
+span.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
 }
 .nav-list-name {
   flex: 1;
@@ -160,7 +166,16 @@
   font-size: 1.6rem;
 }
 .view-icon {
-  font-size: 1.5rem;
+  width: 1.55rem;
+  height: 1.55rem;
+  flex: none;
+  color: var(--accent-lavender);
+}
+span.view-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
 }
 .view-count {
   font-size: 0.9rem;
@@ -277,9 +292,10 @@
   height: 1.2rem;
 }
 .checkbox-tick {
-  font-size: 0.85rem;
-  font-weight: 900;
-  color: #12351f;
+  width: 0.95rem;
+  height: 0.95rem;
+  color: #241a12;
+  stroke-width: 2.6;
 }
 
 .drag-handle {
@@ -455,6 +471,14 @@
   border: 1px solid var(--border);
   background: var(--surface-2);
   font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg);
+}
+.icon-choice .icon {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 .icon-choice--on {
   border-color: var(--primary);

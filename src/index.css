@@ -29,13 +29,13 @@ body {
   text-rendering: optimizeLegibility;
   font-synthesis: none;
   /* Flat star/pixel dot texture via solid-fill SVG tile — no gradients. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23c4b5fd' fill-opacity='0.06'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23d3a67d' fill-opacity='0.06'/%3E%3C/svg%3E");
   background-size: 24px 24px;
   background-attachment: fixed;
 }
 
 [data-theme='light'] body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='2' cy='2' r='1' fill='%237c5cff' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23b87c4b' fill-opacity='0.05'/%3E%3C/svg%3E");
 }
 
 img,

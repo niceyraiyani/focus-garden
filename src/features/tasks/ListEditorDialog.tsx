@@ -5,6 +5,8 @@ import { updateList, deleteList, setListArchived } from '../../data/lists'
 import { LIST_COLORS, LIST_ICONS } from '../../data/lists'
 import { Dialog } from '../../components/Dialog'
 import { Button } from '../../components/Button'
+import { Icon } from '../../components/Icon'
+import type { IconName } from '../../components/Icon'
 import { useConfirm } from '../../components/ConfirmContext'
 
 export function ListHeaderActions({ list }: { list: List }) {
@@ -12,7 +14,7 @@ export function ListHeaderActions({ list }: { list: List }) {
   return (
     <>
       <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
-        ⚙ Edit list
+        <Icon name="gear" /> Edit list
       </Button>
       {open && <ListEditorDialog list={list} onClose={() => setOpen(false)} />}
     </>
@@ -66,8 +68,9 @@ export function ListEditorDialog({ list, onClose }: { list: List; onClose: () =>
                 key={ic}
                 className={`icon-choice ${icon === ic ? 'icon-choice--on' : ''}`}
                 onClick={() => setIcon(ic)}
+                aria-label={ic}
               >
-                {ic}
+                <Icon name={ic as IconName} />
               </button>
             ))}
           </div>

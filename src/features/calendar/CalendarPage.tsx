@@ -14,6 +14,7 @@ import { updateTask } from '../../data/tasks'
 import { useAllOpenTasks, useLists, useTags } from '../tasks/hooks'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
 import { Button, IconButton } from '../../components/Button'
+import { Icon } from '../../components/Icon'
 import { Flourish } from '../../components/Flourish'
 import {
   monthMatrix,
@@ -77,7 +78,7 @@ export function CalendarPage() {
     <section className="calendar">
       <header className="view-header">
         <h1 className="view-title">
-          <span className="view-icon">🗓️</span>Calendar
+          <Icon name="calendar" className="view-icon" />Calendar
         </h1>
         <div className="cal-controls">
           <div className="seg">
@@ -93,17 +94,17 @@ export function CalendarPage() {
           </Button>
           <div className="cal-nav">
             <IconButton label="Previous" onClick={() => step(-1)}>
-              ‹
+              <Icon name="chevron-left" />
             </IconButton>
             <span className="cal-label">{mode === 'month' ? monthLabel(ref) : weekLabel(ref)}</span>
             <IconButton label="Next" onClick={() => step(1)}>
-              ›
+              <Icon name="chevron-right" />
             </IconButton>
           </div>
         </div>
       </header>
 
-      <p className="cal-hint">Drag an unscheduled task onto a day to give it a due date. Drag it back to unschedule. 🌿</p>
+      <p className="cal-hint">Drag an unscheduled task onto a day to give it a due date. Drag it back to unschedule.</p>
 
       <DndContext sensors={sensors} onDragEnd={onDragEnd}>
         <div className="cal-layout">
@@ -228,11 +229,11 @@ function UnscheduledPanel({
   const { setNodeRef, isOver } = useDroppable({ id: 'unscheduled' })
   return (
     <aside ref={setNodeRef} className={`cal-unscheduled ${isOver ? 'cal-unscheduled--over' : ''}`}>
-      <h2 className="group-title">📥 Unscheduled ({tasks.length})</h2>
+      <h2 className="group-title"><Icon name="inbox" /> Unscheduled ({tasks.length})</h2>
       {tasks.length === 0 ? (
         <div className="empty empty--sm">
           <Flourish variant="sprig" size={40} />
-          <p>Everything has a date. Nice! 🌸</p>
+          <p>Everything has a date. Nice!</p>
         </div>
       ) : (
         <div className="cal-unscheduled-list">

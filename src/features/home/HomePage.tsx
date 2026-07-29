@@ -10,6 +10,7 @@ import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
 import { Companion } from '../../components/Companion'
 import { Flourish } from '../../components/Flourish'
 import { Burst } from '../../components/Burst'
+import { Icon } from '../../components/Icon'
 import { InboxTriage } from './InboxTriage'
 import { todayFocusedMs, currentStreak } from '../insights/aggregations'
 import { formatMinutes } from '../../lib/time'
@@ -60,7 +61,7 @@ export function HomePage() {
       <div className="home-hero">
         <div>
           <h1 className="home-greeting">
-            {greeting()} <span className="wave">🌷</span>
+            {greeting()} <Icon name="flower" className="wave" />
           </h1>
           <p className="home-sub">
             {focusedMs > 0
@@ -83,8 +84,16 @@ export function HomePage() {
             <div className="timer-bar-fill" style={{ width: `${goalPct}%` }} />
           </div>
           <div className="home-progress-foot">
-            <span>{streak > 0 ? `${streak}🔥 workday streak` : 'Start a streak today!'}</span>
-            {goalPct >= 100 && <span className="goal-met">Goal met 🌸</span>}
+            <span>
+              {streak > 0 ? (
+                <>
+                  {streak} <Icon name="flame" /> workday streak
+                </>
+              ) : (
+                'Start a streak today!'
+              )}
+            </span>
+            {goalPct >= 100 && <span className="goal-met">Goal met</span>}
           </div>
         </div>
 
@@ -100,7 +109,7 @@ export function HomePage() {
               {session ? 'Resume your session' : 'Start a focus session'}
             </span>
             <span className="focus-hero-sub">
-              {session ? 'Your timer is waiting 🎯' : 'Pick a few tasks and find your flow 🎯'}
+              {session ? 'Your timer is waiting' : 'Pick a few tasks and find your flow'}
             </span>
           </span>
           {session && <span className="focus-live-dot" aria-label="Session in progress" />}
@@ -111,11 +120,11 @@ export function HomePage() {
 
       <section className="home-tasks">
         <div className="home-col">
-          <h2 className="group-title">🗓 Due today &amp; overdue</h2>
+          <h2 className="group-title"><Icon name="calendar" /> Due today &amp; overdue</h2>
           {todayTasks.length === 0 ? (
             <div className="empty empty--sm">
               <Flourish variant="bloom" size={48} float />
-              <p>Nothing due today. Enjoy the calm. 🍃</p>
+              <p>Nothing due today. Enjoy the calm.</p>
             </div>
           ) : (
             <div className="task-list">
@@ -127,10 +136,10 @@ export function HomePage() {
         </div>
 
         <div className="home-col">
-          <h2 className="group-title">📥 Quick capture</h2>
+          <h2 className="group-title"><Icon name="inbox" /> Quick capture</h2>
           <QuickAdd listId={null} placeholder="Brain dump here — organize later…" />
           <p className="muted-note home-inbox-count">
-            {inbox.length === 0 ? 'Inbox is empty 🌟' : `${inbox.length} in your Inbox`}
+            {inbox.length === 0 ? 'Inbox is empty' : `${inbox.length} in your Inbox`}
             {inbox.length > 0 && (
               <>
                 {' · '}

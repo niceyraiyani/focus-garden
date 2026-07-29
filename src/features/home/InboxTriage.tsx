@@ -5,6 +5,7 @@ import { updateTask } from '../../data/tasks'
 import { localDateKey } from '../../lib/date'
 import { TaskRow } from '../tasks/TaskRow'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
+import { Icon } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 
 const MAX_SHOWN = 5
@@ -31,7 +32,7 @@ export function InboxTriage({ tasks, lists, tags }: { tasks: Task[]; lists: List
 
   function scheduleToday(t: Task) {
     void updateTask(t.id, { dueDate: localDateKey() })
-    toast('Scheduled for today 🌞', {
+    toast('Scheduled for today', {
       label: 'Undo',
       onClick: () => updateTask(t.id, { dueDate: null }),
     })
@@ -40,7 +41,7 @@ export function InboxTriage({ tasks, lists, tags }: { tasks: Task[]; lists: List
   return (
     <section className="card triage">
       <div className="triage-head">
-        <h2 className="group-title">🪴 Needs a home ({tasks.length})</h2>
+        <h2 className="group-title"><Icon name="plant" /> Needs a home ({tasks.length})</h2>
         <Link to="/inbox" className="triage-link">
           organize all →
         </Link>
@@ -70,7 +71,7 @@ export function InboxTriage({ tasks, lists, tags }: { tasks: Task[]; lists: List
                     </span>
                   )}
                   <button className="btn btn--ghost btn--sm" onClick={() => scheduleToday(t)}>
-                    📅 Today
+                    <Icon name="calendar" /> Today
                   </button>
                   <button className="btn btn--subtle btn--sm" onClick={() => setOpenTask(t)}>
                     Plan

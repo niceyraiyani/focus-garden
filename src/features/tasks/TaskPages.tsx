@@ -2,6 +2,7 @@ import { useParams, Navigate } from 'react-router-dom'
 import { TaskListView } from './TaskListView'
 import { TaskRow } from './TaskRow'
 import { Flourish } from '../../components/Flourish'
+import { Icon } from '../../components/Icon'
 import { ListHeaderActions } from './ListEditorDialog'
 import {
   useInboxTasks,
@@ -21,13 +22,13 @@ export function InboxPage() {
   return (
     <TaskListView
       title="Inbox"
-      icon="📥"
+      icon="inbox"
       tasks={tasks}
       lists={lists}
       tags={tags}
       scopeListId={null}
       allowReorder
-      emptyMessage="Inbox zero! Every thought has found its place. 🌷"
+      emptyMessage="Inbox zero! Every thought has found its place."
     />
   )
 }
@@ -39,13 +40,13 @@ export function AllTasksPage() {
   return (
     <TaskListView
       title="All tasks"
-      icon="🌼"
+      icon="flower"
       tasks={tasks}
       lists={lists}
       tags={tags}
       allowAdd={false}
       showList
-      emptyMessage="No open tasks anywhere. Beautifully clear. ✨"
+      emptyMessage="No open tasks anywhere. Beautifully clear."
     />
   )
 }
@@ -64,14 +65,14 @@ export function ListPage() {
     <TaskListView
       key={id}
       title={list?.name ?? 'List'}
-      icon={list?.icon ?? '🌿'}
+      icon={list?.icon ?? 'leaf'}
       tasks={tasks}
       lists={activeLists}
       tags={tags}
       scopeListId={id ?? null}
       allowReorder
       headerExtra={list ? <ListHeaderActions list={list} /> : undefined}
-      emptyMessage="This list is a fresh garden bed. Plant a task! 🌱"
+      emptyMessage="This list is a fresh garden bed. Plant a task!"
     />
   )
 }
@@ -92,7 +93,7 @@ export function CompletedPage() {
     <section className="list-view">
       <header className="view-header">
         <h1 className="view-title">
-          <span className="view-icon">🏆</span>Completed
+          <Icon name="trophy" className="view-icon" />Completed
           <span className="view-count">{tasks.length}</span>
         </h1>
       </header>
@@ -100,7 +101,7 @@ export function CompletedPage() {
       {tasks.length === 0 ? (
         <div className="empty">
           <Flourish variant="sparkle" size={64} float />
-          <p>Finished tasks bloom here. Go complete something tiny! 🌸</p>
+          <p>Finished tasks bloom here. Go complete something tiny!</p>
         </div>
       ) : (
         [...groups.entries()].map(([day, dayTasks]) => (

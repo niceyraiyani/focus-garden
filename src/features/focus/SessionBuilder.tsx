@@ -3,6 +3,7 @@ import { useAllOpenTasks, useLists } from '../tasks/hooks'
 import { useSettings } from '../../app/SettingsContext'
 import { startSession } from '../../data/sessions'
 import { Button } from '../../components/Button'
+import { Icon } from '../../components/Icon'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { Flourish } from '../../components/Flourish'
 import type { ID } from '../../domain/types'
@@ -39,16 +40,16 @@ export function SessionBuilder() {
   }
 
   function listName(listId: ID | null): string {
-    if (!listId) return '📥 Inbox'
+    if (!listId) return 'Inbox'
     const l = lists.find((x) => x.id === listId)
-    return l ? `${l.icon} ${l.name}` : 'List'
+    return l ? l.name : 'List'
   }
 
   return (
     <div className="builder">
       <header className="view-header">
         <h1 className="view-title">
-          <span className="view-icon">🎯</span>Plan a focus session
+          <Icon name="target" className="view-icon" />Plan a focus session
         </h1>
       </header>
       <p className="builder-lead">
@@ -61,14 +62,14 @@ export function SessionBuilder() {
           {available.length === 0 ? (
             <div className="empty empty--sm">
               <Flourish variant="sprig" size={48} />
-              <p>No open tasks to add. Capture a few first! 🌱</p>
+              <p>No open tasks to add. Capture a few first!</p>
             </div>
           ) : (
             <div className="pool-list">
               {available.map((t) => (
                 <button key={t.id} className="pool-item" onClick={() => add(t.id)}>
                   <span className="pool-plus" aria-hidden="true">
-                    ＋
+                    <Icon name="plus" />
                   </span>
                   <span className="pool-title">{t.title}</span>
                   <span className="pool-meta">
@@ -96,13 +97,13 @@ export function SessionBuilder() {
                   <span className="queue-title">{t.title}</span>
                   <span className="queue-controls">
                     <button className="icon-btn icon-btn--tiny" aria-label="Move up" onClick={() => move(i, -1)}>
-                      ↑
+                      <Icon name="arrow-up" />
                     </button>
                     <button className="icon-btn icon-btn--tiny" aria-label="Move down" onClick={() => move(i, 1)}>
-                      ↓
+                      <Icon name="arrow-down" />
                     </button>
                     <button className="icon-btn icon-btn--tiny" aria-label="Remove" onClick={() => removeAt(i)}>
-                      ✕
+                      <Icon name="close" />
                     </button>
                   </span>
                 </li>
@@ -124,7 +125,7 @@ export function SessionBuilder() {
               ))}
             </div>
             <p className="duration-hint">
-              We’ll gently nudge you at {minutes} min — then keep counting while you’re in flow. 🌊
+              We’ll gently nudge you at {minutes} min — then keep counting while you’re in flow.
             </p>
           </div>
 
@@ -135,7 +136,7 @@ export function SessionBuilder() {
             disabled={queued.length === 0}
             onClick={() => startSession(queue, minutes)}
           >
-            Start focusing 🎯
+            <Icon name="play" filled /> Start focusing
           </Button>
         </section>
       </div>

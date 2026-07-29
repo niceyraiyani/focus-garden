@@ -10,6 +10,7 @@ import {
   summarizeSessions,
 } from './aggregations'
 import { formatMinutes } from '../../lib/time'
+import { Icon } from '../../components/Icon'
 import { Flourish } from '../../components/Flourish'
 import type { Weekday } from '../../domain/types'
 
@@ -33,7 +34,7 @@ export function InsightsPage() {
     .map(([id, ms]) => ({
       id,
       ms,
-      name: id === 'inbox' ? '📥 Inbox' : lists.find((l) => l.id === id)?.name ?? 'Deleted list',
+      name: id === 'inbox' ? 'Inbox' : lists.find((l) => l.id === id)?.name ?? 'Deleted list',
       color: id === 'inbox' ? 'var(--accent-lavender)' : lists.find((l) => l.id === id)?.color ?? 'var(--accent-blue)',
     }))
     .sort((a, b) => b.ms - a.ms)
@@ -48,14 +49,14 @@ export function InsightsPage() {
     <section className="insights">
       <header className="view-header">
         <h1 className="view-title">
-          <span className="view-icon">📊</span>Insights
+          <Icon name="chart" className="view-icon" />Insights
         </h1>
       </header>
 
       {!hasData ? (
         <div className="empty">
           <Flourish variant="vine" size={64} float />
-          <p>Your productivity garden is just getting started. Finish a focus session to see it bloom! 🌱</p>
+          <p>Your productivity garden is just getting started. Finish a focus session to see it bloom!</p>
         </div>
       ) : (
         <>
@@ -67,12 +68,12 @@ export function InsightsPage() {
                 <div className="timer-bar-fill" style={{ width: `${goalPct}%` }} />
               </div>
               <span className="stat-sub">
-                {goalPct >= 100 ? 'Daily goal met! 🌸' : `${Math.round(goalPct)}% of ${formatMinutes(settings.dailyGoalMinutes)} goal`}
+                {goalPct >= 100 ? 'Daily goal met!' : `${Math.round(goalPct)}% of ${formatMinutes(settings.dailyGoalMinutes)} goal`}
               </span>
             </div>
 
             <div className="card stat-card">
-              <span className="stat-big">{streak}🔥</span>
+              <span className="stat-big">{streak} <Icon name="flame" /></span>
               <span className="stat-label">workday streak</span>
               <span className="stat-sub">rest days never break it</span>
             </div>

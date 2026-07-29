@@ -24,7 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.error) {
       return (
         <div className="crash">
-          <h1>Oh no, a little weed appeared 🌿</h1>
+          <h1>Oh no, a little weed appeared</h1>
           <p>Something went wrong, but your data is safe on this device.</p>
           <pre>{this.state.error.message}</pre>
           <button className="btn btn--primary" onClick={() => window.location.reload()}>

@@ -1,5 +1,6 @@
 import type { EffortLevel } from '../domain/types'
 import { EFFORT_LEVELS, effortMeta } from '../domain/effort'
+import { Icon } from './Icon'
 
 interface EffortFlowersProps {
   value: EffortLevel
@@ -16,7 +17,7 @@ export function EffortFlowers({ value, onChange, readOnly }: EffortFlowersProps)
       <span className="flowers" title={meta ? `Effort: ${meta.label}` : undefined} aria-label={meta ? `Effort ${meta.label}` : 'No effort set'}>
         {EFFORT_LEVELS.map((e) => (
           <span key={e.level} className={`flower-btn ${e.level <= value ? 'flower-btn--on' : ''}`}>
-            🌸
+            <Icon name="flower" filled={e.level <= value} />
           </span>
         ))}
       </span>
@@ -34,7 +35,7 @@ export function EffortFlowers({ value, onChange, readOnly }: EffortFlowersProps)
           title={`${e.label} — ${e.hint}`}
           onClick={() => onChange?.(e.level === value ? (0 as EffortLevel) : e.level)}
         >
-          🌸
+          <Icon name="flower" filled={e.level <= value} />
         </button>
       ))}
     </span>

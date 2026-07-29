@@ -4,6 +4,7 @@ import { db } from '../../data/db'
 import { activeMs, activeMsForTask } from '../../domain/timing'
 import { formatMinutes } from '../../lib/time'
 import { Button } from '../../components/Button'
+import { Icon } from '../../components/Icon'
 import { Flourish } from '../../components/Flourish'
 import { useSessionSegments, useTasksByIds } from './useFocusSession'
 
@@ -28,7 +29,7 @@ export function SessionReview({ sessionId, onClose }: { sessionId: string; onClo
     <div className="review">
       <div className="review-hero">
         <Flourish variant="sparkle" size={72} float color="var(--accent-yellow)" />
-        <h1>Session complete 🌟</h1>
+        <h1>Session complete</h1>
         <p className="review-total">You focused for {formatMinutes(total / 60000)}.</p>
       </div>
 
@@ -54,8 +55,7 @@ export function SessionReview({ sessionId, onClose }: { sessionId: string; onClo
             {perTask.map(({ task, ms }) => (
               <li key={task.id} className="breakdown-row">
                 <span className={task.status === 'completed' ? 'done-title' : ''}>
-                  {task.status === 'completed' ? '✓ ' : ''}
-                  {task.title}
+                  {task.status === 'completed' && <Icon name="check" />} {task.title}
                 </span>
                 <span className="breakdown-time">{formatMinutes(ms / 60000)}</span>
               </li>
@@ -66,7 +66,7 @@ export function SessionReview({ sessionId, onClose }: { sessionId: string; onClo
 
       {parked.length > 0 && (
         <section className="card">
-          <h3 className="group-title">🌙 Parked for later (in your Inbox)</h3>
+          <h3 className="group-title"><Icon name="moon" /> Parked for later (in your Inbox)</h3>
           <ul className="parked-list">
             {parked.map((t) => (
               <li key={t.id} className="parked-item">

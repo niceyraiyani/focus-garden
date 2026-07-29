@@ -16,6 +16,7 @@ import { formatClock, formatMinutes } from '../../lib/time'
 import { Button, IconButton } from '../../components/Button'
 import { Companion } from '../../components/Companion'
 import { Burst } from '../../components/Burst'
+import { Icon } from '../../components/Icon'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { useToast } from '../../components/ToastContext'
 import { useSettings } from '../../app/SettingsContext'
@@ -25,7 +26,7 @@ import { updateSubtask } from '../../data/tasks'
 
 function notifyMinReached(minutes: number, enabled: boolean) {
   if (enabled && 'Notification' in window && Notification.permission === 'granted') {
-    new Notification('Minimum reached 🌸', {
+    new Notification('Minimum reached', {
       body: `You focused for ${minutes} minutes. Keep going if you're in flow!`,
     })
   }
@@ -75,7 +76,7 @@ export function ActiveSession({
       notifiedRef.current = true
       void markNotified(session.id)
       notifyMinReached(session.minMinutes, settings.notificationsEnabled)
-      toast(`🌸 ${session.minMinutes} min done — keep going or wrap up whenever.`)
+      toast(`${session.minMinutes} min done — keep going or wrap up whenever.`)
     }
   }, [over, session.id, session.minMinutes, settings.notificationsEnabled, toast])
 
@@ -89,7 +90,7 @@ export function ActiveSession({
     if (!activeTask) return
     cheer()
     await completeQueuedTask(session.id, activeTask.id)
-    toast('One bloomed 🌸')
+    toast('One done')
   }
 
   async function park(e: React.FormEvent) {
@@ -99,7 +100,7 @@ export function ActiveSession({
     const task = await createTask({ title, listId: null, originSessionId: session.id })
     await addParkingLot(session.id, task.id)
     setParkText('')
-    toast('Parked in your Inbox for later 🌙')
+    toast('Parked in your Inbox for later')
   }
 
   async function end() {
@@ -130,19 +131,19 @@ export function ActiveSession({
       <div className="session-controls">
         {running ? (
           <Button variant="ghost" onClick={() => pauseSession(session.id)}>
-            ⏸ Pause
+            <Icon name="pause" /> Pause
           </Button>
         ) : (
           <Button variant="primary" onClick={() => resumeSession(session.id)}>
-            ▶ Resume
+            <Icon name="play" filled /> Resume
           </Button>
         )}
         <Button variant="danger" onClick={end}>
-          ⏹ End session
+          <Icon name="stop" /> End session
         </Button>
       </div>
 
-      {!running && <p className="paused-note">Paused — the clock is resting. Resume when you’re ready. 🌿</p>}
+      {!running && <p className="paused-note">Paused — the clock is resting. Resume when you’re ready.</p>}
 
       <div className="session-body">
         <section className="card active-task-card">
@@ -156,12 +157,12 @@ export function ActiveSession({
               {activeTask.notes && <p className="active-task-notes">{activeTask.notes}</p>}
               <ActiveSubtasks taskId={activeTask.id} />
               <Button variant="primary" size="lg" className="complete-btn" onClick={completeActive}>
-                ✓ Mark done
+                <Icon name="check" /> Mark done
               </Button>
             </>
           ) : (
             <div className="empty empty--sm">
-              <p>Queue complete — lovely work! 🌟 Add another or end the session.</p>
+              <p>Queue complete — lovely work! Add another or end the session.</p>
             </div>
           )}
         </section>
@@ -186,7 +187,7 @@ export function ActiveSession({
           </section>
 
           <section className="card parking-lot">
-            <h3 className="group-title">🅿️ Parking lot</h3>
+            <h3 className="group-title"><Icon name="bookmark" /> Parking lot</h3>
             <p className="muted-note">A thought popped up? Park it and forget it.</p>
             <form onSubmit={park} className="park-form">
               <input
@@ -207,7 +208,7 @@ export function ActiveSession({
                   const done = t.status === 'completed'
                   return (
                     <li key={t.id} className="parked-item">
-                      <span className="parked-title">🌙 {t.title}</span>
+                      <span className="parked-title"><Icon name="moon" /> {t.title}</span>
                       {done ? (
                         <span className="parked-tag">done</span>
                       ) : inQueue ? (
@@ -217,10 +218,10 @@ export function ActiveSession({
                           className="btn btn--ghost btn--sm"
                           onClick={() => {
                             void addToQueue(session.id, t.id)
-                            toast('Added to your session 🎯')
+                            toast('Added to your session')
                           }}
                         >
-                          ＋ Add to session
+                          <Icon name="plus" /> Add to session
                         </button>
                       )}
                     </li>
@@ -249,7 +250,7 @@ function ActiveSubtasks({ taskId }: { taskId: string }) {
             aria-label={`Complete step ${s.title}`}
             onClick={() => updateSubtask(s.id, { done: !s.done })}
           >
-            {s.done && <span className="checkbox-tick">✓</span>}
+            {s.done && <Icon name="check" className="checkbox-tick" />}
           </button>
           <span className={s.done ? 'subtask-done' : ''}>{s.title}</span>
         </li>

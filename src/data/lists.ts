@@ -15,7 +15,7 @@ export const LIST_COLORS = [
   'var(--accent-yellow)',
 ]
 
-export const LIST_ICONS = ['🌸', '🌿', '⭐', '🍄', '🦋', '🌙', '👾', '🌷']
+export const LIST_ICONS = ['flower', 'leaf', 'tulip', 'star', 'mushroom', 'butterfly', 'moon', 'heart']
 
 export async function createList(name: string, color?: string, icon?: string): Promise<List> {
   const all = await db.lists.toArray()

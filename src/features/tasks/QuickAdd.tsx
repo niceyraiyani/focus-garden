@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { createTask } from '../../data/tasks'
+import { Icon } from '../../components/Icon'
 import type { ID } from '../../domain/types'
 
 interface QuickAddProps {
@@ -26,7 +27,7 @@ export function QuickAdd({ listId, placeholder, autoFocus, onAdded }: QuickAddPr
   return (
     <form className="quick-add" onSubmit={submit}>
       <span className="quick-add-icon" aria-hidden="true">
-        🌱
+        <Icon name="seedling" />
       </span>
       <input
         className="quick-add-input"

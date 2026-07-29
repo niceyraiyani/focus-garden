@@ -3,6 +3,8 @@ import { useSettings } from '../../app/SettingsContext'
 import { downloadBackup, importBackup } from '../../data/backup'
 import { normalizeDomain, isDesktop } from '../focus/nativeBlocker'
 import { Button } from '../../components/Button'
+import { Icon } from '../../components/Icon'
+import type { IconName } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
 import type { ThemeMode, Weekday } from '../../domain/types'
@@ -17,10 +19,10 @@ const WEEKDAYS: { day: Weekday; label: string }[] = [
   { day: 6, label: 'Sat' },
 ]
 
-const THEMES: { mode: ThemeMode; label: string; icon: string }[] = [
-  { mode: 'system', label: 'System', icon: '🖥' },
-  { mode: 'light', label: 'Light', icon: '☀️' },
-  { mode: 'dark', label: 'Dark', icon: '🌙' },
+const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
+  { mode: 'system', label: 'System', icon: 'monitor' },
+  { mode: 'light', label: 'Light', icon: 'sun' },
+  { mode: 'dark', label: 'Dark', icon: 'moon' },
 ]
 
 const GOAL_CHOICES = [30, 60, 90, 120, 180, 240]
@@ -82,7 +84,7 @@ export function SettingsPage() {
     try {
       const text = await file.text()
       await importBackup(text)
-      toast('Backup restored 🌿')
+      toast('Backup restored')
     } catch (err) {
       toast(err instanceof Error ? err.message : 'Could not import that file.')
     } finally {
@@ -95,7 +97,7 @@ export function SettingsPage() {
     <section className="settings">
       <header className="view-header">
         <h1 className="view-title">
-          <span className="view-icon">⚙️</span>Settings
+          <Icon name="gear" className="view-icon" />Settings
         </h1>
       </header>
 
@@ -110,7 +112,7 @@ export function SettingsPage() {
                 className={`seg-item ${settings.theme === t.mode ? 'seg-item--on' : ''}`}
                 onClick={() => update({ theme: t.mode })}
               >
-                {t.icon} {t.label}
+                <Icon name={t.icon} /> {t.label}
               </button>
             ))}
           </div>
@@ -201,7 +203,7 @@ export function SettingsPage() {
         </p>
         {!desktop && (
           <p className="setting-hint">
-            🖥️ Want real blocking?{' '}
+            Want real blocking?{' '}
             <a href="https://github.com/niceyraiyani/focus-garden/releases" target="_blank" rel="noreferrer">
               Download the desktop app
             </a>{' '}
@@ -218,7 +220,7 @@ export function SettingsPage() {
             aria-label="Add a site to block"
           />
           <Button variant="primary" onClick={addSite} disabled={!newSite.trim()}>
-            ＋ Block site
+            <Icon name="plus" /> Block site
           </Button>
         </div>
         {blocklist.length === 0 ? (
@@ -227,16 +229,16 @@ export function SettingsPage() {
           <div className="tag-row">
             {blocklist.map((d) => (
               <span key={d} className="chip">
-                🚫 {d}
+                <Icon name="ban" /> {d}
                 <button className="chip-x" aria-label={`Stop blocking ${d}`} onClick={() => removeSite(d)}>
-                  ✕
+                  <Icon name="close" />
                 </button>
               </span>
             ))}
           </div>
         )}
         {!desktop && blocklist.length > 0 && (
-          <p className="setting-hint">🖥️ Open focus garden in the desktop app to actually block these.</p>
+          <p className="setting-hint">Open focus garden in the desktop app to actually block these.</p>
         )}
       </div>
 
@@ -249,16 +251,16 @@ export function SettingsPage() {
         </p>
         <div className="setting-actions">
           <Button variant="primary" onClick={() => downloadBackup()}>
-            ⬇ Export backup
+            <Icon name="download" /> Export backup
           </Button>
           <Button variant="ghost" onClick={() => fileRef.current?.click()} disabled={importing}>
-            ⬆ Restore backup
+            <Icon name="upload" /> Restore backup
           </Button>
           <input ref={fileRef} type="file" accept="application/json" hidden onChange={onFile} />
         </div>
       </div>
 
-      <p className="settings-foot">Made with 🌸 for calmer, kinder productivity.</p>
+      <p className="settings-foot">Made with care for calmer, kinder productivity.</p>
     </section>
   )
 }

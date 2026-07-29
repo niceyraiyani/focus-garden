@@ -26,6 +26,7 @@ import { Flourish } from '../../components/Flourish'
 import { sortTasks, filterTasks, SORT_LABELS } from './sorting'
 import type { SortMode } from './sorting'
 import { PRIORITY_META } from '../../domain/effort'
+import { ListGlyph } from '../../components/Icon'
 
 interface Props {
   title: string
@@ -73,7 +74,7 @@ export function TaskListView({
   allowReorder = false,
   allowAdd = true,
   showList = false,
-  emptyMessage = 'Nothing here yet — a calm, empty garden bed. 🌱',
+  emptyMessage = 'Nothing here yet — a calm, empty garden bed.',
   headerExtra,
   rowAction,
 }: Props) {
@@ -111,7 +112,7 @@ export function TaskListView({
     <section className="list-view">
       <header className="view-header">
         <h1 className="view-title">
-          {icon && <span className="view-icon">{icon}</span>}
+          {icon && <ListGlyph icon={icon} className="view-icon" />}
           {title}
           <span className="view-count">{tasks.length}</span>
         </h1>
