@@ -6,6 +6,7 @@ import {
   switchActiveTask,
   completeQueuedTask,
   addParkingLot,
+  addToQueue,
   markNotified,
   stopSession,
 } from '../../data/sessions'
@@ -190,11 +191,30 @@ export function ActiveSession({
             </form>
             {parked.length > 0 && (
               <ul className="parked-list">
-                {parked.map((t) => (
-                  <li key={t.id} className="parked-item">
-                    🌙 {t.title}
-                  </li>
-                ))}
+                {parked.map((t) => {
+                  const inQueue = session.queue.includes(t.id)
+                  const done = t.status === 'completed'
+                  return (
+                    <li key={t.id} className="parked-item">
+                      <span className="parked-title">🌙 {t.title}</span>
+                      {done ? (
+                        <span className="parked-tag">done</span>
+                      ) : inQueue ? (
+                        <span className="parked-tag">in session</span>
+                      ) : (
+                        <button
+                          className="btn btn--ghost btn--sm"
+                          onClick={() => {
+                            void addToQueue(session.id, t.id)
+                            toast('Added to your session 🎯')
+                          }}
+                        >
+                          ＋ Add to session
+                        </button>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             )}
           </section>

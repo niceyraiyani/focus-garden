@@ -53,3 +53,69 @@ export function shortDayLabel(dateKey: string): string {
 export function isToday(dateKey: string): boolean {
   return dateKey === localDateKey()
 }
+
+/** Start-of-month timestamp (local). */
+export function startOfMonth(ts: number = Date.now()): number {
+  const d = new Date(ts)
+  d.setDate(1)
+  d.setHours(0, 0, 0, 0)
+  return d.getTime()
+}
+
+/** Add months, clamping to valid dates. */
+export function addMonths(ts: number, n: number): number {
+  const d = new Date(startOfMonth(ts))
+  d.setMonth(d.getMonth() + n)
+  return d.getTime()
+}
+
+/**
+ * 42 local date keys (6 weeks) covering the month of `ts`, starting on the
+ * Sunday on/before the 1st — a standard month grid.
+ */
+export function monthMatrix(ts: number): string[] {
+  const first = new Date(startOfMonth(ts))
+  const start = addDays(first.getTime(), -first.getDay())
+  return Array.from({ length: 42 }, (_, i) => localDateKey(addDays(start, i)))
+}
+
+/** The 7 local date keys of the week containing `ts` (Sunday start). */
+export function weekDates(ts: number = Date.now()): string[] {
+  const base = startOfDay(ts)
+  const offset = new Date(base).getDay()
+  const start = addDays(base, -offset)
+  return Array.from({ length: 7 }, (_, i) => localDateKey(addDays(start, i)))
+}
+
+/** "July 2026" style label for the month of `ts`. */
+export function monthLabel(ts: number): string {
+  return new Date(ts).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+}
+
+/** Range label for the week containing `ts`, e.g. "Jul 26 – Aug 1". */
+export function weekLabel(ts: number): string {
+  const days = weekDates(ts)
+  const fmt = (k: string) => {
+    const [y, m, d] = k.split('-').map(Number)
+    return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  }
+  return `${fmt(days[0])} – ${fmt(days[6])}`
+}
+
+/** 0-based month index of a date key. */
+export function monthOfKey(dateKey: string): number {
+  return Number(dateKey.split('-')[1]) - 1
+}
+
+/** Day-of-month number of a date key. */
+export function dayOfKey(dateKey: string): number {
+  return Number(dateKey.split('-')[2])
+}
+
+/** Midday timestamp for a date key (safe for month math). */
+export function keyToTs(dateKey: string): number {
+  const [y, m, d] = dateKey.split('-').map(Number)
+  return new Date(y, m - 1, d, 12).getTime()
+}
+
+export const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']

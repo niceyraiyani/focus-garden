@@ -46,6 +46,7 @@ export function Layout() {
         <nav className="nav">
           <NavItem to="/" icon="🌞" label="Today" end />
           <NavItem to="/inbox" icon="📥" label="Inbox" />
+          <NavItem to="/calendar" icon="🗓️" label="Calendar" />
           <NavItem to="/all" icon="🌼" label="All tasks" />
           <NavItem to="/completed" icon="🏆" label="Completed" />
         </nav>

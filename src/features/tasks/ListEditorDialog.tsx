@@ -4,16 +4,16 @@ import type { List } from '../../domain/types'
 import { updateList, deleteList, setListArchived } from '../../data/lists'
 import { LIST_COLORS, LIST_ICONS } from '../../data/lists'
 import { Dialog } from '../../components/Dialog'
-import { Button, IconButton } from '../../components/Button'
+import { Button } from '../../components/Button'
 import { useConfirm } from '../../components/ConfirmContext'
 
 export function ListHeaderActions({ list }: { list: List }) {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <IconButton label="List settings" onClick={() => setOpen(true)}>
-        ⚙
-      </IconButton>
+      <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
+        ⚙ Edit list
+      </Button>
       {open && <ListEditorDialog list={list} onClose={() => setOpen(false)} />}
     </>
   )
