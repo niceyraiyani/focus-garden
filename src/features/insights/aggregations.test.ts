@@ -4,6 +4,7 @@ import {
   completedByDay,
   currentStreak,
   weekComparison,
+  focusHeatmap,
 } from './aggregations'
 import type { FocusSegment, Task, Settings } from '../../domain/types'
 
@@ -103,5 +104,73 @@ describe('weekComparison', () => {
     expect(cmp.thisWeekMs).toBe(60 * 60000)
     expect(cmp.lastWeekMs).toBe(30 * 60000)
     expect(cmp.deltaMs).toBe(30 * 60000)
+  })
+})
+
+describe('focusHeatmap', () => {
+  // A Thursday, so the trailing week is partially in the future.
+  const now = new Date(2026, 6, 30, 15, 0, 0).getTime()
+
+  it('lays out whole Sunday-first weeks', () => {
+    const h = focusHeatmap([], settings, now, 5)
+    expect(h.weeks).toHaveLength(5)
+    for (const w of h.weeks) expect(w.cells).toHaveLength(7)
+    // Every row starts on a Sunday.
+    for (const w of h.weeks) {
+      expect(new Date(w.cells[0].dateKey + 'T12:00').getDay()).toBe(0)
+    }
+  })
+
+  it('ends on the week containing today', () => {
+    const h = focusHeatmap([], settings, now, 4)
+    const last = h.weeks[h.weeks.length - 1]
+    expect(last.cells.map((c) => c.dateKey)).toContain('2026-07-30')
+  })
+
+  it('scales levels against the daily goal', () => {
+    // goal is 60 min in the shared settings
+    const h = focusHeatmap(
+      [
+        daySeg(2026, 6, 27, 10), // 17% -> 1
+        daySeg(2026, 6, 28, 20), // 33% -> 2
+        daySeg(2026, 6, 29, 40), // 67% -> 3
+        daySeg(2026, 6, 30, 90), // over goal -> 4
+      ],
+      settings,
+      now,
+      3,
+    )
+    const byKey = new Map(h.weeks.flatMap((w) => w.cells).map((c) => [c.dateKey, c]))
+    expect(byKey.get('2026-07-27')?.level).toBe(1)
+    expect(byKey.get('2026-07-28')?.level).toBe(2)
+    expect(byKey.get('2026-07-29')?.level).toBe(3)
+    expect(byKey.get('2026-07-30')?.level).toBe(4)
+    expect(byKey.get('2026-07-26')?.level).toBe(0)
+  })
+
+  it('ignores days that have not happened yet', () => {
+    const h = focusHeatmap([daySeg(2026, 6, 30, 30)], settings, now, 2)
+    const future = h.weeks[h.weeks.length - 1].cells.find((c) => c.dateKey === '2026-07-31')
+    expect(future?.level).toBe(0)
+    // Only the one real day counts.
+    expect(h.activeDays).toBe(1)
+    expect(h.totalMs).toBe(30 * 60000)
+  })
+
+  it('reports the longest consecutive run of focused days', () => {
+    const h = focusHeatmap(
+      [daySeg(2026, 6, 27, 20), daySeg(2026, 6, 28, 20), daySeg(2026, 6, 30, 20)],
+      settings,
+      now,
+      3,
+    )
+    expect(h.bestRun).toBe(2)
+  })
+
+  it('labels the first week of each month once', () => {
+    const h = focusHeatmap([], settings, now, 10)
+    const labels = h.weeks.map((w) => w.monthLabel).filter(Boolean)
+    expect(labels.length).toBeGreaterThan(0)
+    expect(new Set(labels).size).toBe(labels.length)
   })
 })

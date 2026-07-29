@@ -151,6 +151,98 @@
 .today-tally:hover {
   color: var(--fg-muted);
 }
+
+/* ===== Year-of-focus heatmap ===== */
+.heatmap {
+  --cell: 12px;
+  --cell-gap: 3px;
+}
+.heatmap-scroll {
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+.heatmap-months {
+  display: flex;
+  gap: var(--cell-gap);
+  margin-left: calc(30px + var(--cell-gap));
+  margin-bottom: 4px;
+}
+.heatmap-month {
+  width: var(--cell);
+  flex: none;
+  font-size: 0.66rem;
+  color: var(--fg-subtle);
+  white-space: nowrap;
+}
+.heatmap-body {
+  display: flex;
+  gap: var(--cell-gap);
+}
+.heatmap-days {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cell-gap);
+  width: 30px;
+  flex: none;
+}
+.heatmap-day-label {
+  height: var(--cell);
+  font-size: 0.62rem;
+  line-height: var(--cell);
+  color: var(--fg-subtle);
+}
+.heatmap-grid {
+  display: flex;
+  gap: var(--cell-gap);
+}
+.heatmap-week {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cell-gap);
+}
+.heatmap-cell {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 3px;
+  background: var(--surface-3);
+  display: block;
+  flex: none;
+}
+/* Flat steps toward the accent — no gradients, just four solid tints. */
+.heatmap-cell--1 {
+  background: var(--primary);
+  opacity: 0.28;
+}
+.heatmap-cell--2 {
+  background: var(--primary);
+  opacity: 0.5;
+}
+.heatmap-cell--3 {
+  background: var(--primary);
+  opacity: 0.75;
+}
+.heatmap-cell--4 {
+  background: var(--primary);
+  opacity: 1;
+}
+.heatmap-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-3);
+  font-size: 0.78rem;
+  color: var(--fg-subtle);
+}
+.heatmap-summary strong {
+  color: var(--primary);
+}
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .sidebar,
 .content {
   position: relative;

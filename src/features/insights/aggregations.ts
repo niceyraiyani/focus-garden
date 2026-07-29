@@ -148,6 +148,102 @@ export function currentStreak(
   return streak
 }
 
+export interface HeatCell {
+  dateKey: string
+  focusedMs: number
+  /** 0 = nothing, 4 = daily goal reached. */
+  level: 0 | 1 | 2 | 3 | 4
+}
+
+export interface HeatWeek {
+  /** Sunday-first; the leading week may start before the window. */
+  cells: HeatCell[]
+  /** Set on the first week of each month, for the labels across the top. */
+  monthLabel: string | null
+}
+
+export interface Heatmap {
+  weeks: HeatWeek[]
+  totalMs: number
+  /** Days with any focus at all. */
+  activeDays: number
+  /** Longest run of consecutive days with any focus. */
+  bestRun: number
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+function levelFor(ms: number, goalMs: number): 0 | 1 | 2 | 3 | 4 {
+  if (ms <= 0) return 0
+  const pct = ms / goalMs
+  if (pct >= 1) return 4
+  if (pct >= 0.5) return 3
+  if (pct >= 0.25) return 2
+  return 1
+}
+
+/**
+ * A year of focus as a week-by-week grid, in the spirit of a contribution
+ * graph. Intensity is relative to the daily goal, so level 4 always means
+ * "hit the goal" rather than an arbitrary threshold.
+ */
+export function focusHeatmap(
+  segments: FocusSegment[],
+  settings: Settings,
+  nowTs: number = Date.now(),
+  weekCount = 53,
+): Heatmap {
+  const focus = focusedMsByDay(segments, nowTs)
+  const goalMs = Math.max(1, settings.dailyGoalMinutes * 60000)
+
+  // Walk back to the Sunday that starts the earliest week we show.
+  const today = new Date(nowTs)
+  today.setHours(12, 0, 0, 0)
+  const start = new Date(today)
+  start.setDate(start.getDate() - (weekCount - 1) * 7 - today.getDay())
+
+  const weeks: HeatWeek[] = []
+  let totalMs = 0
+  let activeDays = 0
+  let run = 0
+  let bestRun = 0
+  const cursor = new Date(start)
+  let lastMonth = -1
+
+  for (let w = 0; w < weekCount; w++) {
+    const cells: HeatCell[] = []
+    let monthLabel: string | null = null
+    for (let d = 0; d < 7; d++) {
+      const ts = cursor.getTime()
+      const dateKey = localDateKey(ts)
+      // Don't draw days that haven't happened yet.
+      const future = ts > today.getTime()
+      const focusedMs = future ? 0 : (focus.get(dateKey) ?? 0)
+      if (!future) {
+        totalMs += focusedMs
+        if (focusedMs > 0) {
+          activeDays++
+          run++
+          if (run > bestRun) bestRun = run
+        } else {
+          run = 0
+        }
+      }
+      cells.push({ dateKey, focusedMs, level: future ? 0 : levelFor(focusedMs, goalMs) })
+      // Label a column only when it actually contains the start of a month, so
+      // a partial month at the left edge doesn't crowd the next label.
+      if (cursor.getDate() <= 7 && cursor.getMonth() !== lastMonth) {
+        monthLabel = MONTHS[cursor.getMonth()]
+        lastMonth = cursor.getMonth()
+      }
+      cursor.setDate(cursor.getDate() + 1)
+    }
+    weeks.push({ cells, monthLabel })
+  }
+
+  return { weeks, totalMs, activeDays, bestRun }
+}
+
 export interface WeekComparison {
   thisWeekMs: number
   lastWeekMs: number

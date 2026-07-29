@@ -8,9 +8,11 @@ import {
   weekComparison,
   focusedMsByList,
   summarizeSessions,
+  focusHeatmap,
 } from './aggregations'
 import { formatMinutes } from '../../lib/time'
 import { Icon } from '../../components/Icon'
+import { FocusHeatmap } from '../../components/FocusHeatmap'
 import { Flourish } from '../../components/Flourish'
 import type { Weekday } from '../../domain/types'
 
@@ -28,6 +30,7 @@ export function InsightsPage() {
   const week = weekComparison(segments)
   const days = dailyStats(segments, tasks, 14)
   const maxMs = Math.max(goalMs, ...days.map((d) => d.focusedMs), 1)
+  const heatmap = focusHeatmap(segments, settings)
 
   const byList = focusedMsByList(segments, tasks)
   const listRows = [...byList.entries()]
@@ -86,6 +89,11 @@ export function InsightsPage() {
               </span>
             </div>
           </div>
+
+          <section className="card">
+            <h3 className="group-title">Your year of focus</h3>
+            <FocusHeatmap map={heatmap} />
+          </section>
 
           <section className="card">
             <h3 className="group-title">Last 14 days</h3>
