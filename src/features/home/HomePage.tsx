@@ -78,11 +78,20 @@ export function HomePage() {
         </div>
 
         <Link to="/focus" className="card focus-hero">
-          <Flourish variant="sparkle" size={40} color="var(--accent-yellow)" float />
-          <span className="focus-hero-title">{session ? 'Resume your session' : 'Start a focus session'}</span>
-          <span className="focus-hero-sub">
-            {session ? 'Your timer is waiting 🎯' : 'Pick a few tasks and find your flow 🎯'}
+          <span className="focus-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path d="M8 5v14l11-7z" fill="currentColor" />
+            </svg>
           </span>
+          <span className="focus-hero-text">
+            <span className="focus-hero-title">
+              {session ? 'Resume your session' : 'Start a focus session'}
+            </span>
+            <span className="focus-hero-sub">
+              {session ? 'Your timer is waiting 🎯' : 'Pick a few tasks and find your flow 🎯'}
+            </span>
+          </span>
+          {session && <span className="focus-live-dot" aria-label="Session in progress" />}
         </Link>
       </div>
 
