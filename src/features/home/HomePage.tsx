@@ -9,6 +9,7 @@ import { QuickAdd } from '../tasks/QuickAdd'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
 import { Companion } from '../../components/Companion'
 import { Flourish } from '../../components/Flourish'
+import { InboxTriage } from './InboxTriage'
 import { todayFocusedMs, currentStreak } from '../insights/aggregations'
 import { formatMinutes } from '../../lib/time'
 import { useState } from 'react'
@@ -37,6 +38,9 @@ export function HomePage() {
   const goalMs = settings.dailyGoalMinutes * 60000
   const goalPct = Math.min(100, goalMs > 0 ? (focusedMs / goalMs) * 100 : 0)
   const streak = currentStreak(segments, settings)
+
+  // Undated Inbox tasks — the ones that quietly pile up and get forgotten.
+  const looseInbox = inbox.filter((t) => !t.dueDate)
 
   const openTaskLive = openTask ? todayTasks.find((t) => t.id === openTask.id) ?? openTask : null
 
@@ -81,6 +85,8 @@ export function HomePage() {
           </span>
         </Link>
       </div>
+
+      <InboxTriage tasks={looseInbox} lists={lists} tags={tags} />
 
       <section className="home-tasks">
         <div className="home-col">
