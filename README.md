@@ -114,8 +114,8 @@ click the install icon in your address bar to pin it as an app.
 Grab the latest installer from the
 **[Releases page](https://github.com/niceyraiyani/focus-garden/releases/latest)**:
 
-- **macOS** — `lock.in_*_universal.dmg`
-- **Windows** — `lock.in_*_x64-setup.exe`
+- **macOS** — the universal `.dmg`
+- **Windows** — the `.exe` (or `.msi`) installer
 
 > **Heads up:** the app isn't code-signed (no paid certificate), so your OS may
 > warn about an "unidentified developer." On macOS, right-click the app → **Open**
