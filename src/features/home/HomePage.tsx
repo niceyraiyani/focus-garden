@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../data/db'
 import { useSettings } from '../../app/SettingsContext'
@@ -9,6 +9,7 @@ import { QuickAdd } from '../tasks/QuickAdd'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
 import { Companion } from '../../components/Companion'
 import { Flourish } from '../../components/Flourish'
+import { Burst } from '../../components/Burst'
 import { InboxTriage } from './InboxTriage'
 import { todayFocusedMs, currentStreak } from '../insights/aggregations'
 import { formatMinutes } from '../../lib/time'
@@ -33,6 +34,16 @@ export function HomePage() {
   const session = useActiveSession()
   const segments = useLiveQuery(() => db.segments.toArray(), [], [])
   const [openTask, setOpenTask] = useState<Task | null>(null)
+  const [playBurst, setPlayBurst] = useState(0)
+  const navigate = useNavigate()
+
+  function onPlay(e: React.MouseEvent) {
+    if (settings.celebrations && settings.decorativeMotion) {
+      e.preventDefault()
+      setPlayBurst((b) => b + 1)
+      window.setTimeout(() => navigate('/focus'), 420)
+    }
+  }
 
   const focusedMs = todayFocusedMs(segments)
   const goalMs = settings.dailyGoalMinutes * 60000
@@ -77,7 +88,8 @@ export function HomePage() {
           </div>
         </div>
 
-        <Link to="/focus" className="card focus-hero">
+        <Link to="/focus" className="card focus-hero" onClick={onPlay}>
+          <Burst trigger={playBurst} variant="flower" />
           <span className="focus-play" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="28" height="28">
               <path d="M8 5v14l11-7z" fill="currentColor" />

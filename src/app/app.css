@@ -4,6 +4,31 @@
   min-height: 100vh;
 }
 
+/* Decorative wildflower meadow along the bottom, behind everything. */
+.meadow {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 190px;
+  pointer-events: none;
+  z-index: 0;
+  color: var(--accent-lavender);
+  opacity: 0.16;
+  line-height: 0;
+}
+.meadow svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.sidebar,
+.content {
+  position: relative;
+  z-index: 1;
+}
+
 .sidebar {
   width: 254px;
   flex: none;

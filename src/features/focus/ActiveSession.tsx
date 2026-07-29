@@ -15,7 +15,7 @@ import { activeMs, isOvertime, remainingMs } from '../../domain/timing'
 import { formatClock, formatMinutes } from '../../lib/time'
 import { Button, IconButton } from '../../components/Button'
 import { Companion } from '../../components/Companion'
-import { PetalBurst } from '../../components/PetalBurst'
+import { Burst } from '../../components/Burst'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { useToast } from '../../components/ToastContext'
 import { useSettings } from '../../app/SettingsContext'
@@ -47,9 +47,19 @@ export function ActiveSession({
   const parked = useTasksByIds(session.parkingLot)
 
   const [burst, setBurst] = useState(0)
+  const [startBurst, setStartBurst] = useState(0)
   const [celebrate, setCelebrate] = useState(false)
   const [parkText, setParkText] = useState('')
   const notifiedRef = useRef(session.notifiedMinReached)
+
+  // Flower burst when the session has just begun (not when revisiting one).
+  useEffect(() => {
+    if (Date.now() - session.startedAt < 3000) {
+      setStartBurst((b) => b + 1)
+    }
+    // Only on first mount for this session.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const elapsed = activeMs(segments, now)
   const over = isOvertime(session, segments, now)
@@ -100,7 +110,8 @@ export function ActiveSession({
   return (
     <div className="session">
       <div className="session-timer-wrap">
-        <PetalBurst trigger={burst} />
+        <Burst trigger={burst} variant="star" />
+        <Burst trigger={startBurst} variant="flower" />
         <div className={`session-timer ${over ? 'session-timer--over' : ''}`}>
           <span className="timer-clock">{formatClock(elapsed)}</span>
           <span className="timer-sub">

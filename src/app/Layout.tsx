@@ -5,6 +5,7 @@ import { createList } from '../data/lists'
 import { useActiveSession } from '../features/focus/useFocusSession'
 import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { Flourish } from '../components/Flourish'
+import { MeadowBackground } from '../components/MeadowBackground'
 
 function NavItem({ to, icon, label, end }: { to: string; icon: string; label: string; end?: boolean }) {
   return (
@@ -41,6 +42,7 @@ export function Layout() {
 
   return (
     <div className="app-shell">
+      <MeadowBackground />
       <aside className="sidebar">
         <div className="brand">
           <Flourish variant="bloom" size={30} color="var(--accent-pink)" />

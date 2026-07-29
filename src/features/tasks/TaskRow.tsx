@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 import type { Task, List, Tag } from '../../domain/types'
 import { setTaskComplete } from '../../data/tasks'
 import { EffortFlowers } from '../../components/EffortFlowers'
-import { PetalBurst } from '../../components/PetalBurst'
+import { Burst } from '../../components/Burst'
 import { useToast } from '../../components/ToastContext'
 import { useSubtaskCounts } from './hooks'
 import { localDateKey } from '../../lib/date'
@@ -84,7 +84,7 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
         aria-label={isDone ? `Reopen ${task.title}` : `Complete ${task.title}`}
         onClick={onCheck}
       >
-        <PetalBurst trigger={burst} />
+        <Burst trigger={burst} variant="star" />
         {(completing || isDone) && <span className="checkbox-tick">✓</span>}
       </button>
 

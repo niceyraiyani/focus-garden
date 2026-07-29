@@ -302,8 +302,8 @@
   display: inline-block;
 }
 
-/* ---------- Petal burst celebration ---------- */
-.petal-burst {
+/* ---------- Celebration burst (stars / flowers) ---------- */
+.burst {
   position: absolute;
   inset: 0;
   display: flex;
@@ -312,20 +312,31 @@
   pointer-events: none;
   z-index: 5;
 }
-.petal {
+.burst-bit {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 60% 20% 60% 20%;
-  animation: petal-fly 0.85s ease-out forwards;
+  animation: burst-fly 0.9s ease-out forwards;
+  transform-origin: center;
 }
-@keyframes petal-fly {
+@keyframes burst-fly {
   0% {
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0) scale(0.5);
     opacity: 1;
   }
   100% {
     transform: translate(var(--tx), var(--ty)) scale(1);
+    opacity: 0;
+  }
+}
+.burst-bit--spin {
+  animation: burst-fly-spin 0.9s ease-out forwards;
+}
+@keyframes burst-fly-spin {
+  0% {
+    transform: translate(0, 0) scale(0.4) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1) rotate(140deg);
     opacity: 0;
   }
 }
