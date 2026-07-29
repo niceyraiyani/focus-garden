@@ -42,7 +42,49 @@ profile. Clearing site data erases it — so export a backup now and then
 
 React 19 · TypeScript · Vite · Dexie (IndexedDB) · dnd-kit · Vitest. Structured
 behind a repository boundary with stable ids and timestamps so cloud sync can be
-added later without rewriting the UI.
+added later without rewriting the UI. An optional **Tauri** desktop shell adds
+real site blocking (see below).
+
+## Desktop app + focus site blocker
+
+The web app can't block other websites (browsers forbid it). The **desktop app**
+(built with Tauri) can: while a focus session is running it edits your system
+`hosts` file to point your blocked domains at localhost, then restores it the
+moment the session ends — the same idea as
+[SelfControl](https://github.com/SelfControlApp/selfcontrol), just lighter
+(hosts file only, no `pf` firewall). Add sites under **Settings → Focus site
+blocker**.
+
+Blocking logic lives in `src-tauri/src/blocker.rs` (pure, unit-tested functions
++ Tauri commands). The frontend calls it via `src/features/focus/nativeBlocker.ts`,
+which safely no-ops in a plain browser.
+
+### Build the desktop app
+
+Prerequisites: [Rust](https://rustup.rs) + your platform's Tauri prerequisites
+(macOS: Xcode command-line tools; Windows: VS Build Tools + WebView2).
+
+```bash
+npm install --legacy-peer-deps
+npm run desktop:dev      # run the desktop app with hot reload
+npm run desktop:build    # produce a distributable app (.app / .dmg / .exe)
+cargo test --manifest-path src-tauri/Cargo.toml   # test the blocker logic
+```
+
+On macOS the built app is in `src-tauri/target/release/bundle/`.
+
+### Permissions (important)
+
+Editing the hosts file needs elevated rights:
+
+- **macOS:** launch with permission to write `/etc/hosts` (e.g. run the built
+  binary with `sudo`, or grant the app the needed access). Without it, starting a
+  session shows a clear "needs administrator/root permission" message and simply
+  skips blocking — your tasks and timer still work.
+- **Windows:** run the app **as Administrator**.
+
+The blocker never deletes your existing hosts entries — it only adds/removes a
+clearly delimited `# >>> focus garden block >>>` section.
 
 ## Develop
 

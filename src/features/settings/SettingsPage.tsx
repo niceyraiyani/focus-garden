@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useSettings } from '../../app/SettingsContext'
 import { downloadBackup, importBackup } from '../../data/backup'
+import { normalizeDomain, isDesktop } from '../focus/nativeBlocker'
 import { Button } from '../../components/Button'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
@@ -31,6 +32,25 @@ export function SettingsPage() {
   const confirm = useConfirm()
   const fileRef = useRef<HTMLInputElement>(null)
   const [importing, setImporting] = useState(false)
+  const [newSite, setNewSite] = useState('')
+
+  const blocklist = settings.blocklist ?? []
+  const desktop = isDesktop()
+
+  function addSite() {
+    const domain = normalizeDomain(newSite)
+    if (!domain) return
+    if (blocklist.includes(domain)) {
+      setNewSite('')
+      return
+    }
+    void update({ blocklist: [...blocklist, domain] })
+    setNewSite('')
+  }
+
+  function removeSite(domain: string) {
+    void update({ blocklist: blocklist.filter((d) => d !== domain) })
+  }
 
   function toggleWorkday(day: Weekday) {
     const has = settings.workdays.includes(day)
@@ -170,6 +190,45 @@ export function SettingsPage() {
           </div>
           <p className="setting-hint">Only these days count toward goals and streaks. Rest days are always guilt-free.</p>
         </div>
+      </div>
+
+      <div className="card setting-block">
+        <h3 className="group-title">Focus site blocker</h3>
+        <p className="setting-hint">
+          {desktop
+            ? 'These sites are blocked while a focus session is running, and work normally when it’s off. The app needs administrator/root permission to change blocking.'
+            : 'These sites will be blocked while a focus session runs — but only in the desktop app, which can edit your computer’s hosts file. In this browser tab the list is saved but not enforced. See the README to build the desktop app.'}
+        </p>
+        <div className="setting-actions">
+          <input
+            className="input"
+            value={newSite}
+            onChange={(e) => setNewSite(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && addSite()}
+            placeholder="e.g. youtube.com"
+            aria-label="Add a site to block"
+          />
+          <Button variant="primary" onClick={addSite} disabled={!newSite.trim()}>
+            ＋ Block site
+          </Button>
+        </div>
+        {blocklist.length === 0 ? (
+          <p className="setting-hint">No sites blocked yet.</p>
+        ) : (
+          <div className="tag-row">
+            {blocklist.map((d) => (
+              <span key={d} className="chip">
+                🚫 {d}
+                <button className="chip-x" aria-label={`Stop blocking ${d}`} onClick={() => removeSite(d)}>
+                  ✕
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        {!desktop && blocklist.length > 0 && (
+          <p className="setting-hint">🖥️ Open focus garden in the desktop app to actually block these.</p>
+        )}
       </div>
 
       <div className="card setting-block">

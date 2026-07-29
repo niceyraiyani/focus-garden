@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useActiveLists } from '../features/tasks/hooks'
 import { createList } from '../data/lists'
 import { useActiveSession } from '../features/focus/useFocusSession'
+import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { Flourish } from '../components/Flourish'
 
 function NavItem({ to, icon, label, end }: { to: string; icon: string; label: string; end?: boolean }) {
@@ -22,6 +23,9 @@ export function Layout() {
   const navigate = useNavigate()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
+
+  // Desktop app only: block distracting sites while a session runs.
+  useNativeBlocker()
 
   async function addList() {
     const trimmed = name.trim()
