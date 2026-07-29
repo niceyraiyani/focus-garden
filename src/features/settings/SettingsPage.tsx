@@ -197,8 +197,17 @@ export function SettingsPage() {
         <p className="setting-hint">
           {desktop
             ? 'These sites are blocked while a focus session is running, and work normally when it’s off. The app needs administrator/root permission to change blocking.'
-            : 'These sites will be blocked while a focus session runs — but only in the desktop app, which can edit your computer’s hosts file. In this browser tab the list is saved but not enforced. See the README to build the desktop app.'}
+            : 'These sites will be blocked while a focus session runs — but only in the desktop app, which can edit your computer’s hosts file. In this browser tab the list is saved but not enforced.'}
         </p>
+        {!desktop && (
+          <p className="setting-hint">
+            🖥️ Want real blocking?{' '}
+            <a href="https://github.com/niceyraiyani/focus-garden/releases" target="_blank" rel="noreferrer">
+              Download the desktop app
+            </a>{' '}
+            (macOS &amp; Windows).
+          </p>
+        )}
         <div className="setting-actions">
           <input
             className="input"
