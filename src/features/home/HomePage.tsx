@@ -65,7 +65,7 @@ export function HomePage() {
           <p className="home-sub">
             {focusedMs > 0
               ? `You've focused for ${formatMinutes(focusedMs / 60000)} today.`
-              : 'A fresh day. Time to lock in — what matters most right now?'}
+              : 'Time to lock in.'}
           </p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export function HomePage() {
 
         <div className="home-col">
           <h2 className="group-title"><Icon name="inbox" /> Quick capture</h2>
-          <QuickAdd listId={null} placeholder="Brain dump here — organize later…" />
+          <QuickAdd listId={null} placeholder="Brain dump…" />
           <p className="muted-note home-inbox-count">
             {inbox.length === 0 ? 'Inbox is empty' : `${inbox.length} in your Inbox`}
             {inbox.length > 0 && (

@@ -1,13 +1,15 @@
 import { useRef, useState } from 'react'
 import { useSettings } from '../../app/SettingsContext'
 import { downloadBackup, importBackup } from '../../data/backup'
-import { normalizeDomain, isDesktop } from '../focus/nativeBlocker'
+import { isDesktop } from '../focus/nativeBlocker'
+import { BlocklistEditor } from '../focus/BlocklistEditor'
 import { Button } from '../../components/Button'
 import { Icon } from '../../components/Icon'
 import type { IconName } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
 import type { ThemeMode, Weekday, AccentName, Vibe } from '../../domain/types'
+import { VIBE_DEFAULT_ACCENT, resolveAccent } from '../../theme/accents'
 
 const WEEKDAYS: { day: Weekday; label: string }[] = [
   { day: 0, label: 'Sun' },
@@ -26,13 +28,11 @@ const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
 ]
 
 const ACCENTS: { name: AccentName; label: string; swatch: string }[] = [
-  { name: 'white', label: 'White', swatch: '#ece5d8' },
-  { name: 'terracotta', label: 'Terracotta', swatch: '#d3a67d' },
-  { name: 'sage', label: 'Sage', swatch: '#a9c8a3' },
-  { name: 'rose', label: 'Dusty Rose', swatch: '#e1a49c' },
-  { name: 'honey', label: 'Honey', swatch: '#e4c67d' },
-  { name: 'mauve', label: 'Mauve', swatch: '#cbb4d6' },
-  { name: 'teal', label: 'Teal', swatch: '#8fc2ad' },
+  { name: 'white', label: 'White', swatch: '#e9e6df' },
+  { name: 'blush', label: 'Blush', swatch: '#f4a9c6' },
+  { name: 'lavender', label: 'Lavender', swatch: '#c4b5fd' },
+  { name: 'mint', label: 'Mint', swatch: '#8fe3c0' },
+  { name: 'sky', label: 'Sky', swatch: '#93c1fb' },
 ]
 
 const VIBES: { name: Vibe; label: string; hint: string }[] = [
@@ -50,25 +50,8 @@ export function SettingsPage() {
   const confirm = useConfirm()
   const fileRef = useRef<HTMLInputElement>(null)
   const [importing, setImporting] = useState(false)
-  const [newSite, setNewSite] = useState('')
-
   const blocklist = settings.blocklist ?? []
   const desktop = isDesktop()
-
-  function addSite() {
-    const domain = normalizeDomain(newSite)
-    if (!domain) return
-    if (blocklist.includes(domain)) {
-      setNewSite('')
-      return
-    }
-    void update({ blocklist: [...blocklist, domain] })
-    setNewSite('')
-  }
-
-  function removeSite(domain: string) {
-    void update({ blocklist: blocklist.filter((d) => d !== domain) })
-  }
 
   function toggleWorkday(day: Weekday) {
     const has = settings.workdays.includes(day)
@@ -140,7 +123,7 @@ export function SettingsPage() {
               <button
                 key={v.name}
                 className={`seg-item ${(settings.vibe ?? 'flowers') === v.name ? 'seg-item--on' : ''}`}
-                onClick={() => update({ vibe: v.name })}
+                onClick={() => update({ vibe: v.name, accent: VIBE_DEFAULT_ACCENT[v.name] })}
                 title={v.hint}
               >
                 {v.label}
@@ -157,7 +140,7 @@ export function SettingsPage() {
             {ACCENTS.map((a) => (
               <button
                 key={a.name}
-                className={`accent-choice ${(settings.accent ?? 'terracotta') === a.name ? 'accent-choice--on' : ''}`}
+                className={`accent-choice ${resolveAccent(settings.accent, settings.vibe) === a.name ? 'accent-choice--on' : ''}`}
                 onClick={() => update({ accent: a.name })}
                 title={`${a.label} · ${a.swatch}`}
                 aria-label={a.label}
@@ -167,6 +150,9 @@ export function SettingsPage() {
               </button>
             ))}
           </div>
+          <p className="setting-hint">
+            Picking a vibe auto-matches its accent — switch it anytime.
+          </p>
         </div>
         <ToggleRow
           label="Gentle motion"
@@ -206,6 +192,30 @@ export function SettingsPage() {
         />
       </div>
 
+      <div className="card setting-block setting-block--accent">
+        <h3 className="group-title">
+          <Icon name="ban" className="view-icon" /> Focus site blocker
+        </h3>
+        <p className="setting-hint">
+          {desktop
+            ? 'These sites are blocked while a focus session is running, and work normally when it’s off. The app needs administrator/root permission to change blocking.'
+            : 'These sites will be blocked while a focus session runs — but only in the desktop app, which can edit your computer’s hosts file. In this browser tab the list is saved but not enforced.'}
+        </p>
+        {!desktop && (
+          <p className="setting-hint">
+            Want real blocking?{' '}
+            <a href="https://github.com/niceyraiyani/lock.in/releases" target="_blank" rel="noreferrer">
+              Download the desktop app
+            </a>{' '}
+            (macOS &amp; Windows).
+          </p>
+        )}
+        <BlocklistEditor />
+        {!desktop && blocklist.length > 0 && (
+          <p className="setting-hint">Open lock.in in the desktop app to actually block these.</p>
+        )}
+      </div>
+
       <div className="card setting-block">
         <h3 className="group-title">Goals &amp; streaks</h3>
         <div className="setting-row">
@@ -237,54 +247,6 @@ export function SettingsPage() {
           </div>
           <p className="setting-hint">Only these days count toward goals and streaks. Rest days are always guilt-free.</p>
         </div>
-      </div>
-
-      <div className="card setting-block">
-        <h3 className="group-title">Focus site blocker</h3>
-        <p className="setting-hint">
-          {desktop
-            ? 'These sites are blocked while a focus session is running, and work normally when it’s off. The app needs administrator/root permission to change blocking.'
-            : 'These sites will be blocked while a focus session runs — but only in the desktop app, which can edit your computer’s hosts file. In this browser tab the list is saved but not enforced.'}
-        </p>
-        {!desktop && (
-          <p className="setting-hint">
-            Want real blocking?{' '}
-            <a href="https://github.com/niceyraiyani/lock.in/releases" target="_blank" rel="noreferrer">
-              Download the desktop app
-            </a>{' '}
-            (macOS &amp; Windows).
-          </p>
-        )}
-        <div className="setting-actions">
-          <input
-            className="input"
-            value={newSite}
-            onChange={(e) => setNewSite(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && addSite()}
-            placeholder="e.g. youtube.com"
-            aria-label="Add a site to block"
-          />
-          <Button variant="primary" onClick={addSite} disabled={!newSite.trim()}>
-            <Icon name="plus" /> Block site
-          </Button>
-        </div>
-        {blocklist.length === 0 ? (
-          <p className="setting-hint">No sites blocked yet.</p>
-        ) : (
-          <div className="tag-row">
-            {blocklist.map((d) => (
-              <span key={d} className="chip">
-                <Icon name="ban" /> {d}
-                <button className="chip-x" aria-label={`Stop blocking ${d}`} onClick={() => removeSite(d)}>
-                  <Icon name="close" />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-        {!desktop && blocklist.length > 0 && (
-          <p className="setting-hint">Open lock.in in the desktop app to actually block these.</p>
-        )}
       </div>
 
       <div className="card setting-block">

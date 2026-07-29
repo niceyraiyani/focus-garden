@@ -104,7 +104,7 @@ export function MeadowBackground() {
     <div className="meadow" aria-hidden="true">
       <svg
         viewBox="0 0 1200 240"
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio="xMidYMax meet"
         fill="none"
         stroke="currentColor"
         strokeWidth={2.2}

@@ -11,7 +11,8 @@
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 190px;
+  max-height: 300px;
+  overflow: hidden;
   pointer-events: none;
   z-index: 0;
   color: var(--accent-lavender);
@@ -20,8 +21,24 @@
 }
 .meadow svg {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
+}
+
+.setting-block--accent {
+  box-shadow: inset 0 0 0 1.5px var(--ring);
+}
+
+.builder-block {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.builder-block .field-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 .sidebar,
 .content {

@@ -4,6 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db, DEFAULT_SETTINGS, ensureSeeded } from '../data/db'
 import { updateSettings as persistSettings } from '../data/settings'
 import type { Settings } from '../domain/types'
+import { resolveAccent } from '../theme/accents'
 
 interface SettingsContextValue {
   settings: Settings
@@ -49,7 +50,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement
     root.setAttribute('data-theme', resolvedTheme)
     root.setAttribute('data-motion', effective.decorativeMotion ? 'on' : 'off')
-    root.setAttribute('data-accent', effective.accent ?? 'white')
+    root.setAttribute('data-accent', resolveAccent(effective.accent, effective.vibe))
     root.setAttribute('data-vibe', effective.vibe ?? 'flowers')
   }, [resolvedTheme, effective.decorativeMotion, effective.accent, effective.vibe])
 

@@ -15,7 +15,7 @@ function daySeg(y: number, m: number, d: number, mins: number): FocusSegment {
 const settings: Settings = {
   id: 'app',
   theme: 'system',
-  accent: 'terracotta',
+  accent: 'white',
   vibe: 'flowers',
   defaultMinMinutes: 30,
   notificationsEnabled: false,

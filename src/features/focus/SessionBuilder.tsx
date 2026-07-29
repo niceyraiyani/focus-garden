@@ -7,6 +7,8 @@ import { Icon } from '../../components/Icon'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { Flourish } from '../../components/Flourish'
 import type { ID } from '../../domain/types'
+import { BlocklistEditor } from './BlocklistEditor'
+import { isDesktop } from './nativeBlocker'
 
 const DURATION_CHOICES = [15, 25, 30, 45, 60]
 
@@ -127,6 +129,18 @@ export function SessionBuilder() {
             <p className="duration-hint">
               We’ll gently nudge you at {minutes} min — then keep counting while you’re in flow.
             </p>
+          </div>
+
+          <div className="builder-block">
+            <span className="field-label">
+              <Icon name="ban" /> Blocked while you focus
+            </span>
+            <p className="duration-hint">
+              {isDesktop()
+                ? 'These stay closed until you stop. Tweak the list before you dive in.'
+                : 'Line up your no-go sites now. Real blocking runs in the desktop app — here it’s saved for focus time.'}
+            </p>
+            <BlocklistEditor />
           </div>
 
           <Button

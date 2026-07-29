@@ -150,7 +150,7 @@
 }
 
 /* ===== Accent presets (swap the dominant hue; base canvas stays) ===== */
-/* Terracotta lives in the base tokens; White is the default via data-accent. */
+/* White is the neutral default; base tokens hold the fallback tone. */
 
 [data-theme='dark'][data-accent='white'] {
   --primary: #e9e6df;
@@ -167,79 +167,64 @@
   --soft-lavender: rgba(69, 63, 52, 0.1);
 }
 
-[data-theme='dark'][data-accent='sage'] {
-  --primary: #a9c8a3;
-  --primary-hover: #bcd7b6;
-  --accent-lavender: #a9c8a3;
-  --ring: rgba(169, 200, 163, 0.5);
-  --soft-lavender: rgba(169, 200, 163, 0.16);
+[data-theme='dark'][data-accent='blush'] {
+  --primary: #f4a9c6;
+  --primary-hover: #f8bcd3;
+  --accent-lavender: #f4a9c6;
+  --ring: rgba(244, 169, 198, 0.5);
+  --soft-lavender: rgba(244, 169, 198, 0.16);
 }
-[data-theme='light'][data-accent='sage'] {
-  --primary: #6f9d68;
-  --primary-hover: #5f8a59;
-  --accent-lavender: #6f9d68;
-  --ring: rgba(111, 157, 104, 0.35);
-  --soft-lavender: rgba(111, 157, 104, 0.16);
-}
-
-[data-theme='dark'][data-accent='rose'] {
-  --primary: #e1a49c;
-  --primary-hover: #ecb8b1;
-  --accent-lavender: #e1a49c;
-  --ring: rgba(225, 164, 156, 0.5);
-  --soft-lavender: rgba(225, 164, 156, 0.16);
-}
-[data-theme='light'][data-accent='rose'] {
-  --primary: #cf7d73;
-  --primary-hover: #bd6e64;
-  --accent-lavender: #cf7d73;
-  --ring: rgba(207, 125, 115, 0.35);
-  --soft-lavender: rgba(207, 125, 115, 0.16);
+[data-theme='light'][data-accent='blush'] {
+  --primary: #c25f86;
+  --primary-hover: #ad5276;
+  --accent-lavender: #c25f86;
+  --ring: rgba(194, 95, 134, 0.35);
+  --soft-lavender: rgba(194, 95, 134, 0.16);
 }
 
-[data-theme='dark'][data-accent='honey'] {
-  --primary: #e4c67d;
-  --primary-hover: #eed596;
-  --accent-lavender: #e4c67d;
-  --ring: rgba(228, 198, 125, 0.5);
-  --soft-lavender: rgba(228, 198, 125, 0.16);
+[data-theme='dark'][data-accent='lavender'] {
+  --primary: #c4b5fd;
+  --primary-hover: #d3c7fe;
+  --accent-lavender: #c4b5fd;
+  --ring: rgba(196, 181, 253, 0.5);
+  --soft-lavender: rgba(196, 181, 253, 0.16);
 }
-[data-theme='light'][data-accent='honey'] {
-  --primary: #bf963c;
-  --primary-hover: #a9842f;
-  --accent-lavender: #bf963c;
-  --ring: rgba(191, 150, 60, 0.35);
-  --soft-lavender: rgba(191, 150, 60, 0.16);
-}
-
-[data-theme='dark'][data-accent='mauve'] {
-  --primary: #cbb4d6;
-  --primary-hover: #d9c7e2;
-  --accent-lavender: #cbb4d6;
-  --ring: rgba(203, 180, 214, 0.5);
-  --soft-lavender: rgba(203, 180, 214, 0.16);
-}
-[data-theme='light'][data-accent='mauve'] {
-  --primary: #8f6ea0;
-  --primary-hover: #7d5d8d;
-  --accent-lavender: #8f6ea0;
-  --ring: rgba(143, 110, 160, 0.35);
-  --soft-lavender: rgba(143, 110, 160, 0.16);
+[data-theme='light'][data-accent='lavender'] {
+  --primary: #7c5fd0;
+  --primary-hover: #6b4ec2;
+  --accent-lavender: #7c5fd0;
+  --ring: rgba(124, 95, 208, 0.32);
+  --soft-lavender: rgba(124, 95, 208, 0.14);
 }
 
-[data-theme='dark'][data-accent='teal'] {
-  --primary: #8fc2ad;
-  --primary-hover: #a6d1bf;
-  --accent-lavender: #8fc2ad;
-  --ring: rgba(143, 194, 173, 0.5);
-  --soft-lavender: rgba(143, 194, 173, 0.16);
+[data-theme='dark'][data-accent='mint'] {
+  --primary: #8fe3c0;
+  --primary-hover: #a6ead0;
+  --accent-lavender: #8fe3c0;
+  --ring: rgba(143, 227, 192, 0.5);
+  --soft-lavender: rgba(143, 227, 192, 0.16);
 }
-[data-theme='light'][data-accent='teal'] {
-  --primary: #4f8f79;
-  --primary-hover: #437d69;
-  --accent-lavender: #4f8f79;
-  --ring: rgba(79, 143, 121, 0.35);
-  --soft-lavender: rgba(79, 143, 121, 0.16);
+[data-theme='light'][data-accent='mint'] {
+  --primary: #3f9b78;
+  --primary-hover: #358a69;
+  --accent-lavender: #3f9b78;
+  --ring: rgba(63, 155, 120, 0.32);
+  --soft-lavender: rgba(63, 155, 120, 0.16);
+}
+
+[data-theme='dark'][data-accent='sky'] {
+  --primary: #93c1fb;
+  --primary-hover: #a9cffc;
+  --accent-lavender: #93c1fb;
+  --ring: rgba(147, 193, 251, 0.5);
+  --soft-lavender: rgba(147, 193, 251, 0.16);
+}
+[data-theme='light'][data-accent='sky'] {
+  --primary: #3f7fca;
+  --primary-hover: #356fb5;
+  --accent-lavender: #3f7fca;
+  --ring: rgba(63, 127, 202, 0.32);
+  --soft-lavender: rgba(63, 127, 202, 0.14);
 }
 
 :root {
