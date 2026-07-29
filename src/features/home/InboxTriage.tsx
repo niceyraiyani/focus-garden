@@ -40,7 +40,7 @@ export function InboxTriage({ tasks, lists, tags }: { tasks: Task[]; lists: List
   return (
     <section className="card triage">
       <div className="triage-head">
-        <h2 className="group-title">🌱 Loose in your Inbox ({tasks.length})</h2>
+        <h2 className="group-title">🪴 Needs a home ({tasks.length})</h2>
         <Link to="/inbox" className="triage-link">
           organize all →
         </Link>
