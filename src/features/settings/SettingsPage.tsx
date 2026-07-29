@@ -3,6 +3,7 @@ import { useSettings } from '../../app/SettingsContext'
 import { downloadBackup, importBackup } from '../../data/backup'
 import { isDesktop } from '../focus/nativeBlocker'
 import { BlocklistEditor } from '../focus/BlocklistEditor'
+import { AccountCard } from './AccountCard'
 import { Button } from '../../components/Button'
 import { Icon } from '../../components/Icon'
 import type { IconName } from '../../components/Icon'
@@ -248,6 +249,8 @@ export function SettingsPage() {
           <p className="setting-hint">Only these days count toward goals and streaks. Rest days are always guilt-free.</p>
         </div>
       </div>
+
+      <AccountCard />
 
       <div className="card setting-block">
         <h3 className="group-title">Your data</h3>

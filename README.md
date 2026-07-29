@@ -76,7 +76,8 @@ the rest of the time — the same idea as
 
 Pick a **vibe** that changes the whole feel — background, decorations, and the
 little celebrations when you finish a task. Then choose an accent color (White,
-Terracotta, Sage, Dusty Rose, Honey, Mauve, or Teal) and light/dark mode.
+Blush, Lavender, Mint, or Sky) and light/dark mode. Each vibe automatically
+picks the accent that suits it best, and you can switch anytime.
 
 | 🌫️ Plain | 🌸 Flowers | 🤖 Robot |
 |:---:|:---:|:---:|
@@ -89,15 +90,21 @@ drawn line icons, and generous breathing room.
 
 ---
 
-## 🔐 Private & local-first
+## 🔐 Private & local-first (with optional sync)
 
-Your data lives **only in your browser on your device** — no account, no server,
-no tracking, ever. That means it's fast and completely private. It also means:
+Your data lives **only in your browser on your device** by default — no account,
+no server, no tracking. That means it's fast and completely private. It also means:
 
 - Clearing your browser's site data will erase it, so **export a backup** now and
   then (Settings → Your data). You can re-import it anytime, on any device.
 - The web app and the desktop app keep separate data — use Export/Import to move
   between them.
+
+Want it on your laptop *and* your desktop? Turn on **cloud sync**: sign in with
+Google or an email & password, and lock.in keeps your tasks in step across
+devices. It's opt-in, free for personal use, and the data lives in **your own**
+Supabase project — see **[docs/CLOUD_SYNC.md](docs/CLOUD_SYNC.md)** for the
+5-minute setup. Not signed in? Nothing ever leaves your browser.
 
 lock.in is an installable **PWA**: open it in your browser and it works offline;
 click *Install* to run it in its own window like a native app.

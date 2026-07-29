@@ -39,6 +39,7 @@ export type IconName =
   | 'bookmark'
   | 'bolt'
   | 'cpu'
+  | 'refresh'
 
 const PATHS: Record<IconName, ReactNode> = {
   sun: (
@@ -190,6 +191,12 @@ const PATHS: Record<IconName, ReactNode> = {
       <rect x="7" y="7" width="10" height="10" rx="2" />
       <path d="M10 2.5V5M14 2.5V5M10 19v2.5M14 19v2.5M2.5 10H5M2.5 14H5M19 10h2.5M19 14h2.5" />
       <rect x="10.5" y="10.5" width="3" height="3" rx="0.6" fill="currentColor" stroke="none" />
+    </>
+  ),
+  refresh: (
+    <>
+      <path d="M20 12a8 8 0 1 1-2.6-5.9" />
+      <path d="M20 4v4.5h-4.5" />
     </>
   ),
 }

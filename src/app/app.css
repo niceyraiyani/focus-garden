@@ -40,6 +40,31 @@
   gap: var(--space-2);
   margin-bottom: var(--space-2);
 }
+
+.cloud-setup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+.cloud-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--fg-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.cloud-or {
+  text-align: center;
+  margin: var(--space-3) 0 0;
+}
+.cloud-conflict {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
 .sidebar,
 .content {
   position: relative;
