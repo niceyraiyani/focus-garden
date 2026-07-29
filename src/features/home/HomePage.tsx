@@ -3,15 +3,16 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../data/db'
 import { useSettings } from '../../app/SettingsContext'
 import { useTodayTasks, useLists, useTags, useInboxTasks } from '../tasks/hooks'
-import { useActiveSession } from '../focus/useFocusSession'
+import { useActiveSession, useNow } from '../focus/useFocusSession'
 import { TaskRow } from '../tasks/TaskRow'
 import { QuickAdd } from '../tasks/QuickAdd'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
 import { Flourish } from '../../components/Flourish'
 import { Burst } from '../../components/Burst'
 import { Icon, greetingIconFor } from '../../components/Icon'
+import { WeekStrip } from '../../components/WeekStrip'
 import { InboxTriage } from './InboxTriage'
-import { todayFocusedMs, currentStreak } from '../insights/aggregations'
+import { todayFocusedMs, currentStreak, weekBars } from '../insights/aggregations'
 import { formatMinutes } from '../../lib/time'
 import { useState } from 'react'
 import type { Task } from '../../domain/types'
@@ -37,6 +38,9 @@ export function HomePage() {
   const [playBurst, setPlayBurst] = useState(0)
   const navigate = useNavigate()
 
+  // Ticks while a session runs so today's number climbs as you focus.
+  const nowTs = useNow(session?.status === 'running', 15000)
+
   function onPlay(e: React.MouseEvent) {
     if (settings.celebrations && settings.decorativeMotion) {
       e.preventDefault()
@@ -45,10 +49,11 @@ export function HomePage() {
     }
   }
 
-  const focusedMs = todayFocusedMs(segments)
+  const focusedMs = todayFocusedMs(segments, nowTs)
   const goalMs = settings.dailyGoalMinutes * 60000
   const goalPct = Math.min(100, goalMs > 0 ? (focusedMs / goalMs) * 100 : 0)
   const streak = currentStreak(segments, settings)
+  const bars = weekBars(segments, settings, nowTs)
 
   // Undated Inbox tasks — the ones that quietly pile up and get forgotten.
   const looseInbox = inbox.filter((t) => !t.dueDate)
@@ -81,6 +86,7 @@ export function HomePage() {
           <div className="timer-bar timer-bar--lg">
             <div className="timer-bar-fill" style={{ width: `${goalPct}%` }} />
           </div>
+          <WeekStrip bars={bars} />
           <div className="home-progress-foot">
             <span>
               {streak > 0 ? (

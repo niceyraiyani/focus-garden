@@ -1,6 +1,7 @@
 import { db } from './db'
 import { newId } from '../domain/ids'
 import { setTaskComplete } from './tasks'
+import { abandonedEndAt, activeMs } from '../domain/timing'
 import type { FocusSession, FocusSegment, ID } from '../domain/types'
 
 const now = () => Date.now()
@@ -48,6 +49,7 @@ export async function startSession(queue: ID[], minMinutes: number): Promise<Foc
     minMinutes,
     startedAt: ts,
     endedAt: null,
+    lastActiveAt: ts,
     notifiedMinReached: false,
     createdAt: ts,
     updatedAt: ts,
@@ -141,4 +143,42 @@ export async function stopSession(id: ID): Promise<void> {
 
 export async function getSessionSegments(id: ID): Promise<FocusSegment[]> {
   return db.segments.where('sessionId').equals(id).toArray()
+}
+
+/** Record that the app is open and the user is present. */
+export async function touchSession(id: ID): Promise<void> {
+  await db.sessions.update(id, { lastActiveAt: now() })
+}
+
+/**
+ * End a session at a specific moment rather than "now" — used when we detect
+ * the app was closed, so the time you were away is never counted.
+ */
+export async function endSessionAt(id: ID, endAt: number): Promise<void> {
+  await db.transaction('rw', db.sessions, db.segments, async () => {
+    const open = await db.segments
+      .where('sessionId')
+      .equals(id)
+      .filter((s) => s.endedAt === null)
+      .toArray()
+    for (const s of open) {
+      await db.segments.update(s.id, { endedAt: Math.max(s.startedAt, endAt) })
+    }
+    await db.sessions.update(id, { status: 'completed', endedAt: endAt, updatedAt: now() })
+  })
+}
+
+/**
+ * Close any session that was left running when the app was closed. Returns the
+ * focused minutes that were recovered, or null if there was nothing to do.
+ */
+export async function reconcileAbandonedSession(nowTs: number = now()): Promise<number | null> {
+  const session = await getActiveSession()
+  if (!session) return null
+  const segments = await getSessionSegments(session.id)
+  const endAt = abandonedEndAt(session, segments, nowTs)
+  if (endAt === null) return null
+  await endSessionAt(session.id, endAt)
+  const closed = await getSessionSegments(session.id)
+  return Math.round(activeMs(closed, endAt) / 60000)
 }

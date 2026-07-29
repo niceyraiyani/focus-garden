@@ -1,9 +1,14 @@
 import { useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '../data/db'
 import { useActiveLists } from '../features/tasks/hooks'
 import { createList } from '../data/lists'
-import { useActiveSession } from '../features/focus/useFocusSession'
+import { useActiveSession, useNow } from '../features/focus/useFocusSession'
 import { useNativeBlocker } from '../features/focus/nativeBlocker'
+import { useSessionPresence } from '../features/focus/useSessionPresence'
+import { todayFocusedMs } from '../features/insights/aggregations'
+import { formatMinutes } from '../lib/time'
 import { Flourish } from '../components/Flourish'
 import { Icon, ListGlyph } from '../components/Icon'
 import type { IconName } from '../components/Icon'
@@ -27,6 +32,14 @@ export function Layout() {
 
   // Desktop app only: block distracting sites while a session runs.
   useNativeBlocker()
+
+  // Keep session time tied to actually being here.
+  useSessionPresence()
+
+  // Today's focused time, visible from every page.
+  const segments = useLiveQuery(() => db.segments.toArray(), [], [])
+  const nowTs = useNow(session?.status === 'running', 15000)
+  const todayMs = todayFocusedMs(segments, nowTs)
 
   async function addList() {
     const trimmed = name.trim()
@@ -102,6 +115,15 @@ export function Layout() {
             <span>Focus</span>
             {session && <span className="focus-live" aria-label="Session in progress" />}
           </NavLink>
+          <Link to="/insights" className="today-tally">
+            {todayMs > 0 ? (
+              <>
+                <strong>{formatMinutes(todayMs / 60000)}</strong> focused today
+              </>
+            ) : (
+              'No focus yet today'
+            )}
+          </Link>
           <div className="nav">
             <NavItem to="/insights" icon="chart" label="Insights" />
             <NavItem to="/settings" icon="gear" label="Settings" />

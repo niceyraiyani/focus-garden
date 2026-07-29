@@ -168,18 +168,18 @@
 }
 
 [data-theme='dark'][data-accent='blush'] {
-  --primary: #f9ccdd;
-  --primary-hover: #fde0ec;
-  --accent-lavender: #f9ccdd;
-  --ring: rgba(249, 204, 221, 0.45);
-  --soft-lavender: rgba(249, 204, 221, 0.14);
+  --primary: #f6d3d8;
+  --primary-hover: #fbe4e7;
+  --accent-lavender: #f6d3d8;
+  --ring: rgba(246, 211, 216, 0.45);
+  --soft-lavender: rgba(246, 211, 216, 0.14);
 }
 [data-theme='light'][data-accent='blush'] {
-  --primary: #c2738f;
-  --primary-hover: #ad6480;
-  --accent-lavender: #c2738f;
-  --ring: rgba(194, 115, 143, 0.32);
-  --soft-lavender: rgba(194, 115, 143, 0.14);
+  --primary: #b8737f;
+  --primary-hover: #a46471;
+  --accent-lavender: #b8737f;
+  --ring: rgba(184, 115, 127, 0.32);
+  --soft-lavender: rgba(184, 115, 127, 0.14);
 }
 
 [data-theme='dark'][data-accent='lavender'] {

@@ -76,6 +76,12 @@ export interface FocusSession {
   minMinutes: number
   startedAt: number
   endedAt: number | null
+  /**
+   * Heartbeat written while the app is open and the session is running. Used
+   * to end a session at the moment you actually left, instead of letting an
+   * open segment accrue time while the app is closed.
+   */
+  lastActiveAt?: number
   /** Whether the "minimum reached" notification already fired. */
   notifiedMinReached: boolean
   createdAt: number

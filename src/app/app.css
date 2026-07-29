@@ -65,6 +65,92 @@
   border-radius: var(--r-md);
   background: var(--surface-2);
 }
+
+/* ===== Week momentum strip (Today) ===== */
+.week-strip {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  margin-top: var(--space-4);
+}
+.week-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.week-bar-track {
+  width: 100%;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--surface-3);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.week-bar-fill {
+  width: 100%;
+  background: var(--primary);
+  border-radius: var(--r-sm);
+  opacity: 0.72;
+}
+.week-bar--met .week-bar-fill {
+  opacity: 1;
+}
+.week-bar--rest .week-bar-track {
+  opacity: 0.5;
+}
+.week-bar-label {
+  font-size: 0.7rem;
+  color: var(--fg-subtle);
+  line-height: 1;
+}
+.week-bar--today .week-bar-track {
+  box-shadow: inset 0 0 0 1.5px var(--ring);
+}
+.week-bar--today .week-bar-label {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+/* ===== Calendar focus record ===== */
+.cal-focus-badge {
+  margin-left: auto;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: var(--primary);
+  opacity: 0.9;
+}
+.cal-focus-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: transparent;
+  margin: 2px 0 4px;
+}
+.cal-focus-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--primary);
+  opacity: 0.75;
+}
+
+.today-tally {
+  display: block;
+  margin-top: var(--space-2);
+  padding: 0 var(--space-2);
+  font-size: 0.78rem;
+  color: var(--fg-subtle);
+  text-decoration: none;
+  text-align: center;
+}
+.today-tally strong {
+  color: var(--primary);
+  font-weight: 800;
+}
+.today-tally:hover {
+  color: var(--fg-muted);
+}
 .sidebar,
 .content {
   position: relative;

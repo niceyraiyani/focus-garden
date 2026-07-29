@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '../../data/db'
 import {
   DndContext,
   PointerSensor,
@@ -30,6 +32,8 @@ import {
   localDateKey,
   WEEKDAY_LABELS,
 } from '../../lib/date'
+import { focusedMsByDay } from '../insights/aggregations'
+import { formatMinutes } from '../../lib/time'
 
 type Mode = 'month' | 'week'
 
@@ -55,6 +59,14 @@ export function CalendarPage() {
   }, [tasks])
 
   const unscheduled = useMemo(() => tasks.filter((t) => !t.dueDate), [tasks])
+
+  // Focused time per day turns the calendar into a gentle record of effort.
+  const segments = useLiveQuery(() => db.segments.toArray(), [], [])
+  const focusByDay = useMemo(() => focusedMsByDay(segments), [segments])
+  const peakMs = useMemo(
+    () => Math.max(1, ...Array.from(focusByDay.values())),
+    [focusByDay],
+  )
 
   const days = mode === 'month' ? monthMatrix(ref) : weekDates(ref)
   const refMonth = monthOfKey(localDateKey(ref))
@@ -122,6 +134,8 @@ export function CalendarPage() {
                 mode={mode}
                 dimmed={mode === 'month' && monthOfKey(key) !== refMonth}
                 tasks={byDay.get(key) ?? []}
+                focusedMs={focusByDay.get(key) ?? 0}
+                peakMs={peakMs}
                 lists={lists}
                 onOpen={setOpenTask}
                 onExpand={(k) => {
@@ -148,6 +162,8 @@ function DayCell({
   mode,
   dimmed,
   tasks,
+  focusedMs,
+  peakMs,
   lists,
   onOpen,
   onExpand,
@@ -156,6 +172,8 @@ function DayCell({
   mode: Mode
   dimmed: boolean
   tasks: Task[]
+  focusedMs: number
+  peakMs: number
   lists: List[]
   onOpen: (t: Task) => void
   onExpand: (dateKey: string) => void
@@ -179,7 +197,20 @@ function DayCell({
             {new Date(keyToTs(dateKey)).toLocaleDateString(undefined, { weekday: 'short' })}
           </span>
         )}
+        {focusedMs > 0 && (
+          <span className="cal-focus-badge" title={`${formatMinutes(focusedMs / 60000)} focused`}>
+            {formatMinutes(focusedMs / 60000)}
+          </span>
+        )}
       </div>
+      {focusedMs > 0 && (
+        <div className="cal-focus-bar" aria-hidden="true">
+          <div
+            className="cal-focus-bar-fill"
+            style={{ width: `${Math.max(12, Math.round((focusedMs / peakMs) * 100))}%` }}
+          />
+        </div>
+      )}
       <div className="cal-cell-tasks">
         {shown.map((t) => (
           <CalendarChip key={t.id} task={t} lists={lists} onOpen={onOpen} />

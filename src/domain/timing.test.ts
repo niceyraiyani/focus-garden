@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { segmentMs, activeMs, activeMsForTask, remainingMs, isOvertime } from './timing'
+import { segmentMs, activeMs, activeMsForTask, remainingMs, isOvertime, abandonedEndAt } from './timing'
 import type { FocusSegment, FocusSession } from './types'
 
 function seg(start: number, end: number | null, taskId: string | null = null): FocusSegment {
@@ -50,5 +50,49 @@ describe('timing', () => {
     const segs2 = [seg(0, 65000)]
     expect(remainingMs(s, segs2, 65000)).toBe(0)
     expect(isOvertime(s, segs2, 65000)).toBe(true)
+  })
+})
+
+describe('abandonedEndAt', () => {
+  const GRACE = 90_000
+  const running = (patch: Partial<FocusSession> = {}): FocusSession => ({
+    ...session(30),
+    startedAt: 1_000_000,
+    updatedAt: 1_000_000,
+    ...patch,
+  })
+
+  it('leaves a session alone while the heartbeat is fresh', () => {
+    const s = running({ lastActiveAt: 1_100_000 })
+    const segs = [seg(1_000_000, null)]
+    expect(abandonedEndAt(s, segs, 1_130_000, GRACE)).toBeNull()
+  })
+
+  it('closes the session at the last heartbeat once the app goes quiet', () => {
+    const s = running({ lastActiveAt: 1_100_000 })
+    const segs = [seg(1_000_000, null)]
+    // Reopened 10 hours later: the session ends when we last saw them.
+    expect(abandonedEndAt(s, segs, 1_100_000 + 36_000_000, GRACE)).toBe(1_100_000)
+  })
+
+  it('ignores sessions with no open segment', () => {
+    const s = running({ lastActiveAt: 1_100_000 })
+    expect(abandonedEndAt(s, [seg(1_000_000, 1_050_000)], 9_000_000, GRACE)).toBeNull()
+  })
+
+  it('ignores paused sessions', () => {
+    const s = running({ status: 'paused', lastActiveAt: 1_100_000 })
+    expect(abandonedEndAt(s, [seg(1_000_000, null)], 9_000_000, GRACE)).toBeNull()
+  })
+
+  it('falls back to updatedAt for sessions saved before heartbeats existed', () => {
+    const s = running({ updatedAt: 1_200_000 })
+    expect(abandonedEndAt(s, [seg(1_000_000, null)], 9_000_000, GRACE)).toBe(1_200_000)
+  })
+
+  it('never ends a session before its open segment started', () => {
+    const s = running({ updatedAt: 0, lastActiveAt: 0 })
+    const segs = [seg(1_500_000, null)]
+    expect(abandonedEndAt(s, segs, 9_000_000, GRACE)).toBe(1_500_000)
   })
 })

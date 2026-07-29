@@ -44,3 +44,35 @@ export function isOvertime(
 ): boolean {
   return activeMs(segments, nowTs) >= session.minMinutes * 60000
 }
+
+/** How long we tolerate silence before assuming the app was closed. */
+export const PRESENCE_GRACE_MS = 90_000
+
+/**
+ * A focus session only counts while you're actually there. If the app is
+ * closed or the device sleeps, the heartbeat stops but the open segment would
+ * otherwise keep accruing — turning a 40 minute session into "10h".
+ *
+ * Returns the timestamp the session should be closed at (the last moment we
+ * know the user was present), or null if the session is still live.
+ */
+export function abandonedEndAt(
+  session: FocusSession,
+  segments: FocusSegment[],
+  nowTs: number = Date.now(),
+  graceMs: number = PRESENCE_GRACE_MS,
+): number | null {
+  if (session.status !== 'running') return null
+  const open = segments.filter((s) => s.sessionId === session.id && s.endedAt === null)
+  if (open.length === 0) return null
+
+  // Fall back through progressively older signals so sessions created before
+  // heartbeats existed still get closed at a sensible time.
+  const lastSeen = Math.max(
+    session.lastActiveAt ?? 0,
+    session.updatedAt,
+    session.startedAt,
+    ...open.map((s) => s.startedAt),
+  )
+  return nowTs - lastSeen > graceMs ? lastSeen : null
+}

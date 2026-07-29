@@ -7,13 +7,19 @@ import type { FocusSegment, FocusSession, Task, Settings, Weekday } from '../../
  * session segments and task completion timestamps, using the local calendar.
  */
 
-/** Focused ms per local date key, from all (completed) session segments. */
-export function focusedMsByDay(segments: FocusSegment[]): Map<string, number> {
+/**
+ * Focused ms per local date key, from all session segments.
+ *
+ * Pass `nowTs` to include the session that's running right now (its open
+ * segment counts up to that moment) so today's number climbs live. Leave it
+ * out for historical reporting, where only finished segments count.
+ */
+export function focusedMsByDay(segments: FocusSegment[], nowTs?: number): Map<string, number> {
   const map = new Map<string, number>()
   for (const seg of segments) {
-    if (seg.endedAt === null) continue
+    if (seg.endedAt === null && nowTs === undefined) continue
     const key = localDateKey(seg.startedAt)
-    map.set(key, (map.get(key) ?? 0) + segmentMs(seg, seg.endedAt))
+    map.set(key, (map.get(key) ?? 0) + segmentMs(seg, seg.endedAt ?? nowTs ?? 0))
   }
   return map
 }
@@ -63,8 +69,43 @@ export function focusedMsByList(segments: FocusSegment[], tasks: Task[]): Map<st
   return map
 }
 
-export function todayFocusedMs(segments: FocusSegment[]): number {
-  return focusedMsByDay(segments).get(localDateKey()) ?? 0
+export function todayFocusedMs(segments: FocusSegment[], nowTs?: number): number {
+  return focusedMsByDay(segments, nowTs).get(localDateKey()) ?? 0
+}
+
+export interface DayBar {
+  dateKey: string
+  focusedMs: number
+  /** 0..1 against the daily goal. */
+  ratio: number
+  isToday: boolean
+  isWorkday: boolean
+}
+
+/**
+ * The last 7 days as simple bars — enough to feel momentum at a glance without
+ * opening Insights. Used on Today and in the calendar header.
+ */
+export function weekBars(
+  segments: FocusSegment[],
+  settings: Settings,
+  nowTs: number = Date.now(),
+): DayBar[] {
+  const focus = focusedMsByDay(segments, nowTs)
+  const goalMs = Math.max(1, settings.dailyGoalMinutes * 60000)
+  const workdays = new Set<Weekday>(settings.workdays)
+  const todayKey = localDateKey(nowTs)
+  return lastNDays(7).map((dateKey) => {
+    const focusedMs = focus.get(dateKey) ?? 0
+    const ts = new Date(`${dateKey}T12:00:00`).getTime()
+    return {
+      dateKey,
+      focusedMs,
+      ratio: Math.min(1, focusedMs / goalMs),
+      isToday: dateKey === todayKey,
+      isWorkday: workdays.has(weekdayOf(ts) as Weekday),
+    }
+  })
 }
 
 /**
