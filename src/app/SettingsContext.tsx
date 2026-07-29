@@ -22,9 +22,13 @@ function systemPrefersDark(): boolean {
 }
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const settings = useLiveQuery(async () => {
-    await ensureSeeded()
-    return db.settings.get('app')
+  const settings = useLiveQuery(() => db.settings.get('app'), [])
+
+  // Seed the settings row once, outside of any liveQuery (writes are not
+  // allowed inside a liveQuery querier). Until it exists we fall back to
+  // DEFAULT_SETTINGS below, so the UI renders immediately either way.
+  useEffect(() => {
+    void ensureSeeded()
   }, [])
 
   const [systemDark, setSystemDark] = useState(systemPrefersDark)

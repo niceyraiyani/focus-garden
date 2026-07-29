@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { App } from './App'
 
 describe('App', () => {
@@ -13,4 +13,14 @@ describe('App', () => {
     // Any time-of-day greeting ends up on screen.
     expect(await screen.findByText(/morning|afternoon|evening|up\?|down\?/i)).toBeInTheDocument()
   })
+
+  it('does not trip the error boundary (settings load is read-only)', async () => {
+    render(<App />)
+    await screen.findByText('focus garden')
+    // Give async liveQueries a chance to settle, then assert no crash screen.
+    await waitFor(() => {
+      expect(screen.queryByText(/a little weed appeared/i)).not.toBeInTheDocument()
+    })
+  })
 })
+
