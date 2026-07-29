@@ -10,7 +10,7 @@ export const ACCENT_NAMES: AccentName[] = ['white', 'blush', 'lavender', 'mint',
  */
 export const VIBE_DEFAULT_ACCENT: Record<Vibe, AccentName> = {
   plain: 'white',
-  flowers: 'blush',
+  flowers: 'white',
   robot: 'sky',
 }
 

@@ -30,7 +30,7 @@ const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
 
 const ACCENTS: { name: AccentName; label: string; swatch: string }[] = [
   { name: 'white', label: 'White', swatch: '#e9e6df' },
-  { name: 'blush', label: 'Blush', swatch: '#f4a9c6' },
+  { name: 'blush', label: 'Blush', swatch: '#f9ccdd' },
   { name: 'lavender', label: 'Lavender', swatch: '#c4b5fd' },
   { name: 'mint', label: 'Mint', swatch: '#8fe3c0' },
   { name: 'sky', label: 'Sky', swatch: '#93c1fb' },
