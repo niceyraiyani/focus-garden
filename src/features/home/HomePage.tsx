@@ -65,7 +65,7 @@ export function HomePage() {
           <p className="home-sub">
             {focusedMs > 0
               ? `You've focused for ${formatMinutes(focusedMs / 60000)} today.`
-              : 'A fresh day in the garden. What matters most right now?'}
+              : 'A fresh day. Time to lock in — what matters most right now?'}
           </p>
         </div>
       </div>
