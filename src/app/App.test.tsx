@@ -8,10 +8,9 @@ describe('App', () => {
     expect(await screen.findByText('lock.in')).toBeInTheDocument()
   })
 
-  it('shows the Today greeting on the home route', async () => {
+  it('shows the Today header on the home route', async () => {
     render(<App />)
-    // Any time-of-day greeting ends up on screen.
-    expect(await screen.findByText(/morning|afternoon|evening|up\?|down\?/i)).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /lock in/i })).toBeInTheDocument()
   })
 
   it('does not trip the error boundary (settings load is read-only)', async () => {

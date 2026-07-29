@@ -29,7 +29,7 @@ const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
 ]
 
 const ACCENTS: { name: AccentName; label: string; swatch: string }[] = [
-  { name: 'white', label: 'White', swatch: '#e9e6df' },
+  { name: 'white', label: 'White', swatch: '#f4f5f7' },
   // Internal id stays 'blush' so saved settings keep working; the label is
   // what the user picked.
   { name: 'blush', label: 'Petal', swatch: '#f6d3d8' },

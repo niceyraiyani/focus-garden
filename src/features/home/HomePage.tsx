@@ -17,15 +17,6 @@ import { formatMinutes } from '../../lib/time'
 import { useState } from 'react'
 import type { Task } from '../../domain/types'
 
-function greeting(): string {
-  const h = new Date().getHours()
-  if (h < 5) return 'Still up?'
-  if (h < 12) return 'Good morning'
-  if (h < 17) return 'Good afternoon'
-  if (h < 22) return 'Good evening'
-  return 'Winding down?'
-}
-
 export function HomePage() {
   const { settings } = useSettings()
   const todayTasks = useTodayTasks()
@@ -65,12 +56,12 @@ export function HomePage() {
       <div className="home-hero">
         <div>
           <h1 className="home-greeting">
-            {greeting()} <Icon name={greetingIconFor(settings.vibe)} className="wave" />
+            Lock in <Icon name={greetingIconFor(settings.vibe)} className="wave" />
           </h1>
           <p className="home-sub">
             {focusedMs > 0
               ? `You've focused for ${formatMinutes(focusedMs / 60000)} today.`
-              : 'Time to lock in.'}
+              : 'Pick one thing to start.'}
           </p>
         </div>
       </div>
