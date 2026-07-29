@@ -175,8 +175,9 @@ export function SettingsPage() {
       <div className="card setting-block">
         <h3 className="group-title">Your data</h3>
         <p className="setting-hint">
-          Everything lives privately in this browser on this device — no account, no cloud, no tracking. Clearing site
-          data will erase it, so back up now and then.
+          Everything lives privately in this browser on this device, tied to this exact web address — no
+          account, no cloud, no tracking. Data on the local dev version and the hosted version are separate;
+          use Export/Import to move between them. Clearing site data erases it, so back up now and then.
         </p>
         <div className="setting-actions">
           <Button variant="primary" onClick={() => downloadBackup()}>

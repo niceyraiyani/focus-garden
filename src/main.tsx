@@ -28,3 +28,15 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
       .catch(() => {})
   })
 }
+
+// Ask the browser to keep our IndexedDB data durable (not evicted under
+// storage pressure). Best-effort; harmless if unsupported or denied.
+if (navigator.storage?.persist) {
+  navigator.storage
+    .persisted()
+    .then((already) => {
+      if (!already) return navigator.storage.persist()
+      return true
+    })
+    .catch(() => {})
+}
