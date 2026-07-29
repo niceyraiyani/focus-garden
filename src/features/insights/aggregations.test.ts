@@ -22,6 +22,7 @@ const settings: Settings = {
   decorativeMotion: true,
   celebrations: true,
   showCompanion: true,
+  blocklist: [],
   version: 1,
 }
 

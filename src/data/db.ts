@@ -51,6 +51,7 @@ export const DEFAULT_SETTINGS: Settings = {
   decorativeMotion: true,
   celebrations: true,
   showCompanion: true,
+  blocklist: ['youtube.com', 'reddit.com', 'instagram.com', 'x.com', 'tiktok.com'],
   version: 1,
 }
 

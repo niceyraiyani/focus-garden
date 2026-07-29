@@ -165,6 +165,17 @@
   border-radius: var(--r-pill);
   flex: none;
 }
+.chip-x {
+  border: none;
+  background: none;
+  color: var(--fg-subtle);
+  font-size: 0.7rem;
+  padding: 0 0 0 0.15rem;
+  line-height: 1;
+}
+.chip-x:hover {
+  color: var(--danger);
+}
 
 /* ---------- Dialog ---------- */
 .dialog-backdrop {

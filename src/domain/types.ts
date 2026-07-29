@@ -113,5 +113,7 @@ export interface Settings {
   decorativeMotion: boolean
   celebrations: boolean
   showCompanion: boolean
+  /** Domains to block during a focus session (used by the companion extension). */
+  blocklist: string[]
   version: number
 }
