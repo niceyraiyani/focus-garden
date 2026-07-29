@@ -1,92 +1,140 @@
-# 🌸 focus garden
+<div align="center">
 
-A cozy, ADHD-friendly todo + focus timer. Capture thoughts fast, organize them
-gently, pick a few tasks for a focus session, and stay in flow with a flexible
-timer — all private and local to your browser.
+# 🔒 lock.in
 
-**Live:** https://niceyraiyani.github.io/focus-garden/
+### a cozy, ADHD-friendly todo & focus app that helps you actually *lock in*
 
-## Why it exists
+Capture the swirl of thoughts in your head, organize them when you're ready,
+pick a few things to focus on, and lock in with a gentle timer that flexes to
+your flow. Private, local-first, and yours.
 
-Built for one person's brain: capture-first so nothing gets lost, one clear
-thing to focus on at a time, a parking lot for distracting thoughts, and gentle
-productivity insights that never punish rest days.
+**[▶ Open the live app](https://niceyraiyani.github.io/focus-garden/)**  ·  **[⬇ Download desktop](https://github.com/niceyraiyani/focus-garden/releases/latest)**
 
-## Features
+![lock.in — Today](docs/screenshots/today.png)
 
-- **Inbox-first capture** — every thought lands in the Inbox, organize into
-  lists later. Optional due date, priority, notes, subtasks, tags, and a 1–5
-  🌸 effort level.
-- **Lists & tags** — drag-and-drop manual ordering plus non-destructive
-  sort/filter (due date, priority, effort, newest).
-- **Focus sessions** — build an ordered queue, work one active task at a time,
-  switch when needed. A configurable minimum (default 30 min) gives a gentle
-  nudge, then keeps counting while you're in flow.
-- **Parking lot** — capture a distraction in one step; it's saved to your Inbox
-  instantly and shown beside the timer.
-- **Insights** — focused hours, completed tasks, daily/weekly comparison,
-  time-by-list breakdown, session history, and workday-aware streaks.
-- **Cozy cyber-cottagecore** — flat pastel design, light + dark themes, line-art
-  flowers, an optional focus companion, and gentle celebrations. No gradients,
-  fully keyboard accessible, respects reduced motion.
-- **Local-first PWA** — installable, works offline, all data stays in your
-  browser (IndexedDB). Export/import JSON backups any time.
+</div>
 
-## Privacy
+---
 
-No account, no server, no telemetry. Your data lives only in this browser
-profile. Clearing site data erases it — so export a backup now and then
-(Settings → Your data).
+## 🌷 Why lock.in?
 
-## Tech
+Most todo apps assume you already know what to do and just need a list. ADHD
+brains work differently — thoughts arrive fast, dates are fuzzy, and a wall of
+tasks is paralyzing. lock.in is built around how that actually feels:
 
-React 19 · TypeScript · Vite · Dexie (IndexedDB) · dnd-kit · Vitest. Structured
-behind a repository boundary with stable ids and timestamps so cloud sync can be
-added later without rewriting the UI. An optional **Tauri** desktop shell adds
-real site blocking (see below).
+- **Capture first, organize later.** Dump anything into your Inbox in one tap.
+  No list, no date, no pressure. Sort it out when you have the bandwidth.
+- **One clear thing at a time.** A focus session shows the single task you're on
+  — not the whole overwhelming backlog.
+- **A place for stray thoughts.** When your brain throws a random idea mid-focus,
+  park it and keep going. It's saved, you can forget it.
+- **Gentle, never punishing.** Timers flex, streaks respect your rest days, and
+  overdue tasks don't yell at you.
 
-## Desktop app + focus site blocker
+---
 
-The web app can't block other websites (browsers forbid it). The **desktop app**
-(built with Tauri) can: while a focus session is running it edits your system
-`hosts` file to point your blocked domains at localhost, then restores it the
-moment the session ends — the same idea as
-[SelfControl](https://github.com/SelfControlApp/selfcontrol), just lighter
-(hosts file only, no `pf` firewall). Add sites under **Settings → Focus site
-blocker**.
+## ✨ Features
 
-Blocking logic lives in `src-tauri/src/blocker.rs` (pure, unit-tested functions
-+ Tauri commands). The frontend calls it via `src/features/focus/nativeBlocker.ts`,
-which safely no-ops in a plain browser.
+### 🎯 Focus sessions that flex to your flow
+Build a little queue, work one task at a time, and lock in. Set a minimum
+(default 30 min) — lock.in gives you a soft nudge when you reach it, then keeps
+counting while you're in the zone. Pause, switch tasks, or check off subtasks as
+you go. A **Parking Lot** catches distracting thoughts and drops them straight
+into your Inbox.
 
-### Build the desktop app
+![Focus session](docs/screenshots/focus.png)
 
-Prerequisites: [Rust](https://rustup.rs) + your platform's Tauri prerequisites
-(macOS: Xcode command-line tools; Windows: VS Build Tools + WebView2).
+### 📥 Capture & organize the way your brain works
+Everything lands in the **Inbox**. Move things into lists when you're ready, add
+tags, due dates, priority, notes, subtasks, and a 1–5 🌸 effort rating. Drag to
+reorder, or sort and filter without losing your manual order. Undated tasks get
+surfaced on Today ("Needs a home") so nothing quietly slips away.
 
-```bash
-npm install --legacy-peer-deps
-npm run desktop:dev      # run the desktop app with hot reload
-npm run desktop:build    # produce a distributable app (.app / .dmg / .exe)
-cargo test --manifest-path src-tauri/Cargo.toml   # test the blocker logic
-```
+![Task list](docs/screenshots/tasks.png)
 
-On macOS the built app is in `src-tauri/target/release/bundle/`.
+### 🗓️ A calendar you can drag onto
+See your week or month at a glance. Got a task with no date? **Drag it onto a
+day** to schedule it — drag it back off to unschedule.
 
-### Permissions (important)
+![Calendar](docs/screenshots/calendar.png)
 
-Editing the hosts file needs elevated rights:
+### 📊 Insights that motivate, not shame
+Focused hours today and this week, a workday streak that **never breaks on your
+rest days**, a 14-day chart, time-by-list breakdown, and your session history.
 
-- **macOS:** launch with permission to write `/etc/hosts` (e.g. run the built
-  binary with `sudo`, or grant the app the needed access). Without it, starting a
-  session shows a clear "needs administrator/root permission" message and simply
-  skips blocking — your tasks and timer still work.
-- **Windows:** run the app **as Administrator**.
+![Insights](docs/screenshots/insights.png)
 
-The blocker never deletes your existing hosts entries — it only adds/removes a
-clearly delimited `# >>> focus garden block >>>` section.
+### 🚫 Site blocker (desktop app)
+Name the sites that pull you away (YouTube, Reddit, socials…). In the desktop
+app they're blocked **only while a focus session is running**, and work normally
+the rest of the time — the same idea as
+[SelfControl](https://github.com/SelfControlApp/selfcontrol), built right in.
 
-## Develop
+---
+
+## 🎨 Make it yours
+
+Pick a **vibe** that changes the whole feel — background, decorations, and the
+little celebrations when you finish a task. Then choose an accent color (White,
+Terracotta, Sage, Dusty Rose, Honey, Mauve, or Teal) and light/dark mode.
+
+| 🌫️ Plain | 🌸 Flowers | 🤖 Robot |
+|:---:|:---:|:---:|
+| clean black & white | cozy plum + wildflowers | techy dark blue |
+| ![Plain vibe](docs/screenshots/vibe-plain.png) | ![Flowers vibe](docs/screenshots/vibe-flowers.png) | ![Robot vibe](docs/screenshots/vibe-robot.png) |
+
+Everything's designed to be calm and low-stimulation: flat colors (no harsh
+gradients or glow), soft rounded corners, gentle motion you can turn off, hand-
+drawn line icons, and generous breathing room.
+
+---
+
+## 🔐 Private & local-first
+
+Your data lives **only in your browser on your device** — no account, no server,
+no tracking, ever. That means it's fast and completely private. It also means:
+
+- Clearing your browser's site data will erase it, so **export a backup** now and
+  then (Settings → Your data). You can re-import it anytime, on any device.
+- The web app and the desktop app keep separate data — use Export/Import to move
+  between them.
+
+lock.in is an installable **PWA**: open it in your browser and it works offline;
+click *Install* to run it in its own window like a native app.
+
+---
+
+## ⬇ Get lock.in
+
+### Use it in your browser (nothing to install)
+Just open **<https://niceyraiyani.github.io/focus-garden/>**. To keep it handy,
+click the install icon in your address bar to pin it as an app.
+
+### Download the desktop app (adds real site blocking)
+Grab the latest installer from the
+**[Releases page](https://github.com/niceyraiyani/focus-garden/releases/latest)**:
+
+- **macOS** — `lock.in_*_universal.dmg`
+- **Windows** — `lock.in_*_x64-setup.exe`
+
+> **Heads up:** the app isn't code-signed (no paid certificate), so your OS may
+> warn about an "unidentified developer." On macOS, right-click the app → **Open**
+> once; on Windows, click **More info → Run anyway**.
+>
+> Site blocking edits your system `hosts` file, which needs elevated rights
+> (macOS: run with `sudo`; Windows: **Run as administrator**). Without it, the
+> app still works — it just skips blocking with a friendly message.
+
+---
+
+## 🛠️ Tech
+
+React 19 · TypeScript · Vite · Dexie (IndexedDB) · dnd-kit · Vitest, with an
+optional **Tauri** (Rust) desktop shell for the hosts-file site blocker. It's
+structured behind a clean storage boundary with stable IDs and timestamps, so
+cloud sync could be added later without rewriting the UI.
+
+### Run it locally
 
 ```bash
 npm install --legacy-peer-deps
@@ -94,12 +142,25 @@ npm run dev        # local dev server with hot reload
 npm test           # run the test suite
 npm run build      # type-check + production build
 npm run lint       # oxlint
-node scripts/gen-icons.mjs   # regenerate PWA icons from public/icon.svg
 ```
 
-## Deploy
+### Build the desktop app
 
-Pushing to `main` triggers the GitHub Actions workflow
-(`.github/workflows/deploy.yml`), which tests, builds, and publishes to GitHub
-Pages. The Vite `base` is `/focus-garden/`; override with the `VITE_BASE` env var
-if hosting elsewhere.
+Needs [Rust](https://rustup.rs) plus your platform's Tauri prerequisites
+(macOS: Xcode command-line tools; Windows: VS Build Tools + WebView2).
+
+```bash
+npm run desktop:dev      # run the desktop app with hot reload
+npm run desktop:build    # produce a distributable installer
+```
+
+Pushing a `v*` tag builds and publishes installers for macOS & Windows via
+GitHub Actions.
+
+---
+
+<div align="center">
+
+Made with care for calmer, kinder productivity. 🤍
+
+</div>

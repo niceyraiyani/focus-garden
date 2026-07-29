@@ -1,4 +1,4 @@
-// Core domain types for focus-garden.
+// Core domain types for lock.in.
 // Uses string-literal unions + const maps instead of TS enums
 // (tsconfig has erasableSyntaxOnly).
 
@@ -97,7 +97,10 @@ export interface FocusSegment {
 
 export type ThemeMode = 'system' | 'light' | 'dark'
 
-export type AccentName = 'terracotta' | 'sage' | 'rose' | 'honey' | 'mauve' | 'teal'
+export type AccentName = 'white' | 'terracotta' | 'sage' | 'rose' | 'honey' | 'mauve' | 'teal'
+
+/** Decorative style: minimal, floral, or techy. Also sets the base canvas. */
+export type Vibe = 'plain' | 'flowers' | 'robot'
 
 /** 0=Sunday .. 6=Saturday, matching Date.getDay(). */
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
@@ -107,6 +110,8 @@ export interface Settings {
   theme: ThemeMode
   /** Accent color family. */
   accent: AccentName
+  /** Decorative style + base canvas. */
+  vibe: Vibe
   defaultMinMinutes: number
   notificationsEnabled: boolean
   /** Days that count toward goals and streaks. */

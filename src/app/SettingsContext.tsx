@@ -49,8 +49,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement
     root.setAttribute('data-theme', resolvedTheme)
     root.setAttribute('data-motion', effective.decorativeMotion ? 'on' : 'off')
-    root.setAttribute('data-accent', effective.accent ?? 'terracotta')
-  }, [resolvedTheme, effective.decorativeMotion, effective.accent])
+    root.setAttribute('data-accent', effective.accent ?? 'white')
+    root.setAttribute('data-vibe', effective.vibe ?? 'flowers')
+  }, [resolvedTheme, effective.decorativeMotion, effective.accent, effective.vibe])
 
   const value = useMemo<SettingsContextValue>(
     () => ({

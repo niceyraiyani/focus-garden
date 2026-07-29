@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "focus garden",
+  "productName": "lock.in",
   "version": "0.1.0",
   "identifier": "com.niceyraiyani.focusgarden",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "focus garden",
+        "title": "lock.in",
         "width": 800,
         "height": 600,
         "resizable": true,

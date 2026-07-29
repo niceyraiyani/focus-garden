@@ -54,7 +54,7 @@ export async function downloadBackup(): Promise<void> {
   const a = document.createElement('a')
   a.href = url
   const stamp = new Date().toISOString().slice(0, 10)
-  a.download = `focus-garden-backup-${stamp}.json`
+  a.download = `lockin-backup-${stamp}.json`
   a.click()
   URL.revokeObjectURL(url)
 }
@@ -72,7 +72,7 @@ function isBackup(data: unknown): data is BackupData {
 export async function importBackup(json: string): Promise<void> {
   const parsed: unknown = JSON.parse(json)
   if (!isBackup(parsed)) {
-    throw new Error('This file is not a valid focus-garden backup.')
+    throw new Error('This file is not a valid lock.in backup.')
   }
   const data = parsed
   await db.transaction(

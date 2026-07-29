@@ -1,7 +1,9 @@
+import { useSettings } from '../app/SettingsContext'
+
 /**
- * Decorative single-weight line art in pastel colors. Purely ornamental:
- * always aria-hidden and never the sole indicator of state. Solid strokes,
- * no gradients, no fills (or flat translucent only).
+ * Decorative single-weight line art. Purely ornamental: always aria-hidden and
+ * never the sole indicator of state. The motif follows the current vibe —
+ * flowers, a techy chip (robot), or a minimal ring (plain).
  */
 
 interface FlourishProps {
@@ -19,6 +21,7 @@ export function Flourish({
   className = '',
   float = false,
 }: FlourishProps) {
+  const { settings } = useSettings()
   const cls = ['flourish', float ? 'float' : '', className].filter(Boolean).join(' ')
   const common = {
     width: size,
@@ -31,6 +34,40 @@ export function Flourish({
     strokeLinejoin: 'round' as const,
     'aria-hidden': true,
     className: cls,
+  }
+
+  // Plain vibe: a quiet minimal mark.
+  if (settings.vibe === 'plain') {
+    return (
+      <svg {...common}>
+        <circle cx="24" cy="24" r="10" />
+        <circle cx="24" cy="24" r="2.4" fill={color} />
+      </svg>
+    )
+  }
+
+  // Robot vibe: a small friendly chip/bot motif.
+  if (settings.vibe === 'robot') {
+    if (variant === 'sparkle') {
+      return (
+        <svg {...common}>
+          <rect x="16" y="16" width="16" height="16" rx="3" />
+          <circle cx="24" cy="24" r="3" fill={color} />
+          <path d="M20 16v-5M28 16v-5M20 32v5M28 32v5M16 20h-5M16 28h-5M32 20h5M32 28h5" />
+        </svg>
+      )
+    }
+    return (
+      <svg {...common}>
+        <path d="M24 12V7" />
+        <circle cx="24" cy="5.5" r="2" fill={color} />
+        <rect x="12" y="12" width="24" height="18" rx="6" />
+        <circle cx="19" cy="21" r="2" fill={color} />
+        <circle cx="29" cy="21" r="2" fill={color} />
+        <path d="M19 26q5 3 10 0" />
+        <path d="M17 30v6M31 30v6" />
+      </svg>
+    )
   }
 
   if (variant === 'sparkle') {

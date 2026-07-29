@@ -17,7 +17,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('focus-garden error:', error, info)
+    console.error('lock.in error:', error, info)
   }
 
   render() {

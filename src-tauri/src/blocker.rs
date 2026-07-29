@@ -11,8 +11,8 @@
 
 use std::path::PathBuf;
 
-const BEGIN: &str = "# >>> focus garden block >>>";
-const END: &str = "# <<< focus garden block <<<";
+const BEGIN: &str = "# >>> lock.in block >>>";
+const END: &str = "# <<< lock.in block <<<";
 
 /// Platform-specific path to the system hosts file.
 pub fn hosts_path() -> PathBuf {
@@ -63,7 +63,7 @@ pub fn build_section(domains: &[String]) -> String {
     let mut out = String::new();
     out.push_str(BEGIN);
     out.push('\n');
-    out.push_str("# Managed by focus garden. Do not edit; removed when your session ends.\n");
+    out.push_str("# Managed by lock.in. Do not edit; removed when your session ends.\n");
     let mut seen: Vec<String> = Vec::new();
     for raw in domains {
         let d = normalize_domain(raw);
@@ -80,7 +80,7 @@ pub fn build_section(domains: &[String]) -> String {
     out
 }
 
-/// Remove any existing focus-garden section from hosts content.
+/// Remove any existing lock.in section from hosts content.
 pub fn strip_section(content: &str) -> String {
     let mut result = Vec::new();
     let mut skipping = false;
@@ -107,7 +107,7 @@ pub fn strip_section(content: &str) -> String {
 }
 
 /// Produce new hosts content with a fresh block section for `domains`,
-/// replacing any previous focus-garden section.
+/// replacing any previous lock.in section.
 pub fn apply(content: &str, domains: &[String]) -> String {
     let base = strip_section(content);
     let mut out = base;

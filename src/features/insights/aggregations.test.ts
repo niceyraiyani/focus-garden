@@ -16,6 +16,7 @@ const settings: Settings = {
   id: 'app',
   theme: 'system',
   accent: 'terracotta',
+  vibe: 'flowers',
   defaultMinMinutes: 30,
   notificationsEnabled: false,
   workdays: [1, 2, 3, 4, 5],

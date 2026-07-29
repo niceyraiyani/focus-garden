@@ -1,5 +1,5 @@
 /*
- * focus-garden design tokens — "cozy cyber-cottagecore".
+ * lock.in design tokens — warm, cozy, flat. No gradients, no blurred glows.
  * Flat colors only: no gradients, no blurred glows. Emphasis uses a flat
  * semi-transparent outline ring. Dark is the signature theme.
  */
@@ -95,8 +95,77 @@
   --texture-dot: rgba(184, 124, 75, 0.05);
 }
 
-/* ===== Accent presets (swap the dominant hue; warm base stays) ===== */
-/* Terracotta is the default and lives in the base tokens above. */
+/* ===== Vibe base canvases (bg/surfaces/text). Flowers = warm plum base above. ===== */
+
+/* Plain — clean neutral black/white. */
+[data-theme='dark'][data-vibe='plain'] {
+  --bg: #0e0e10;
+  --surface: #1a1a1d;
+  --surface-2: #242428;
+  --surface-3: #2e2e33;
+  --border: #313136;
+  --border-strong: #45454c;
+  --fg: #ededef;
+  --fg-muted: #a6a6ad;
+  --fg-subtle: #72727a;
+  --texture-dot: rgba(255, 255, 255, 0.035);
+}
+[data-theme='light'][data-vibe='plain'] {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f2f2f4;
+  --surface-3: #e9e9ec;
+  --border: #e4e4e7;
+  --border-strong: #d3d3d8;
+  --fg: #1b1b1e;
+  --fg-muted: #55555c;
+  --fg-subtle: #86868d;
+  --texture-dot: rgba(0, 0, 0, 0.03);
+}
+
+/* Robot — dark bluish, techy. */
+[data-theme='dark'][data-vibe='robot'] {
+  --bg: #0c111d;
+  --surface: #131a29;
+  --surface-2: #1a2334;
+  --surface-3: #232f45;
+  --border: #2a3650;
+  --border-strong: #394868;
+  --fg: #e3e9f5;
+  --fg-muted: #9db0d0;
+  --fg-subtle: #68789a;
+  --texture-dot: rgba(140, 170, 220, 0.06);
+}
+[data-theme='light'][data-vibe='robot'] {
+  --bg: #eef2f9;
+  --surface: #ffffff;
+  --surface-2: #e7edf7;
+  --surface-3: #dce5f2;
+  --border: #d4deec;
+  --border-strong: #c0cce1;
+  --fg: #1d2740;
+  --fg-muted: #54607b;
+  --fg-subtle: #8591a9;
+  --texture-dot: rgba(40, 70, 120, 0.05);
+}
+
+/* ===== Accent presets (swap the dominant hue; base canvas stays) ===== */
+/* Terracotta lives in the base tokens; White is the default via data-accent. */
+
+[data-theme='dark'][data-accent='white'] {
+  --primary: #e9e6df;
+  --primary-hover: #f6f3ec;
+  --accent-lavender: #e9e6df;
+  --ring: rgba(233, 230, 223, 0.4);
+  --soft-lavender: rgba(233, 230, 223, 0.14);
+}
+[data-theme='light'][data-accent='white'] {
+  --primary: #453f34;
+  --primary-hover: #35302a;
+  --accent-lavender: #453f34;
+  --ring: rgba(69, 63, 52, 0.28);
+  --soft-lavender: rgba(69, 63, 52, 0.1);
+}
 
 [data-theme='dark'][data-accent='sage'] {
   --primary: #a9c8a3;

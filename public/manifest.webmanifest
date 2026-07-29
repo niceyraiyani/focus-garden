@@ -1,7 +1,7 @@
 {
-  "name": "focus garden",
-  "short_name": "focus garden",
-  "description": "A cozy, ADHD-friendly todo and focus timer. Capture thoughts, organize gently, focus with a flexible timer.",
+  "name": "lock.in",
+  "short_name": "lock.in",
+  "description": "A cozy, ADHD-friendly todo and focus app. Capture thoughts, organize gently, and lock in with a flexible timer.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

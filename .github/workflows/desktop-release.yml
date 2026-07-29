@@ -1,6 +1,6 @@
 name: Desktop app build
 
-# Builds the focus garden desktop app (with the hosts-file site blocker) on
+# Builds the lock.in desktop app (with the hosts-file site blocker) on
 # GitHub's macOS and Windows runners — which have the full Rust + platform
 # toolchains. Run manually (Actions ▸ this workflow ▸ Run) to get downloadable
 # artifacts, or push a "v*" tag to publish a GitHub Release with installers.
@@ -57,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
-          releaseName: focus garden ${{ github.ref_name }}
+          releaseName: lock.in ${{ github.ref_name }}
           releaseBody: 'Desktop app with focus site blocking. Needs admin/root to edit the hosts file — see the README.'
           releaseDraft: false
           prerelease: false

@@ -7,7 +7,7 @@ import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { Flourish } from '../components/Flourish'
 import { Icon, ListGlyph } from '../components/Icon'
 import type { IconName } from '../components/Icon'
-import { MeadowBackground } from '../components/MeadowBackground'
+import { DecorBackground } from '../components/DecorBackground'
 
 function NavItem({ to, icon, label, end }: { to: string; icon: IconName; label: string; end?: boolean }) {
   return (
@@ -42,11 +42,11 @@ export function Layout() {
 
   return (
     <div className="app-shell">
-      <MeadowBackground />
+      <DecorBackground />
       <aside className="sidebar">
         <div className="brand">
           <Flourish variant="bloom" size={30} color="var(--accent-pink)" />
-          <span className="brand-name">focus garden</span>
+          <span className="brand-name">lock.in</span>
         </div>
 
         <nav className="nav">

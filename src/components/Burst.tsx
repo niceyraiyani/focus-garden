@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSettings } from '../app/SettingsContext'
 
-export type BurstVariant = 'star' | 'flower'
+export type BurstVariant = 'star' | 'flower' | 'pixel' | 'dot'
 
 const COLORS = [
   'var(--accent-pink)',
@@ -23,6 +23,20 @@ function Shape({ variant, color }: { variant: BurstVariant; color: string }) {
           <circle cx="17.5" cy="12" r="3.4" />
         </g>
         <circle cx="12" cy="12" r="2.4" fill="var(--accent-yellow)" />
+      </svg>
+    )
+  }
+  if (variant === 'pixel') {
+    return (
+      <svg viewBox="0 0 12 12" width="12" height="12">
+        <rect x="1" y="1" width="10" height="10" rx="2" fill={color} />
+      </svg>
+    )
+  }
+  if (variant === 'dot') {
+    return (
+      <svg viewBox="0 0 10 10" width="9" height="9">
+        <circle cx="5" cy="5" r="4" fill={color} />
       </svg>
     )
   }
@@ -56,6 +70,10 @@ export function Burst({ trigger, variant = 'star' }: { trigger: number; variant?
 
   if (!show) return null
 
+  // The vibe overrides the shape: robot bursts pixels, plain bursts soft dots.
+  const effective: BurstVariant =
+    settings.vibe === 'robot' ? 'pixel' : settings.vibe === 'plain' ? 'dot' : variant
+  const spin = effective === 'star' || effective === 'pixel'
   const count = 14
 
   return (
@@ -66,14 +84,14 @@ export function Burst({ trigger, variant = 'star' }: { trigger: number; variant?
         return (
           <span
             key={i}
-            className={`burst-bit ${variant === 'star' ? 'burst-bit--spin' : ''}`}
+            className={`burst-bit ${spin ? 'burst-bit--spin' : ''}`}
             style={{
               ['--tx' as string]: `${Math.cos((angle * Math.PI) / 180) * dist}px`,
               ['--ty' as string]: `${Math.sin((angle * Math.PI) / 180) * dist}px`,
               animationDelay: `${(i % 4) * 25}ms`,
             }}
           >
-            <Shape variant={variant} color={COLORS[i % COLORS.length]} />
+            <Shape variant={effective} color={COLORS[i % COLORS.length]} />
           </span>
         )
       })}

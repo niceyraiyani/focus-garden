@@ -7,7 +7,7 @@ import { Icon } from '../../components/Icon'
 import type { IconName } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
-import type { ThemeMode, Weekday, AccentName } from '../../domain/types'
+import type { ThemeMode, Weekday, AccentName, Vibe } from '../../domain/types'
 
 const WEEKDAYS: { day: Weekday; label: string }[] = [
   { day: 0, label: 'Sun' },
@@ -26,12 +26,19 @@ const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
 ]
 
 const ACCENTS: { name: AccentName; label: string; swatch: string }[] = [
+  { name: 'white', label: 'White', swatch: '#ece5d8' },
   { name: 'terracotta', label: 'Terracotta', swatch: '#d3a67d' },
   { name: 'sage', label: 'Sage', swatch: '#a9c8a3' },
   { name: 'rose', label: 'Dusty Rose', swatch: '#e1a49c' },
   { name: 'honey', label: 'Honey', swatch: '#e4c67d' },
   { name: 'mauve', label: 'Mauve', swatch: '#cbb4d6' },
   { name: 'teal', label: 'Teal', swatch: '#8fc2ad' },
+]
+
+const VIBES: { name: Vibe; label: string; hint: string }[] = [
+  { name: 'plain', label: 'Plain', hint: 'clean black & white' },
+  { name: 'flowers', label: 'Flowers', hint: 'cozy plum + wildflowers' },
+  { name: 'robot', label: 'Robot', hint: 'techy dark blue' },
 ]
 
 const GOAL_CHOICES = [30, 60, 90, 120, 180, 240]
@@ -125,6 +132,24 @@ export function SettingsPage() {
               </button>
             ))}
           </div>
+        </div>
+        <div className="setting-row setting-row--col">
+          <span>Vibe</span>
+          <div className="seg vibe-seg">
+            {VIBES.map((v) => (
+              <button
+                key={v.name}
+                className={`seg-item ${(settings.vibe ?? 'flowers') === v.name ? 'seg-item--on' : ''}`}
+                onClick={() => update({ vibe: v.name })}
+                title={v.hint}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+          <p className="setting-hint">
+            {VIBES.find((v) => v.name === (settings.vibe ?? 'flowers'))?.hint}
+          </p>
         </div>
         <div className="setting-row setting-row--col">
           <span>Accent color</span>
@@ -258,7 +283,7 @@ export function SettingsPage() {
           </div>
         )}
         {!desktop && blocklist.length > 0 && (
-          <p className="setting-hint">Open focus garden in the desktop app to actually block these.</p>
+          <p className="setting-hint">Open lock.in in the desktop app to actually block these.</p>
         )}
       </div>
 

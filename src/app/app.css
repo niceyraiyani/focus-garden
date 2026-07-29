@@ -1152,6 +1152,7 @@ span.view-icon {
   height: 1.3rem;
   border-radius: var(--r-pill);
   flex: none;
+  border: 1px solid var(--border-strong);
 }
 .setting-hint {
   color: var(--fg-subtle);

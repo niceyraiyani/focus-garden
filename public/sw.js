@@ -1,5 +1,5 @@
 /*
- * focus-garden service worker — offline support via runtime caching.
+ * lock.in service worker — offline support via runtime caching.
  * No gradients here, just caches. :)
  * - navigations: network-first, fall back to cached shell when offline
  * - same-origin GET assets: stale-while-revalidate
