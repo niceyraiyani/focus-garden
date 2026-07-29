@@ -6,6 +6,8 @@ import {
   setCloudConfig,
   clearCloudConfig,
   isCloudConfigured,
+  hasBuiltInConfig,
+  hasOverride,
   getLastSyncedAt,
   setLastSyncedAt,
 } from '../data/cloud/config'
@@ -29,6 +31,10 @@ interface CloudUser {
 
 interface CloudContextValue {
   configured: boolean
+  /** True when this build ships its own project (no setup needed). */
+  builtIn: boolean
+  /** True when the user pointed this device at their own project. */
+  usingOwnProject: boolean
   user: CloudUser | null
   syncState: SyncState
   lastSyncedAt: number | null
@@ -51,6 +57,7 @@ function errMessage(e: unknown): string {
 
 export function CloudProvider({ children }: { children: ReactNode }) {
   const [configured, setConfigured] = useState(isCloudConfigured())
+  const [usingOwnProject, setUsingOwnProject] = useState(hasOverride())
   const [user, setUser] = useState<CloudUser | null>(null)
   const [syncState, setSyncState] = useState<SyncState>('off')
   const [lastSyncedAt, setLast] = useState<number | null>(null)
@@ -176,6 +183,8 @@ export function CloudProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CloudContextValue>(
     () => ({
       configured,
+      builtIn: hasBuiltInConfig(),
+      usingOwnProject,
       user,
       syncState,
       lastSyncedAt,
@@ -186,6 +195,7 @@ export function CloudProvider({ children }: { children: ReactNode }) {
         const sb = getSupabase()
         if (!sb) throw new Error('Could not start the cloud client — check the URL and key.')
         syncedUsers.current.clear()
+        setUsingOwnProject(true)
         setConfigured(true)
       },
       async disconnect() {
@@ -199,7 +209,9 @@ export function CloudProvider({ children }: { children: ReactNode }) {
         resetSupabase()
         syncedUsers.current.clear()
         applyUser(null)
-        setConfigured(false)
+        setUsingOwnProject(false)
+        // Falling back to a built-in project means we're still configured.
+        setConfigured(isCloudConfigured())
         setSyncState('off')
         setLast(null)
         setError(null)
@@ -245,7 +257,7 @@ export function CloudProvider({ children }: { children: ReactNode }) {
         }
       },
     }),
-    [configured, user, syncState, lastSyncedAt, error],
+    [configured, usingOwnProject, user, syncState, lastSyncedAt, error],
   )
 
   return <CloudContext.Provider value={value}>{children}</CloudContext.Provider>

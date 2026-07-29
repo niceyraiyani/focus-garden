@@ -36,6 +36,13 @@ jobs:
         run: npm test
 
       - name: Build
+        # Supplied as repository variables (Settings -> Secrets and variables ->
+        # Actions -> Variables). The anon key is public by design — row-level
+        # security is what protects the data — so it isn't kept as a secret.
+        # Leave them unset and the app simply stays local-only.
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
       - name: Setup Pages

@@ -153,9 +153,54 @@ export function AccountCard() {
             </Button>
           </div>
         </div>
-        <Button variant="ghost" disabled={busy} onClick={() => run(() => cloud.disconnect())}>
-          Disconnect project
-        </Button>
+
+        {cloud.usingOwnProject ? (
+          <Button variant="ghost" disabled={busy} onClick={() => run(() => cloud.disconnect())}>
+            Use the default project instead
+          </Button>
+        ) : (
+          <>
+            <Button variant="ghost" onClick={() => setShowSetup((s) => !s)}>
+              <Icon name={showSetup ? 'arrow-up' : 'arrow-down'} /> Use my own Supabase project
+            </Button>
+            {showSetup && (
+              <div className="cloud-setup">
+                <p className="setting-hint">
+                  Optional — point this device at a project you own instead. See{' '}
+                  <a
+                    href="https://github.com/niceyraiyani/lock.in/blob/main/docs/CLOUD_SYNC.md"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    docs/CLOUD_SYNC.md
+                  </a>
+                  .
+                </p>
+                <input
+                  className="input"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://xxxx.supabase.co"
+                  aria-label="Supabase project URL"
+                />
+                <input
+                  className="input"
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
+                  placeholder="anon public key"
+                  aria-label="Supabase anon key"
+                />
+                <Button
+                  variant="primary"
+                  disabled={!url.trim() || !key.trim() || busy}
+                  onClick={() => run(() => cloud.connect(url, key))}
+                >
+                  <Icon name="check" /> Connect
+                </Button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     )
   }

@@ -1,11 +1,24 @@
 # Cloud sync setup
 
-lock.in works completely offline by default — your tasks live in your browser and never leave your
-device. If you want to **sign in and sync across laptops**, connect a free Supabase project. It stays
-free for personal use, and the data lives in *your* project, not anyone else's.
+> **Just using lock.in?** You don't need any of this. Open **Settings → Account & cloud sync** and
+> sign in — that's it. This guide is for whoever *runs* the app.
 
-Takes about 5–10 minutes, once. Parts 1–3 are enough for email + password sign-in; Part 4 adds
-"Continue with Google".
+lock.in works completely offline by default — tasks live in the browser and never leave the device.
+Connecting a free Supabase project turns on **sign in + sync across devices**.
+
+You have two options:
+
+| | Set up once by the owner | Each person brings their own |
+| --- | --- | --- |
+| Setup for users | **None** — click and go | ~10 minutes each |
+| Whose project holds the data | The owner's | Their own |
+| Who can read a user's tasks | **Only that user** (row-level security) | Only that user |
+
+**Parts 1–5 set up the project. Part 6 bakes it into the deployed app** so everyone gets zero-setup
+sign-in. Skip Part 6 and each person can still connect their own project from Settings →
+*Use my own Supabase project*.
+
+Takes about 5–10 minutes, once.
 
 ---
 
@@ -61,11 +74,13 @@ by design; without your login it can't touch your data.
    > Use the key labelled **anon public**, *not* `service_role`. The service key bypasses row-level
    > security and must never go in a browser.
 
-9. Open lock.in → **Settings** → **Account & cloud sync** → **Set up sync**.
+9. Open lock.in → **Settings** → **Account & cloud sync** → **Use my own Supabase project**.
 10. Paste both values and click **Connect**.
 
 **Only want email + password?** You're done — click **Need an account?**, enter an email and
 password, and you're syncing.
+
+> This connects *this device only*. To make it the default for everyone, do Part 6 as well.
 
 ---
 
@@ -100,6 +115,32 @@ Add `http://localhost:5173/` too if you run the app locally.
 > The trailing slash matters. lock.in redirects back to `window.location.origin + BASE_URL`, which is
 > exactly `https://niceyraiyani.github.io/lock.in/`. A missing slash is the most common cause of
 > "redirect not allowed".
+
+---
+
+## Part 6 — Make it the default for everyone (1 min)
+
+So nobody else has to repeat any of this, bake the project into the deployed build.
+
+17. On GitHub: **Settings** → **Secrets and variables** → **Actions** → **Variables** tab →
+    **New repository variable**. Add both:
+
+| Name | Value |
+| --- | --- |
+| `VITE_SUPABASE_URL` | your Project URL from step 8 |
+| `VITE_SUPABASE_ANON_KEY` | your **anon public** key from step 8 |
+
+18. Re-run the deploy: **Actions** → **Deploy to GitHub Pages** → **Run workflow**.
+
+From then on, anyone opening the app sees **Continue with Google** straight away, with
+*Use my own Supabase project* tucked underneath for anyone who prefers their own.
+
+> **Variables, not Secrets.** The anon key is public by design — it's compiled into the JavaScript
+> the browser downloads, so it can't be hidden, and it doesn't need to be. Row-level security is what
+> keeps each person's data private. Never put the `service_role` key here.
+
+For local development, copy `.env.example` to `.env.local` and fill in the same two values.
+`.env*` files are gitignored so real keys stay out of the repo.
 
 ---
 

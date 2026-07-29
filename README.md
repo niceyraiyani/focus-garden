@@ -102,9 +102,10 @@ no server, no tracking. That means it's fast and completely private. It also mea
 
 Want it on your laptop *and* your desktop? Turn on **cloud sync**: sign in with
 Google or an email & password, and lock.in keeps your tasks in step across
-devices. It's opt-in, free for personal use, and the data lives in **your own**
-Supabase project — see **[docs/CLOUD_SYNC.md](docs/CLOUD_SYNC.md)** for the
-5-minute setup. Not signed in? Nothing ever leaves your browser.
+devices. Signing in is all it takes — there's nothing to configure. It's opt-in,
+free, and row-level security means **only you** can read your own tasks. Running
+your own copy of lock.in? See **[docs/CLOUD_SYNC.md](docs/CLOUD_SYNC.md)** for the
+5-minute Supabase setup. Not signed in? Nothing ever leaves your browser.
 
 lock.in is an installable **PWA**: open it in your browser and it works offline;
 click *Install* to run it in its own window like a native app.
