@@ -97,12 +97,16 @@ export interface FocusSegment {
 
 export type ThemeMode = 'system' | 'light' | 'dark'
 
+export type AccentName = 'terracotta' | 'sage' | 'rose' | 'honey' | 'mauve' | 'teal'
+
 /** 0=Sunday .. 6=Saturday, matching Date.getDay(). */
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export interface Settings {
   id: 'app'
   theme: ThemeMode
+  /** Accent color family. */
+  accent: AccentName
   defaultMinMinutes: number
   notificationsEnabled: boolean
   /** Days that count toward goals and streaks. */

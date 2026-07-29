@@ -49,7 +49,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement
     root.setAttribute('data-theme', resolvedTheme)
     root.setAttribute('data-motion', effective.decorativeMotion ? 'on' : 'off')
-  }, [resolvedTheme, effective.decorativeMotion])
+    root.setAttribute('data-accent', effective.accent ?? 'terracotta')
+  }, [resolvedTheme, effective.decorativeMotion, effective.accent])
 
   const value = useMemo<SettingsContextValue>(
     () => ({

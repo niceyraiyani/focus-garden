@@ -7,7 +7,7 @@ import { Icon } from '../../components/Icon'
 import type { IconName } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
-import type { ThemeMode, Weekday } from '../../domain/types'
+import type { ThemeMode, Weekday, AccentName } from '../../domain/types'
 
 const WEEKDAYS: { day: Weekday; label: string }[] = [
   { day: 0, label: 'Sun' },
@@ -23,6 +23,15 @@ const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
   { mode: 'system', label: 'System', icon: 'monitor' },
   { mode: 'light', label: 'Light', icon: 'sun' },
   { mode: 'dark', label: 'Dark', icon: 'moon' },
+]
+
+const ACCENTS: { name: AccentName; label: string; swatch: string }[] = [
+  { name: 'terracotta', label: 'Terracotta', swatch: '#d3a67d' },
+  { name: 'sage', label: 'Sage', swatch: '#a9c8a3' },
+  { name: 'rose', label: 'Dusty Rose', swatch: '#e1a49c' },
+  { name: 'honey', label: 'Honey', swatch: '#e4c67d' },
+  { name: 'mauve', label: 'Mauve', swatch: '#cbb4d6' },
+  { name: 'teal', label: 'Teal', swatch: '#8fc2ad' },
 ]
 
 const GOAL_CHOICES = [30, 60, 90, 120, 180, 240]
@@ -113,6 +122,23 @@ export function SettingsPage() {
                 onClick={() => update({ theme: t.mode })}
               >
                 <Icon name={t.icon} /> {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="setting-row setting-row--col">
+          <span>Accent color</span>
+          <div className="accent-picker">
+            {ACCENTS.map((a) => (
+              <button
+                key={a.name}
+                className={`accent-choice ${(settings.accent ?? 'terracotta') === a.name ? 'accent-choice--on' : ''}`}
+                onClick={() => update({ accent: a.name })}
+                title={`${a.label} · ${a.swatch}`}
+                aria-label={a.label}
+              >
+                <span className="accent-swatch" style={{ background: a.swatch }} />
+                <span className="accent-label">{a.label}</span>
               </button>
             ))}
           </div>

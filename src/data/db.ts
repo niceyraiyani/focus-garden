@@ -44,6 +44,7 @@ export const db = new FocusGardenDB()
 export const DEFAULT_SETTINGS: Settings = {
   id: 'app',
   theme: 'system',
+  accent: 'terracotta',
   defaultMinMinutes: 30,
   notificationsEnabled: true,
   workdays: [1, 2, 3, 4, 5],
