@@ -22,7 +22,6 @@ const settings: Settings = {
   dailyGoalMinutes: 60,
   decorativeMotion: true,
   celebrations: true,
-  showCompanion: true,
   blocklist: [],
   version: 1,
 }

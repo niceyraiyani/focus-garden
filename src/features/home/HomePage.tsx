@@ -7,7 +7,6 @@ import { useActiveSession } from '../focus/useFocusSession'
 import { TaskRow } from '../tasks/TaskRow'
 import { QuickAdd } from '../tasks/QuickAdd'
 import { TaskDetailDialog } from '../tasks/TaskDetailDialog'
-import { Companion } from '../../components/Companion'
 import { Flourish } from '../../components/Flourish'
 import { Burst } from '../../components/Burst'
 import { Icon } from '../../components/Icon'
@@ -69,7 +68,6 @@ export function HomePage() {
               : 'A fresh day in the garden. What matters most right now?'}
           </p>
         </div>
-        <Companion mood="idle" size={72} />
       </div>
 
       <div className="home-stats">

@@ -155,12 +155,6 @@ export function SettingsPage() {
           value={settings.celebrations}
           onChange={(v) => update({ celebrations: v })}
         />
-        <ToggleRow
-          label="Focus companion"
-          hint="A tiny friend that keeps you company while you work."
-          value={settings.showCompanion}
-          onChange={(v) => update({ showCompanion: v })}
-        />
       </div>
 
       <div className="card setting-block">

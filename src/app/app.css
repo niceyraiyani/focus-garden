@@ -1216,7 +1216,7 @@ span.view-icon {
 }
 .cal-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
 }
 .cal-weekday {
@@ -1233,6 +1233,7 @@ span.view-icon {
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   padding: 6px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1277,6 +1278,8 @@ span.view-icon {
   align-items: center;
   gap: 5px;
   text-align: left;
+  min-width: 0;
+  max-width: 100%;
   border: none;
   background: var(--surface-2);
   border-radius: var(--r-sm);

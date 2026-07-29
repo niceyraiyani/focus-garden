@@ -307,11 +307,6 @@
   user-select: none;
 }
 
-/* ---------- Companion ---------- */
-.companion {
-  display: inline-block;
-}
-
 /* ---------- Celebration burst (stars / flowers) ---------- */
 .burst {
   position: absolute;

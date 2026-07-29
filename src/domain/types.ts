@@ -116,8 +116,7 @@ export interface Settings {
   /** Low-stimulation toggles. */
   decorativeMotion: boolean
   celebrations: boolean
-  showCompanion: boolean
-  /** Domains to block during a focus session (used by the companion extension). */
+  /** Domains to block during a focus session (used by the desktop blocker). */
   blocklist: string[]
   version: number
 }

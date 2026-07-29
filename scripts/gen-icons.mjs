@@ -18,7 +18,7 @@ async function maskable(size, name, pad) {
   const inner = Math.round(size * (1 - pad * 2))
   const icon = await sharp(svg, { density: 384 }).resize(inner, inner).png().toBuffer()
   await sharp({
-    create: { width: size, height: size, channels: 4, background: '#0d1117' },
+    create: { width: size, height: size, channels: 4, background: '#1c1416' },
   })
     .composite([{ input: icon, gravity: 'center' }])
     .png()

@@ -8,13 +8,13 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  /* Warm espresso base + raised surfaces (no blue). */
-  --bg: #17130f;
-  --surface: #211b15;
-  --surface-2: #2b241b;
-  --surface-3: #372e23;
-  --border: #3c3227;
-  --border-strong: #4e4133;
+  /* Warm plum base + raised surfaces (warm, subtle purple-brown, no blue). */
+  --bg: #1c1416;
+  --surface: #271d20;
+  --surface-2: #32262a;
+  --surface-3: #3d2f34;
+  --border: #433339;
+  --border-strong: #564350;
 
   /* Body text: warm cream, never pure white. */
   --fg: #efe6d6;

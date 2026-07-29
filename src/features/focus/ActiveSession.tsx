@@ -14,7 +14,6 @@ import { createTask } from '../../data/tasks'
 import { activeMs, isOvertime, remainingMs } from '../../domain/timing'
 import { formatClock, formatMinutes } from '../../lib/time'
 import { Button, IconButton } from '../../components/Button'
-import { Companion } from '../../components/Companion'
 import { Burst } from '../../components/Burst'
 import { Icon } from '../../components/Icon'
 import { EffortFlowers } from '../../components/EffortFlowers'
@@ -49,7 +48,6 @@ export function ActiveSession({
 
   const [burst, setBurst] = useState(0)
   const [startBurst, setStartBurst] = useState(0)
-  const [celebrate, setCelebrate] = useState(false)
   const [parkText, setParkText] = useState('')
   const notifiedRef = useRef(session.notifiedMinReached)
 
@@ -82,8 +80,6 @@ export function ActiveSession({
 
   function cheer() {
     setBurst((b) => b + 1)
-    setCelebrate(true)
-    window.setTimeout(() => setCelebrate(false), 700)
   }
 
   async function completeActive() {
@@ -125,7 +121,6 @@ export function ActiveSession({
             />
           </div>
         </div>
-        <Companion mood={celebrate ? 'celebrate' : running ? 'working' : 'idle'} />
       </div>
 
       <div className="session-controls">
