@@ -1,0 +1,320 @@
+/* focus-garden UI primitives. Flat fills only; hover is an instant color
+   swap (no color transitions). Motion is limited to gentle transforms. */
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: var(--surface-2);
+  color: var(--fg);
+  transition: transform 0.12s ease;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: var(--surface-3);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--primary);
+  color: var(--primary-fg);
+}
+.btn--primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--border-strong);
+}
+.btn--ghost:hover {
+  background: var(--soft-lavender);
+}
+
+.btn--subtle {
+  background: transparent;
+  color: var(--fg-muted);
+}
+.btn--subtle:hover {
+  background: var(--surface-2);
+  color: var(--fg);
+}
+
+.btn--danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.btn--danger:hover {
+  background: var(--soft-pink);
+}
+
+.btn--lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.05rem;
+}
+.btn--sm {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--r-pill);
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  transition: transform 0.12s ease;
+}
+.icon-btn:hover {
+  background: var(--surface-2);
+  color: var(--fg);
+}
+.icon-btn:active {
+  transform: scale(0.92);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--space-5);
+}
+.card--raised {
+  background: var(--surface-2);
+}
+
+/* ---------- Inputs ---------- */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  padding: 0.55rem 0.8rem;
+  color: var(--fg);
+  transition: none;
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--fg-subtle);
+}
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+.textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+  font-family: inherit;
+}
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Chips / badges ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--r-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--soft-lavender);
+  color: var(--fg);
+  border: 1px solid transparent;
+}
+.chip--button:hover {
+  border-color: var(--border-strong);
+}
+.chip--active {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.chip-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--r-pill);
+  flex: none;
+}
+
+/* ---------- Dialog ---------- */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 12, 20, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: 100;
+}
+.dialog {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl);
+  padding: var(--space-6);
+  width: 100%;
+  max-width: 30rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: pop-in 0.16s ease;
+}
+.dialog--wide {
+  max-width: 40rem;
+}
+.dialog-title {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-4);
+}
+
+/* ---------- Toasts ---------- */
+.toast-wrap {
+  position: fixed;
+  bottom: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: 200;
+  width: min(92vw, 26rem);
+}
+.toast {
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-left: 4px solid var(--accent-mint);
+  border-radius: var(--r-md);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  animation: slide-up 0.18s ease;
+}
+.toast button {
+  margin-left: auto;
+}
+
+/* ---------- Effort flowers ---------- */
+.flowers {
+  display: inline-flex;
+  gap: 0.1rem;
+  align-items: center;
+}
+.flower-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  line-height: 1;
+  font-size: 1.1rem;
+  filter: grayscale(1) opacity(0.4);
+  transition: transform 0.12s ease;
+}
+.flower-btn--on {
+  filter: none;
+}
+.flower-btn:hover {
+  transform: scale(1.2);
+}
+
+/* ---------- Animations (gentle) ---------- */
+@keyframes pop-in {
+  from {
+    transform: scale(0.96);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes gentle-bounce {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.18); }
+  60% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+.bounce {
+  animation: gentle-bounce 0.4s ease;
+}
+@keyframes soft-float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+.float {
+  animation: soft-float 6s ease-in-out infinite;
+}
+
+/* ---------- Decorative flourish ---------- */
+.flourish {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- Companion ---------- */
+.companion {
+  display: inline-block;
+}
+
+/* ---------- Petal burst celebration ---------- */
+.petal-burst {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+}
+.petal {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 60% 20% 60% 20%;
+  animation: petal-fly 0.85s ease-out forwards;
+}
+@keyframes petal-fly {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1);
+    opacity: 0;
+  }
+}

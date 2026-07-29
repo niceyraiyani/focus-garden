@@ -1,0 +1,116 @@
+/*
+ * focus-garden design tokens — "cozy cyber-cottagecore".
+ * Flat colors only: no gradients, no blurred glows. Emphasis uses a flat
+ * semi-transparent outline ring. Dark is the signature theme.
+ */
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Flat blue-black base + raised surfaces. */
+  --bg: #0d1117;
+  --surface: #141b2d;
+  --surface-2: #1b2438;
+  --surface-3: #222c44;
+  --border: #2b3550;
+  --border-strong: #3a4568;
+
+  /* Body text: soft lavender-white, never pure white. */
+  --fg: #e8e4f6;
+  --fg-muted: #aab2cc;
+  --fg-subtle: #737c99;
+
+  /* Flat pastel accents. */
+  --accent-lavender: #c4b5fd;
+  --accent-pink: #f9a8d4;
+  --accent-mint: #a7f3d0;
+  --accent-blue: #93c5fd;
+  --accent-peach: #fecdc5;
+  --accent-yellow: #fde68a;
+
+  /* Primary interactive (flat, hard hover swap). */
+  --primary: #c4b5fd;
+  --primary-fg: #171326;
+  --primary-hover: #d8ccff;
+
+  /* Emphasis ring that replaces glow (flat, semi-transparent). */
+  --ring: rgba(196, 181, 253, 0.55);
+
+  /* Chip/soft accent fills (flat translucent). */
+  --soft-lavender: rgba(196, 181, 253, 0.16);
+  --soft-pink: rgba(249, 168, 212, 0.16);
+  --soft-mint: rgba(167, 243, 208, 0.16);
+  --soft-blue: rgba(147, 197, 253, 0.16);
+  --soft-peach: rgba(254, 205, 197, 0.16);
+  --soft-yellow: rgba(253, 230, 138, 0.16);
+
+  --danger: #f9a8d4;
+  --success: #a7f3d0;
+
+  /* Subtle star/grid texture dot color. */
+  --texture-dot: rgba(196, 181, 253, 0.06);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f7f4fd;
+  --surface: #ffffff;
+  --surface-2: #f2ecfb;
+  --surface-3: #eae4f7;
+  --border: #e5ddf3;
+  --border-strong: #d3c7ec;
+
+  /* Dark lavender-charcoal, not pure black. */
+  --fg: #2b2542;
+  --fg-muted: #5e5878;
+  --fg-subtle: #8a84a3;
+
+  /* Same pastel identity; used for line art, chips, accents. */
+  --accent-lavender: #a78bfa;
+  --accent-pink: #ec6fb8;
+  --accent-mint: #34d399;
+  --accent-blue: #60a5fa;
+  --accent-peach: #fb9d8f;
+  --accent-yellow: #eab308;
+
+  --primary: #7c5cff;
+  --primary-fg: #ffffff;
+  --primary-hover: #6a49f0;
+
+  --ring: rgba(124, 92, 255, 0.35);
+
+  --soft-lavender: rgba(124, 92, 255, 0.12);
+  --soft-pink: rgba(236, 111, 184, 0.12);
+  --soft-mint: rgba(52, 211, 153, 0.14);
+  --soft-blue: rgba(96, 165, 250, 0.12);
+  --soft-peach: rgba(251, 157, 143, 0.14);
+  --soft-yellow: rgba(234, 179, 8, 0.14);
+
+  --danger: #e5578f;
+  --success: #10b981;
+
+  --texture-dot: rgba(124, 92, 255, 0.05);
+}
+
+:root {
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-pixel: 'Press Start 2P', 'Nunito', monospace;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
+  --maxw: 1080px;
+}
