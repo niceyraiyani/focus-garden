@@ -156,6 +156,7 @@
 .heatmap {
   --cell: 12px;
   --cell-gap: 3px;
+  max-width: 100%;
 }
 .heatmap-scroll {
   overflow-x: auto;
@@ -1134,7 +1135,8 @@ span.view-icon {
 .review-cards,
 .insight-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0,…) so a long stat can't push the row wider than the page. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-3);
 }
 .stat-card {
@@ -1206,6 +1208,11 @@ span.view-icon {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+}
+/* Let wide children (the heatmap) scroll inside their card instead of
+   stretching the whole page. */
+.insights > * {
+  min-width: 0;
 }
 .bar-chart {
   display: flex;
@@ -1589,5 +1596,103 @@ span.view-icon {
   }
   .cal-cell {
     min-height: 72px;
+  }
+}
+
+/* ===== Phones ===== */
+@media (max-width: 600px) {
+  /* Keep navigation to a compact bar so the first thing you see is your
+     tasks, not a wall of links. */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: var(--space-3);
+    gap: var(--space-2);
+    row-gap: var(--space-2);
+  }
+  .brand {
+    flex: 1 1 auto;
+  }
+  /* Nav rows scroll sideways rather than wrapping onto three lines. */
+  .sidebar .nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: var(--space-1);
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .sidebar .nav::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-item {
+    white-space: nowrap;
+    padding: 0.4rem 0.7rem;
+  }
+  .nav-section {
+    width: 100%;
+  }
+  /* The Lists heading eats a whole row on a phone; keep it tight. */
+  .nav-section-head {
+    padding: 0 var(--space-2) 2px;
+    font-size: 0.62rem;
+  }
+  .nav-section-head span {
+    opacity: 0.8;
+  }
+  .sidebar-bottom {
+    width: 100%;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .focus-cta {
+    flex: 1;
+    justify-content: center;
+  }
+  .today-tally {
+    margin-top: 0;
+    white-space: nowrap;
+  }
+
+  .content {
+    padding: var(--space-4) var(--space-3) var(--space-8);
+  }
+  .view-title {
+    font-size: 1.5rem;
+  }
+  /* Page headers put their controls on a second line rather than
+     squeezing them on top of the title. */
+  .view-header {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .cal-controls {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .home-greeting {
+    font-size: 1.8rem;
+  }
+
+  .insight-cards {
+    grid-template-columns: 1fr;
+  }
+  .heatmap {
+    --cell: 10px;
+    --cell-gap: 2px;
+  }
+  .setting-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+  .setting-actions {
+    flex-wrap: wrap;
+  }
+  /* Stack the segmented controls so their options stay tappable. */
+  .seg {
+    flex-wrap: wrap;
   }
 }
