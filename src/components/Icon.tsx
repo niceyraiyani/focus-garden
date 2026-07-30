@@ -40,6 +40,8 @@ export type IconName =
   | 'bolt'
   | 'cpu'
   | 'refresh'
+  | 'search'
+  | 'circle'
 
 const PATHS: Record<IconName, ReactNode> = {
   sun: (
@@ -199,6 +201,13 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M20 4v4.5h-4.5" />
     </>
   ),
+  search: (
+    <>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M15.8 15.8 20.5 20.5" />
+    </>
+  ),
+  circle: <circle cx="12" cy="12" r="7.5" />,
 }
 
 interface IconProps {

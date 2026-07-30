@@ -60,9 +60,16 @@ day** to schedule it — drag it back off to unschedule.
 
 ### 📊 Insights that motivate, not shame
 Focused hours today and this week, a workday streak that **never breaks on your
-rest days**, a 14-day chart, time-by-list breakdown, and your session history.
+rest days**, a year-of-focus heatmap, a 14-day chart, time-by-list breakdown, and
+your session history.
 
 ![Insights](docs/screenshots/insights.png)
+
+### 🔎 Find it — or dump it — in one keystroke
+Hit <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd> (or just <kbd>/</kbd>) anywhere to search
+every task by title, notes, or list. No match? Press Enter and whatever you typed
+lands in your Inbox — so a thought that pops up mid-task never costs you your
+place.
 
 ### 🚫 Site blocker (desktop app)
 Name the sites that pull you away (YouTube, Reddit, socials…). In the desktop

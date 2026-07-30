@@ -13,6 +13,7 @@ import { Flourish } from '../components/Flourish'
 import { Icon, ListGlyph } from '../components/Icon'
 import type { IconName } from '../components/Icon'
 import { DecorBackground } from '../components/DecorBackground'
+import { CommandPalette, openCommandPalette } from '../components/CommandPalette'
 
 function NavItem({ to, icon, label, end }: { to: string; icon: IconName; label: string; end?: boolean }) {
   return (
@@ -61,6 +62,12 @@ export function Layout() {
           <Flourish variant="bloom" size={30} color="var(--accent-pink)" />
           <span className="brand-name">lock.in</span>
         </div>
+
+        <button className="sidebar-search" onClick={openCommandPalette}>
+          <Icon name="search" />
+          <span>Search or capture</span>
+          <kbd>⌘K</kbd>
+        </button>
 
         <nav className="nav">
           <NavItem to="/" icon="sun" label="Today" end />
@@ -134,6 +141,7 @@ export function Layout() {
       <main className="content">
         <Outlet />
       </main>
+      <CommandPalette />
     </div>
   )
 }
