@@ -71,6 +71,8 @@ every task by title, notes, or list. No match? Press Enter and whatever you type
 lands in your Inbox — so a thought that pops up mid-task never costs you your
 place.
 
+![Search and capture](docs/screenshots/search.png)
+
 ### 🚫 Site blocker (desktop app)
 Name the sites that pull you away (YouTube, Reddit, socials…). In the desktop
 app they're blocked **only while a focus session is running**, and work normally
