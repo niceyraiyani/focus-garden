@@ -97,12 +97,12 @@
   --danger: #b8503f;
   --success: #3c7f52;
 
-  --primary: #3b3b40;
-  --primary-hover: #2c2c30;
-  --primary-fg: #f7f6f2;
-  --link: #3b3b40;
-  --ring: rgba(59, 59, 64, 0.28);
-  --soft-lavender: rgba(59, 59, 64, 0.1);
+  --primary: #e6e2d8;
+  --primary-hover: #dcd7ca;
+  --primary-fg: #3a352c;
+  --link: #4a4438;
+  --ring: rgba(74, 68, 56, 0.28);
+  --soft-lavender: rgba(74, 68, 56, 0.1);
 
   /* A soft mid-tone, not black: on a light canvas the hard edge of the offset
      does the depth work, and a dark shadow would read harsh. */
@@ -189,13 +189,14 @@
   --ring: rgba(236, 234, 227, 0.42);
   --soft-lavender: rgba(236, 234, 227, 0.14);
 }
+/* Paper */
 [data-theme='light'][data-accent='white'] {
-  --primary: #3b3b40;
-  --primary-hover: #2c2c30;
-  --primary-fg: #f7f6f2;
-  --link: #3b3b40;
-  --ring: rgba(59, 59, 64, 0.28);
-  --soft-lavender: rgba(59, 59, 64, 0.1);
+  --primary: #e6e2d8;
+  --primary-hover: #dcd7ca;
+  --primary-fg: #3a352c;
+  --link: #4a4438;
+  --ring: rgba(74, 68, 56, 0.28);
+  --soft-lavender: rgba(74, 68, 56, 0.1);
 }
 
 /* Petal */
@@ -208,12 +209,12 @@
   --soft-lavender: rgba(230, 173, 182, 0.14);
 }
 [data-theme='light'][data-accent='blush'] {
-  --primary: #a05c67;
-  --primary-hover: #8e4f5a;
-  --primary-fg: #fdf7f4;
-  --link: #a05c67;
-  --ring: rgba(160, 92, 103, 0.3);
-  --soft-lavender: rgba(160, 92, 103, 0.13);
+  --primary: #f4cdd5;
+  --primary-hover: #efbdc7;
+  --primary-fg: #562f36;
+  --link: #9c5763;
+  --ring: rgba(156, 87, 99, 0.3);
+  --soft-lavender: rgba(156, 87, 99, 0.13);
 }
 
 /* Amber */
@@ -226,12 +227,12 @@
   --soft-lavender: rgba(230, 197, 140, 0.14);
 }
 [data-theme='light'][data-accent='amber'] {
-  --primary: #8c6023;
-  --primary-hover: #79521c;
-  --primary-fg: #fff9f0;
-  --link: #8c6023;
-  --ring: rgba(140, 96, 35, 0.3);
-  --soft-lavender: rgba(140, 96, 35, 0.14);
+  --primary: #f2dcae;
+  --primary-hover: #ecd19a;
+  --primary-fg: #533e14;
+  --link: #86601f;
+  --ring: rgba(134, 96, 31, 0.3);
+  --soft-lavender: rgba(134, 96, 31, 0.14);
 }
 
 /* Sage */
@@ -244,12 +245,12 @@
   --soft-lavender: rgba(166, 204, 172, 0.14);
 }
 [data-theme='light'][data-accent='mint'] {
-  --primary: #3f7b4f;
-  --primary-hover: #356b43;
-  --primary-fg: #f6fbf6;
-  --link: #3f7b4f;
-  --ring: rgba(63, 123, 79, 0.3);
-  --soft-lavender: rgba(63, 123, 79, 0.14);
+  --primary: #c8dfcb;
+  --primary-hover: #b9d6bd;
+  --primary-fg: #26402c;
+  --link: #3d7449;
+  --ring: rgba(61, 116, 73, 0.3);
+  --soft-lavender: rgba(61, 116, 73, 0.14);
 }
 
 /* Sky */
@@ -262,12 +263,12 @@
   --soft-lavender: rgba(163, 196, 232, 0.14);
 }
 [data-theme='light'][data-accent='sky'] {
-  --primary: #40699a;
-  --primary-hover: #375a86;
-  --primary-fg: #f5f9fd;
-  --link: #40699a;
-  --ring: rgba(64, 105, 154, 0.3);
-  --soft-lavender: rgba(64, 105, 154, 0.13);
+  --primary: #c8daf1;
+  --primary-hover: #b8cfea;
+  --primary-fg: #1f364d;
+  --link: #3c6592;
+  --ring: rgba(60, 101, 146, 0.3);
+  --soft-lavender: rgba(60, 101, 146, 0.13);
 }
 
 /* Lavender */
@@ -280,12 +281,12 @@
   --soft-lavender: rgba(193, 177, 230, 0.14);
 }
 [data-theme='light'][data-accent='lavender'] {
-  --primary: #6a56ab;
-  --primary-hover: #5c489b;
-  --primary-fg: #f8f6fd;
-  --link: #6a56ab;
-  --ring: rgba(106, 86, 171, 0.3);
-  --soft-lavender: rgba(106, 86, 171, 0.13);
+  --primary: #d7ccf0;
+  --primary-hover: #c9bce9;
+  --primary-fg: #322a50;
+  --link: #63519f;
+  --ring: rgba(99, 81, 159, 0.3);
+  --soft-lavender: rgba(99, 81, 159, 0.13);
 }
 
 :root {
