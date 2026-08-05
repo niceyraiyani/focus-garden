@@ -158,6 +158,12 @@ export function SettingsPage() {
           </p>
         </div>
         <ToggleRow
+          label="Retro chrome"
+          hint="Window title bars, chunky outlines, and hard drop shadows."
+          value={settings.retro ?? true}
+          onChange={(v) => update({ retro: v })}
+        />
+        <ToggleRow
           label="Gentle motion"
           hint="Drifting flowers, bounces, and floating details."
           value={settings.decorativeMotion}

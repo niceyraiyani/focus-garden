@@ -52,7 +52,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     root.setAttribute('data-motion', effective.decorativeMotion ? 'on' : 'off')
     root.setAttribute('data-accent', resolveAccent(effective.accent, effective.vibe))
     root.setAttribute('data-vibe', effective.vibe ?? 'flowers')
-  }, [resolvedTheme, effective.decorativeMotion, effective.accent, effective.vibe])
+    // Settings saved before the retro skin existed default to on.
+    root.setAttribute('data-retro', (effective.retro ?? true) ? 'on' : 'off')
+  }, [
+    resolvedTheme,
+    effective.decorativeMotion,
+    effective.accent,
+    effective.vibe,
+    effective.retro,
+  ])
 
   const value = useMemo<SettingsContextValue>(
     () => ({

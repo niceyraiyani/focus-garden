@@ -46,6 +46,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
   accent: 'white',
   vibe: 'flowers',
+  retro: true,
   defaultMinMinutes: 30,
   notificationsEnabled: true,
   workdays: [1, 2, 3, 4, 5],

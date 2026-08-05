@@ -42,6 +42,8 @@ export type IconName =
   | 'refresh'
   | 'search'
   | 'circle'
+  | 'folder'
+  | 'folder-open'
 
 const PATHS: Record<IconName, ReactNode> = {
   sun: (
@@ -208,6 +210,18 @@ const PATHS: Record<IconName, ReactNode> = {
     </>
   ),
   circle: <circle cx="12" cy="12" r="7.5" />,
+  folder: (
+    <>
+      <path d="M3 7.5a1.5 1.5 0 0 1 1.5-1.5h4.2a1.5 1.5 0 0 1 1.06.44l1.3 1.3a1.5 1.5 0 0 0 1.06.44h6.38A1.5 1.5 0 0 1 20 9.68V18a1.5 1.5 0 0 1-1.5 1.5h-14A1.5 1.5 0 0 1 3 18z" />
+      <path d="M3 10.5h17" />
+    </>
+  ),
+  'folder-open': (
+    <>
+      <path d="M3 7.5a1.5 1.5 0 0 1 1.5-1.5h4.2a1.5 1.5 0 0 1 1.06.44l1.3 1.3a1.5 1.5 0 0 0 1.06.44h5.38A1.5 1.5 0 0 1 18 9.68v1.32" />
+      <path d="M3 18V7.5M3 18a1.5 1.5 0 0 0 1.5 1.5h13.1a1.5 1.5 0 0 0 1.44-1.08l1.6-5.4A1 1 0 0 0 19.68 11H7.4a1.5 1.5 0 0 0-1.44 1.08z" />
+    </>
+  ),
 }
 
 interface IconProps {

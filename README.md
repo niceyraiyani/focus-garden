@@ -52,6 +52,13 @@ surfaced on Today ("Needs a home") so nothing quietly slips away.
 
 ![Task list](docs/screenshots/tasks.png)
 
+### 🗂️ A desk of folders
+**Lists** lays every folder out at a glance — open counts, what's due, and the
+Inbox alongside them — so it's obvious where a thought belongs. Click a folder to
+open it.
+
+![Lists](docs/screenshots/lists.png)
+
 ### 🗓️ A calendar you can drag onto
 See your week or month at a glance. Got a task with no date? **Drag it onto a
 day** to schedule it — drag it back off to unschedule.
@@ -85,8 +92,13 @@ the rest of the time — the same idea as
 
 Pick a **vibe** that changes the whole feel — background, decorations, and the
 little celebrations when you finish a task. Then choose an accent color (White,
-Blush, Lavender, Mint, or Sky) and light/dark mode. Each vibe automatically
+Petal, Lavender, Mint, or Sky) and light/dark mode. Each vibe automatically
 picks the accent that suits it best, and you can switch anytime.
+
+**Retro chrome** (on by default) layers little window title bars, chunky
+outlines, and flat drop shadows over whichever vibe you're in — old-desktop
+nostalgia without touching the palette. Turn it off in Settings for a flatter,
+quieter look.
 
 | 🌫️ Plain | 🌸 Flowers | 🤖 Robot |
 |:---:|:---:|:---:|

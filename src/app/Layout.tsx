@@ -72,6 +72,7 @@ export function Layout() {
         <nav className="nav">
           <NavItem to="/" icon="sun" label="Today" end />
           <NavItem to="/inbox" icon="inbox" label="Inbox" />
+          <NavItem to="/lists" icon="folder" label="Lists" />
           <NavItem to="/calendar" icon="calendar" label="Calendar" />
           <NavItem to="/all" icon="flower" label="All tasks" />
           <NavItem to="/completed" icon="trophy" label="Completed" />
@@ -79,7 +80,9 @@ export function Layout() {
 
         <div className="nav-section">
           <div className="nav-section-head">
-            <span>Lists</span>
+            <Link to="/lists" className="nav-section-link">
+              Lists
+            </Link>
             <button className="icon-btn icon-btn--tiny" aria-label="New list" onClick={() => setAdding(true)}>
               <Icon name="plus" />
             </button>

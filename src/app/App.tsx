@@ -7,6 +7,7 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { Layout } from './Layout'
 import { HomePage } from '../features/home/HomePage'
 import { InboxPage, AllTasksPage, CompletedPage, ListPage } from '../features/tasks/TaskPages'
+import { ListsPage } from '../features/tasks/ListsPage'
 import { CalendarPage } from '../features/calendar/CalendarPage'
 import { FocusPage } from '../features/focus/FocusPage'
 import { InsightsPage } from '../features/insights/InsightsPage'
@@ -24,6 +25,7 @@ export function App() {
                   <Route element={<Layout />}>
                     <Route index element={<HomePage />} />
                     <Route path="inbox" element={<InboxPage />} />
+                    <Route path="lists" element={<ListsPage />} />
                     <Route path="all" element={<AllTasksPage />} />
                     <Route path="calendar" element={<CalendarPage />} />
                     <Route path="completed" element={<CompletedPage />} />

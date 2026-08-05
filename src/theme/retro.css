@@ -1,0 +1,287 @@
+/*
+ * Retro chrome — an optional skin layered over whatever vibe and accent are
+ * active. It never changes the palette; it only changes the *edges*: chunky
+ * outlines, flat offset shadows, squarer corners, and little window title bars.
+ *
+ * Still no gradients and no blurred glows anywhere. A "shadow" here is a solid
+ * colour offset by a few pixels, exactly like an old desktop UI would draw it.
+ */
+
+/* ---------- Panels (work in both skins) ---------- */
+
+.panel {
+  padding: 0;
+  overflow: hidden;
+}
+.panel-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.panel-dots {
+  display: none;
+  gap: 5px;
+  flex: none;
+}
+.panel-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--retro-line);
+  background: var(--surface-2);
+}
+.panel-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  flex: 1;
+  min-width: 0;
+}
+.panel-actions {
+  flex: none;
+  font-size: 0.78rem;
+  color: var(--fg-subtle);
+}
+.panel-body {
+  padding: var(--space-5);
+}
+
+/* ---------- Retro skin ---------- */
+
+[data-retro='on'] {
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 14px;
+}
+
+[data-retro='on'] .card,
+[data-retro='on'] .dialog,
+[data-retro='on'] .palette {
+  border-width: 2px;
+  border-color: var(--retro-line);
+  box-shadow: 4px 4px 0 var(--retro-shadow);
+}
+
+/* Title bar becomes real window chrome: filled strip, dots on the left. */
+[data-retro='on'] .panel-bar {
+  background: var(--surface-2);
+  border-bottom: 2px solid var(--retro-line);
+  padding: 0.5rem var(--space-3);
+}
+[data-retro='on'] .panel-dots {
+  display: flex;
+}
+[data-retro='on'] .panel-title {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+}
+
+/* Buttons get an outline and a shadow they can be "pressed" into. */
+[data-retro='on'] .btn {
+  border-width: 2px;
+  border-color: var(--retro-line);
+  border-radius: var(--r-md);
+  box-shadow: 3px 3px 0 var(--retro-shadow);
+  transition: none;
+}
+[data-retro='on'] .btn:hover:not(:disabled) {
+  transform: none;
+}
+[data-retro='on'] .btn:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--retro-shadow);
+}
+[data-retro='on'] .btn--primary {
+  border-color: var(--retro-line);
+}
+
+[data-retro='on'] .input,
+[data-retro='on'] .textarea,
+[data-retro='on'] .select {
+  border-width: 2px;
+  border-color: var(--retro-line);
+  border-radius: var(--r-sm);
+}
+
+/* Chips, segmented controls and nav keep the same colours, squarer edges. */
+[data-retro='on'] .chip,
+[data-retro='on'] .seg,
+[data-retro='on'] .seg-item,
+[data-retro='on'] .nav-item,
+[data-retro='on'] .sidebar-search,
+[data-retro='on'] .accent-choice {
+  border-radius: var(--r-sm);
+}
+[data-retro='on'] .sidebar-search {
+  border-width: 2px;
+  border-color: var(--retro-line);
+  box-shadow: 3px 3px 0 var(--retro-shadow);
+}
+[data-retro='on'] .seg {
+  border: 2px solid var(--retro-line);
+  padding: 3px;
+}
+[data-retro='on'] .focus-cta {
+  border: 2px solid var(--retro-line);
+  border-radius: var(--r-md);
+  box-shadow: 3px 3px 0 var(--retro-shadow);
+}
+
+/* Section headings pick up the pixel face, small and quiet. */
+[data-retro='on'] .group-title,
+[data-retro='on'] .field-label {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+}
+[data-retro='on'] .view-title {
+  letter-spacing: -0.01em;
+}
+
+/* Task rows read as little file entries. */
+[data-retro='on'] .task-row {
+  border-radius: var(--r-sm);
+  border-width: 2px;
+  border-color: var(--border);
+}
+[data-retro='on'] .task-row:hover {
+  border-color: var(--retro-line);
+}
+
+[data-retro='on'] .brand-name {
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+}
+
+/* The pixel font has no bold weight; asking for one smears it. */
+[data-retro='on'] .panel-title,
+[data-retro='on'] .group-title,
+[data-retro='on'] .field-label,
+[data-retro='on'] .brand-name {
+  font-weight: 400;
+}
+
+/* ---------- Folder grid (Lists page) ---------- */
+
+.lists-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.lists-lead {
+  margin: 0;
+  color: var(--fg-muted);
+}
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-4);
+}
+.folder-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--fg);
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  font: inherit;
+}
+.folder-card:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+}
+.folder-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: var(--accent-lavender);
+}
+/* The list's own glyph tucked into the folder, like a label on a tab. */
+.folder-badge {
+  position: absolute;
+  bottom: 4px;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+.folder-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.folder-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.76rem;
+  color: var(--fg-subtle);
+}
+.folder-due {
+  color: var(--primary);
+  font-weight: 800;
+}
+.folder-card--new {
+  border-style: dashed;
+  color: var(--fg-muted);
+}
+.folder-card--archived {
+  opacity: 0.6;
+}
+.lists-archived-title {
+  margin: var(--space-3) 0 0;
+}
+.lists-foot {
+  margin: var(--space-3) 0 0;
+  font-size: 0.8rem;
+  color: var(--fg-subtle);
+}
+
+.nav-section-link {
+  color: inherit;
+  text-decoration: none;
+}
+.nav-section-link:hover {
+  color: var(--primary);
+}
+
+[data-retro='on'] .folder-card {
+  border-width: 2px;
+  border-color: var(--retro-line);
+  box-shadow: 4px 4px 0 var(--retro-shadow);
+  border-radius: var(--r-md);
+}
+[data-retro='on'] .folder-card:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--retro-shadow);
+}
+[data-retro='on'] .folder-name {
+  font-family: var(--font-pixel);
+  font-size: 0.56rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .folder-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-3);
+  }
+  .panel-body {
+    padding: var(--space-4);
+  }
+}

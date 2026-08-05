@@ -50,6 +50,9 @@
 
   /* Subtle texture dot color. */
   --texture-dot: rgba(211, 166, 125, 0.06);
+  /* Flat offset shadow used by the retro chrome (never blurred). */
+  --retro-shadow: #0d090a;
+  --retro-line: var(--border-strong);
 }
 
 [data-theme='light'] {
@@ -93,6 +96,8 @@
   --success: #4f8a48;
 
   --texture-dot: rgba(184, 124, 75, 0.05);
+  --retro-shadow: #b9a68c;
+  --retro-line: var(--border-strong);
 }
 
 /* ===== Vibe base canvases (bg/surfaces/text). Flowers = warm plum base above. ===== */
@@ -109,6 +114,7 @@
   --fg-muted: #a6a6ad;
   --fg-subtle: #72727a;
   --texture-dot: rgba(255, 255, 255, 0.035);
+  --retro-shadow: #000000;
 }
 [data-theme='light'][data-vibe='plain'] {
   --bg: #fafafa;
@@ -121,6 +127,7 @@
   --fg-muted: #55555c;
   --fg-subtle: #86868d;
   --texture-dot: rgba(0, 0, 0, 0.03);
+  --retro-shadow: #c9c9d0;
 }
 
 /* Robot — dark bluish, techy. */
@@ -135,6 +142,7 @@
   --fg-muted: #9db0d0;
   --fg-subtle: #68789a;
   --texture-dot: rgba(140, 170, 220, 0.06);
+  --retro-shadow: #05080f;
 }
 [data-theme='light'][data-vibe='robot'] {
   --bg: #eef2f9;
@@ -147,6 +155,7 @@
   --fg-muted: #54607b;
   --fg-subtle: #8591a9;
   --texture-dot: rgba(40, 70, 120, 0.05);
+  --retro-shadow: #b7c3d8;
 }
 
 /* ===== Accent presets (swap the dominant hue; base canvas stays) ===== */

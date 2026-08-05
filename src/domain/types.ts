@@ -118,6 +118,8 @@ export interface Settings {
   accent: AccentName
   /** Decorative style + base canvas. */
   vibe: Vibe
+  /** Retro window chrome: title bars, chunky borders, hard shadows. */
+  retro: boolean
   defaultMinMinutes: number
   notificationsEnabled: boolean
   /** Days that count toward goals and streaks. */

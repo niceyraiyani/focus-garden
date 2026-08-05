@@ -13,6 +13,7 @@ import {
 import { formatMinutes } from '../../lib/time'
 import { Icon } from '../../components/Icon'
 import { FocusHeatmap } from '../../components/FocusHeatmap'
+import { Panel } from '../../components/Panel'
 import { Flourish } from '../../components/Flourish'
 import type { Weekday } from '../../domain/types'
 
@@ -90,13 +91,11 @@ export function InsightsPage() {
             </div>
           </div>
 
-          <section className="card">
-            <h3 className="group-title">Your year of focus</h3>
+          <Panel title="Your year of focus">
             <FocusHeatmap map={heatmap} />
-          </section>
+          </Panel>
 
-          <section className="card">
-            <h3 className="group-title">Last 14 days</h3>
+          <Panel title="Last 14 days">
             <div className="bar-chart" role="img" aria-label="Daily focused minutes for the last 14 days">
               {days.map((d) => {
                 const [, , dd] = d.dateKey.split('-')
@@ -117,11 +116,10 @@ export function InsightsPage() {
             <p className="chart-legend">
               <span className="legend-dot legend-dot--goal" /> reached daily goal &nbsp;·&nbsp; faded = rest day
             </p>
-          </section>
+          </Panel>
 
           {listTotal > 0 && (
-            <section className="card">
-              <h3 className="group-title">Time by list</h3>
+            <Panel title="Time by list">
               <ul className="list-breakdown">
                 {listRows.map((r) => (
                   <li key={r.id} className="breakdown-row">
@@ -136,11 +134,10 @@ export function InsightsPage() {
                   </li>
                 ))}
               </ul>
-            </section>
+            </Panel>
           )}
 
-          <section className="card">
-            <h3 className="group-title">Recent sessions</h3>
+          <Panel title="Recent sessions">
             <ul className="session-history">
               {history.map(({ session, focusedMs }) => (
                 <li key={session.id} className="history-row">
@@ -160,7 +157,7 @@ export function InsightsPage() {
                 </li>
               ))}
             </ul>
-          </section>
+          </Panel>
         </>
       )}
     </section>
