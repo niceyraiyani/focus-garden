@@ -7,6 +7,7 @@ import { createList } from '../data/lists'
 import { useActiveSession, useNow } from '../features/focus/useFocusSession'
 import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { useSessionPresence } from '../features/focus/useSessionPresence'
+import { useDailyNudge } from '../features/focus/useDailyNudge'
 import { todayFocusedMs } from '../features/insights/aggregations'
 import { formatMinutes } from '../lib/time'
 import { Icon, ListGlyph } from '../components/Icon'
@@ -35,6 +36,9 @@ export function Layout() {
 
   // Keep session time tied to actually being here.
   useSessionPresence()
+
+  // One gentle "what are you locking in on?" a day.
+  useDailyNudge()
 
   // Today's focused time, visible from every page.
   const segments = useLiveQuery(() => db.segments.toArray(), [], [])

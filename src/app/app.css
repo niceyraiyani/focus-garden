@@ -1323,6 +1323,11 @@ span.view-icon {
   flex-direction: column;
   align-items: stretch;
 }
+.setting-time {
+  width: auto;
+  flex: none;
+  font-family: var(--font-mono, inherit);
+}
 .toggle-label {
   display: flex;
   flex-direction: column;

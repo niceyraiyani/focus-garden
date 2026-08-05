@@ -86,6 +86,14 @@ app they're blocked **only while a focus session is running**, and work normally
 the rest of the time — the same idea as
 [SelfControl](https://github.com/SelfControlApp/selfcontrol), built right in.
 
+### 🔔 One gentle reminder a day
+The hardest part of a focus app is remembering it exists. Pick a time and lock.in
+sends **one** notification — *"1 due today"* — and then leaves you alone. If
+you've already started working, or already focused today, it stays quiet.
+
+Reminders only arrive while lock.in is open, since nothing is sent from a server.
+The desktop app is the reliable way to get them.
+
 ---
 
 ## 🎨 Make it yours

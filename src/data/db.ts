@@ -49,6 +49,8 @@ export const DEFAULT_SETTINGS: Settings = {
   retro: true,
   defaultMinMinutes: 30,
   notificationsEnabled: true,
+  dailyNudge: false,
+  dailyNudgeAt: '09:00',
   workdays: [1, 2, 3, 4, 5],
   dailyGoalMinutes: 120,
   decorativeMotion: true,

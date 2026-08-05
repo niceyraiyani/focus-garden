@@ -21,6 +21,8 @@ const settings: Settings = {
   retro: true,
   defaultMinMinutes: 30,
   notificationsEnabled: false,
+  dailyNudge: false,
+  dailyNudgeAt: '09:00',
   workdays: [1, 2, 3, 4, 5],
   dailyGoalMinutes: 60,
   decorativeMotion: true,

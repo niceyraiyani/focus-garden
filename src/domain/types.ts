@@ -128,6 +128,10 @@ export interface Settings {
   retro: boolean
   defaultMinMinutes: number
   notificationsEnabled: boolean
+  /** A once-a-day prompt to start, since the app can't reach you otherwise. */
+  dailyNudge: boolean
+  /** Local "HH:MM" the daily nudge fires at. */
+  dailyNudgeAt: string
   /** Days that count toward goals and streaks. */
   workdays: Weekday[]
   /** Daily focus goal in minutes. */

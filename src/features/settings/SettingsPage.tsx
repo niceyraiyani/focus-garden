@@ -9,6 +9,7 @@ import { Icon } from '../../components/Icon'
 import type { IconName } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
+import { requestNotificationPermission } from '../../lib/notify'
 import type { ThemeMode, Weekday, AccentName, Vibe } from '../../domain/types'
 import { VIBE_DEFAULT_ACCENT, resolveAccent } from '../../theme/accents'
 
@@ -68,6 +69,11 @@ export function SettingsPage() {
       await Notification.requestPermission()
     }
     void update({ notificationsEnabled: on })
+  }
+
+  async function enableDailyNudge(on: boolean) {
+    if (on && !(await requestNotificationPermission())) return
+    void update({ dailyNudge: on })
   }
 
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -200,6 +206,27 @@ export function SettingsPage() {
           value={settings.notificationsEnabled}
           onChange={enableNotifications}
         />
+        <ToggleRow
+          label="Daily reminder"
+          hint="One nudge a day if you haven’t started yet. Stays quiet once you’re working."
+          value={settings.dailyNudge ?? false}
+          onChange={enableDailyNudge}
+        />
+        {(settings.dailyNudge ?? false) && (
+          <div className="setting-row">
+            <span>Remind me at</span>
+            <input
+              type="time"
+              className="input input--sm setting-time"
+              value={settings.dailyNudgeAt ?? '09:00'}
+              onChange={(e) => update({ dailyNudgeAt: e.target.value })}
+            />
+          </div>
+        )}
+        <p className="setting-hint">
+          Reminders only arrive while lock.in is open — there’s no server sending them. The desktop app keeps it
+          running in the background.
+        </p>
       </div>
 
       <div className="card setting-block setting-block--accent">
