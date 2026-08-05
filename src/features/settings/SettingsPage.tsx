@@ -9,7 +9,7 @@ import { Icon } from '../../components/Icon'
 import type { IconName } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
 import { useConfirm } from '../../components/ConfirmContext'
-import { requestNotificationPermission } from '../../lib/notify'
+import { requestNotificationPermission, enableBackgroundNudge } from '../../lib/notify'
 import type { ThemeMode, Weekday, AccentName, Vibe } from '../../domain/types'
 import { VIBE_DEFAULT_ACCENT, resolveAccent } from '../../theme/accents'
 
@@ -73,6 +73,7 @@ export function SettingsPage() {
 
   async function enableDailyNudge(on: boolean) {
     if (on && !(await requestNotificationPermission())) return
+    if (on) void enableBackgroundNudge()
     void update({ dailyNudge: on })
   }
 
@@ -224,8 +225,8 @@ export function SettingsPage() {
           </div>
         )}
         <p className="setting-hint">
-          Reminders only arrive while lock.in is open — there’s no server sending them. The desktop app keeps it
-          running in the background.
+          Reminders show up in your system notifications. Install lock.in (or use the desktop app) and they can
+          arrive with it closed — in a plain browser tab they only fire while it’s open.
         </p>
       </div>
 

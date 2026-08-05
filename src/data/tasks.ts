@@ -1,7 +1,8 @@
 import { db } from './db'
 import { newId } from '../domain/ids'
 import { localDateKey } from '../lib/date'
-import type { Task, Subtask, EffortLevel, Priority, ID } from '../domain/types'
+import { nextDueDate } from '../domain/recurrence'
+import type { Task, Subtask, EffortLevel, Priority, ID, Repeat } from '../domain/types'
 
 const now = () => Date.now()
 
@@ -24,6 +25,8 @@ export interface NewTaskInput {
   effort?: EffortLevel
   tagIds?: ID[]
   originSessionId?: ID | null
+  repeat?: Repeat
+  routine?: boolean
 }
 
 export async function createTask(input: NewTaskInput): Promise<Task> {
@@ -44,6 +47,9 @@ export async function createTask(input: NewTaskInput): Promise<Task> {
     updatedAt: ts,
     completedAt: null,
     originSessionId: input.originSessionId ?? null,
+    repeat: input.repeat ?? 'none',
+    hiddenUntil: null,
+    routine: input.routine ?? false,
   }
   await db.tasks.add(task)
   return task
@@ -53,12 +59,57 @@ export async function updateTask(id: ID, patch: Partial<Task>): Promise<void> {
   await db.tasks.update(id, { ...patch, updatedAt: now() })
 }
 
-export async function setTaskComplete(id: ID, complete: boolean): Promise<void> {
+/**
+ * Complete or reopen a task.
+ *
+ * Completing a repeating task also schedules the next occurrence and returns
+ * its id, so an undo can remove it again.
+ */
+export async function setTaskComplete(id: ID, complete: boolean): Promise<ID | null> {
+  const task = await db.tasks.get(id)
   await db.tasks.update(id, {
     status: complete ? 'completed' : 'open',
     completedAt: complete ? now() : null,
     updatedAt: now(),
   })
+  if (!complete || !task) return null
+  return spawnNextOccurrence(task)
+}
+
+/**
+ * Create the next instance of a repeating task.
+ *
+ * The finished one stays completed so history, streaks and insights stay
+ * honest; the new one is a fresh copy with unchecked subtasks.
+ */
+async function spawnNextOccurrence(task: Task): Promise<ID | null> {
+  const repeat = task.repeat ?? 'none'
+  if (repeat === 'none') return null
+  const today = localDateKey()
+  const due = nextDueDate(task.dueDate ?? today, repeat, today)
+  if (!due) return null
+
+  const ts = now()
+  const next: Task = {
+    ...task,
+    id: newId(),
+    status: 'open',
+    dueDate: due,
+    // Sleep until it's actually due. Ticking off a chore should empty the
+    // list, not swap it for the same chore wearing a new date.
+    hiddenUntil: due,
+    createdAt: ts,
+    updatedAt: ts,
+    completedAt: null,
+  }
+  const steps = await db.subtasks.where('taskId').equals(task.id).toArray()
+  await db.transaction('rw', db.tasks, db.subtasks, async () => {
+    await db.tasks.add(next)
+    for (const s of steps) {
+      await db.subtasks.add({ ...s, id: newId(), taskId: next.id, done: false, createdAt: ts, updatedAt: ts })
+    }
+  })
+  return next.id
 }
 
 export async function moveTaskToList(id: ID, listId: ID | null): Promise<void> {

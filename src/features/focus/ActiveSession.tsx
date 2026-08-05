@@ -22,13 +22,14 @@ import { useSettings } from '../../app/SettingsContext'
 import { useSessionSegments, useNow, useTasksByIds } from './useFocusSession'
 import { useSubtasks } from '../tasks/hooks'
 import { updateSubtask } from '../../data/tasks'
+import { notify } from '../../lib/notify'
 
 function notifyMinReached(minutes: number, enabled: boolean) {
-  if (enabled && 'Notification' in window && Notification.permission === 'granted') {
-    new Notification('Minimum reached', {
-      body: `You focused for ${minutes} minutes. Keep going if you're in flow!`,
-    })
-  }
+  if (!enabled) return
+  void notify('Minimum reached', {
+    body: `You focused for ${minutes} minutes. Keep going if you're in flow!`,
+    tag: 'lockin-min-reached',
+  })
 }
 
 export function ActiveSession({

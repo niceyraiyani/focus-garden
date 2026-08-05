@@ -603,6 +603,31 @@ span.view-icon {
 .prio {
   font-weight: 700;
 }
+/* Quiet markers: useful when scanning, never louder than the task title. */
+.repeat-badge,
+.routine-badge {
+  color: var(--fg-subtle);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.routine-badge {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-pill);
+  padding: 0 0.4rem;
+}
+.field-hint {
+  color: var(--fg-subtle);
+  font-size: 0.78rem;
+  margin: var(--space-2) 0 0;
+  line-height: 1.5;
+}
+/* Chores live apart from focus work so neither makes the other feel heavy. */
+.routine-strip {
+  margin-top: var(--space-6);
+}
+.task-list--tight {
+  gap: var(--space-2);
+}
 .subcount {
   color: var(--fg-subtle);
 }

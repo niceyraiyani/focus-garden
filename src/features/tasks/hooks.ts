@@ -1,7 +1,11 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../data/db'
 import { localDateKey } from '../../lib/date'
+import { isSleeping } from '../../domain/recurrence'
 import type { Task, List, Tag, Subtask } from '../../domain/types'
+
+/** Open, and not a repeat that's sleeping until its next date. */
+const awake = (t: Task, today: string) => t.status === 'open' && !isSleeping(t, today)
 
 export function useLists(): List[] {
   return useLiveQuery(() => db.lists.orderBy('sortRank').toArray(), [], [])
@@ -20,23 +24,26 @@ export function useTags(): Tag[] {
 }
 
 export function useInboxTasks(): Task[] {
+  const today = localDateKey()
   return useLiveQuery(
-    () => db.tasks.filter((t) => t.status === 'open' && (t.listId ?? null) === null).toArray(),
-    [],
+    () => db.tasks.filter((t) => awake(t, today) && (t.listId ?? null) === null).toArray(),
+    [today],
     [],
   )
 }
 
 export function useListTasks(listId: string): Task[] {
+  const today = localDateKey()
   return useLiveQuery(
-    () => db.tasks.filter((t) => t.status === 'open' && t.listId === listId).toArray(),
-    [listId],
+    () => db.tasks.filter((t) => awake(t, today) && t.listId === listId).toArray(),
+    [listId, today],
     [],
   )
 }
 
 export function useAllOpenTasks(): Task[] {
-  return useLiveQuery(() => db.tasks.where('status').equals('open').toArray(), [], [])
+  const today = localDateKey()
+  return useLiveQuery(() => db.tasks.filter((t) => awake(t, today)).toArray(), [today], [])
 }
 
 export function useCompletedTasks(): Task[] {
@@ -58,8 +65,18 @@ export function useTodayTasks(): Task[] {
   return useLiveQuery(
     () =>
       db.tasks
-        .filter((t) => t.status === 'open' && t.dueDate !== null && t.dueDate <= today)
+        .filter((t) => awake(t, today) && t.dueDate !== null && t.dueDate <= today)
         .toArray(),
+    [today],
+    [],
+  )
+}
+
+/** Repeats that are scheduled but deliberately hidden until their next date. */
+export function useSleepingTasks(): Task[] {
+  const today = localDateKey()
+  return useLiveQuery(
+    () => db.tasks.filter((t) => t.status === 'open' && isSleeping(t, today)).toArray(),
     [today],
     [],
   )

@@ -31,7 +31,27 @@ export interface Task {
   completedAt: number | null
   /** If captured via a session Parking Lot, the originating session id. */
   originSessionId: ID | null
+  /**
+   * How often this task comes back. Completing a repeating task schedules the
+   * next one; missed occurrences are skipped rather than stacking up.
+   */
+  repeat?: Repeat
+  /**
+   * Date (yyyy-mm-dd) before which this task stays out of every list.
+   *
+   * Repeating tasks sleep until they're due again, so finishing one actually
+   * clears it off your plate instead of instantly reappearing with a new date.
+   */
+  hiddenUntil?: string | null
+  /**
+   * A thing you just do — meds, laundry, bins. Kept out of focus sessions,
+   * because putting a 30-minute timer on taking a tablet is absurd.
+   */
+  routine?: boolean
 }
+
+/** Recurrence cadence. `none` (or absent) means a one-off task. */
+export type Repeat = 'none' | 'daily' | 'weekdays' | 'weekly' | 'monthly'
 
 export interface Subtask {
   id: ID
@@ -132,6 +152,11 @@ export interface Settings {
   dailyNudge: boolean
   /** Local "HH:MM" the daily nudge fires at. */
   dailyNudgeAt: string
+  /**
+   * Local date the daily nudge last fired. Stored here rather than in
+   * localStorage so the service worker can see it too and not repeat it.
+   */
+  nudgeLastFiredOn?: string | null
   /** Days that count toward goals and streaks. */
   workdays: Weekday[]
   /** Daily focus goal in minutes. */

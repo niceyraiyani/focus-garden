@@ -1,12 +1,14 @@
 import { beforeEach, describe, it, expect } from 'vitest'
 import { db } from './db'
 import { localDateKey } from '../lib/date'
+import { isSleeping } from '../domain/recurrence'
 import {
   createTask,
   reorderTasks,
   setTaskComplete,
   moveTaskToList,
   addSubtask,
+  updateSubtask,
   deleteTask,
   rollOverdueToToday,
   restoreDueDates,
@@ -108,6 +110,72 @@ describe('task repository', () => {
       await restoreDueDates(moved)
       expect((await db.tasks.get(a.id))!.dueDate).toBe(lastWeek)
       expect((await db.tasks.get(b.id))!.dueDate).toBe(yesterday)
+    })
+  })
+
+  describe('repeating tasks', () => {
+    const today = localDateKey()
+    const tomorrow = localDateKey(Date.now() + 86400000)
+
+    it('schedules the next occurrence and hides it until it is due', async () => {
+      const a = await createTask({ title: 'laundry', dueDate: today, repeat: 'daily' })
+      const spawned = await setTaskComplete(a.id, true)
+
+      expect(spawned).not.toBeNull()
+      const next = (await db.tasks.get(spawned!))!
+      expect(next.title).toBe('laundry')
+      expect(next.status).toBe('open')
+      expect(next.dueDate).toBe(tomorrow)
+      // The whole point: it's out of sight until its day comes round.
+      expect(next.hiddenUntil).toBe(tomorrow)
+      expect(isSleeping(next, today)).toBe(true)
+      expect(isSleeping(next, tomorrow)).toBe(false)
+    })
+
+    it('leaves the finished occurrence completed, so history stays honest', async () => {
+      const a = await createTask({ title: 'meds', dueDate: today, repeat: 'daily' })
+      await setTaskComplete(a.id, true)
+      const done = (await db.tasks.get(a.id))!
+      expect(done.status).toBe('completed')
+      expect(done.completedAt).not.toBeNull()
+    })
+
+    it('copies steps to the next occurrence, unchecked', async () => {
+      const a = await createTask({ title: 'weekly review', dueDate: today, repeat: 'weekly' })
+      const s = await addSubtask(a.id, 'read notes')
+      await updateSubtask(s.id, { done: true })
+
+      const spawned = await setTaskComplete(a.id, true)
+      const steps = await db.subtasks.where('taskId').equals(spawned!).toArray()
+      expect(steps.map((x) => x.title)).toEqual(['read notes'])
+      expect(steps[0].done).toBe(false)
+      expect(steps[0].id).not.toBe(s.id)
+    })
+
+    it('does not spawn anything for one-off tasks', async () => {
+      const a = await createTask({ title: 'one off', dueDate: today })
+      expect(await setTaskComplete(a.id, true)).toBeNull()
+      expect(await db.tasks.count()).toBe(1)
+    })
+
+    it('spawns nothing when reopening a task', async () => {
+      const a = await createTask({ title: 'laundry', dueDate: today, repeat: 'daily' })
+      const spawned = await setTaskComplete(a.id, true)
+      await deleteTask(spawned!)
+      expect(await setTaskComplete(a.id, false)).toBeNull()
+      expect(await db.tasks.count()).toBe(1)
+    })
+
+    it('undoing a completion can remove the occurrence it created', async () => {
+      const a = await createTask({ title: 'bins', dueDate: today, repeat: 'weekly' })
+      const spawned = await setTaskComplete(a.id, true)
+      expect(await db.tasks.count()).toBe(2)
+
+      await setTaskComplete(a.id, false)
+      await deleteTask(spawned!)
+
+      expect(await db.tasks.count()).toBe(1)
+      expect((await db.tasks.get(a.id))!.status).toBe('open')
     })
   })
 })

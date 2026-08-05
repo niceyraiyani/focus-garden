@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { Task, List, Tag } from '../../domain/types'
-import { setTaskComplete } from '../../data/tasks'
+import { setTaskComplete, deleteTask } from '../../data/tasks'
 import { EffortFlowers } from '../../components/EffortFlowers'
 import { Burst } from '../../components/Burst'
 import { Icon, ListGlyph } from '../../components/Icon'
@@ -9,6 +9,7 @@ import { useToast } from '../../components/ToastContext'
 import { useSubtaskCounts } from './hooks'
 import { localDateKey } from '../../lib/date'
 import { PRIORITY_META } from '../../domain/effort'
+import { REPEAT_LABELS, REPEAT_SHORT } from '../../domain/recurrence'
 
 interface TaskRowProps {
   task: Task
@@ -65,15 +66,20 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
     setBurst((b) => b + 1)
     // Let the bounce + petal play before the row leaves the open list.
     window.setTimeout(async () => {
-      await setTaskComplete(task.id, true)
-      toast('Nice — one done', {
+      const spawned = await setTaskComplete(task.id, true)
+      toast(spawned ? 'Done — back again on its next date' : 'Nice — one done', {
         label: 'Undo',
-        onClick: () => setTaskComplete(task.id, false),
+        onClick: async () => {
+          await setTaskComplete(task.id, false)
+          // Undo shouldn't leave the follow-up occurrence behind.
+          if (spawned) await deleteTask(spawned)
+        },
       })
     }, 380)
   }
 
   const due = task.dueDate ? dueLabel(task.dueDate) : null
+  const repeat = task.repeat ?? 'none'
 
   return (
     <div className={`task-row ${completing ? 'task-row--completing' : ''} ${isDone ? 'task-row--done' : ''}`}>
@@ -103,6 +109,12 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
               <Icon name="calendar" /> {due.text}
             </span>
           )}
+          {repeat !== 'none' && (
+            <span className="repeat-badge" title={REPEAT_LABELS[repeat]}>
+              ↻ {REPEAT_SHORT[repeat]}
+            </span>
+          )}
+          {task.routine && <span className="routine-badge">routine</span>}
           {task.priority !== 'none' && (
             <span className="prio" style={{ color: PRIORITY_META[task.priority].color }}>
               ● {PRIORITY_META[task.priority].label}
@@ -113,7 +125,8 @@ export function TaskRow({ task, lists, tags, onOpen, showList, dragHandle, actio
               <Icon name="check" /> {counts.done}/{counts.total}
             </span>
           )}
-          {task.effort > 0 && <EffortFlowers value={task.effort} readOnly />}
+          {/* Effort is a focus-planning signal; it means nothing on a chore. */}
+          {task.effort > 0 && !task.routine && <EffortFlowers value={task.effort} readOnly />}
           {taskTags.map((t) => (
             <span key={t.id} className="tag-chip" style={tagStyle(t.color)}>
               #{t.name}

@@ -58,6 +58,11 @@ export function HomePage() {
   const today = localDateKey()
   const overdue = todayTasks.filter((t) => t.dueDate !== null && t.dueDate < today)
 
+  // Chores sit in their own low-key strip. Mixing "take meds" into the same
+  // list as "write the proposal" makes both feel equally heavy.
+  const routines = todayTasks.filter((t) => t.routine)
+  const realWork = todayTasks.filter((t) => !t.routine)
+
   async function rollOverdue() {
     const moved = await rollOverdueToToday()
     if (moved.length === 0) return
@@ -143,14 +148,14 @@ export function HomePage() {
               </button>
             )}
           </div>
-          {todayTasks.length === 0 ? (
+          {realWork.length === 0 ? (
             <div className="empty empty--sm">
               <Flourish variant="bloom" size={48} float />
               <p>Nothing due today. Enjoy the calm.</p>
             </div>
           ) : (
             <div className="task-list">
-              {todayTasks.map((t) => (
+              {realWork.map((t) => (
                 <TaskRow key={t.id} task={t} lists={lists} tags={tags} onOpen={setOpenTask} showList />
               ))}
             </div>
@@ -169,6 +174,18 @@ export function HomePage() {
               </>
             )}
           </p>
+          {routines.length > 0 && (
+            <div className="routine-strip">
+              <h2 className="group-title">
+                <Icon name="check" /> Just do these
+              </h2>
+              <div className="task-list task-list--tight">
+                {routines.map((t) => (
+                  <TaskRow key={t.id} task={t} lists={lists} tags={tags} onOpen={setOpenTask} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

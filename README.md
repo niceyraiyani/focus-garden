@@ -92,8 +92,22 @@ The hardest part of a focus app is remembering it exists. Pick a time and lock.i
 sends **one** notification — *"1 due today"* — and then leaves you alone. If
 you've already started working, or already focused today, it stays quiet.
 
-Reminders only arrive while lock.in is open, since nothing is sent from a server.
-The desktop app is the reliable way to get them.
+Reminders come through the service worker, so they land in your system tray and
+survive closing the tab. Install lock.in (or use the desktop app) and they can
+arrive with it fully closed.
+
+### 🔁 Repeating tasks that give you a breather
+Laundry every week, meds every day, weekly review every Monday. Tick one off and
+it **disappears** — your list actually goes empty. It comes back on its next
+date, not two seconds later wearing a new deadline.
+
+Missed occurrences are **skipped, never stacked**: a weekly chore you ignored for
+a month gives you one task, not four.
+
+### 🧺 Chores aren't focus work
+Some things need a 30-minute timer and your whole brain. Taking a tablet doesn't.
+Mark a task **Routine** and it moves to a quiet "just do these" strip, stays out
+of the focus-session picker, and stops asking you to rate its difficulty.
 
 ---
 

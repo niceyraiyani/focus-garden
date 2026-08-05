@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Task, List, Tag, Priority, EffortLevel, ID } from '../../domain/types'
+import type { Task, List, Tag, Priority, EffortLevel, ID, Repeat } from '../../domain/types'
 import {
   updateTask,
   deleteTask,
@@ -16,6 +16,7 @@ import { EffortFlowers } from '../../components/EffortFlowers'
 import { useConfirm } from '../../components/ConfirmContext'
 import { useSubtasks } from './hooks'
 import { PRIORITY_META } from '../../domain/effort'
+import { REPEAT_LABELS } from '../../domain/recurrence'
 
 interface Props {
   task: Task
@@ -25,6 +26,7 @@ interface Props {
 }
 
 const PRIORITIES: Priority[] = ['none', 'low', 'medium', 'high']
+const REPEATS: Repeat[] = ['none', 'daily', 'weekdays', 'weekly', 'monthly']
 
 export function TaskDetailDialog({ task, lists, tags, onClose }: Props) {
   const confirm = useConfirm()
@@ -130,10 +132,58 @@ export function TaskDetailDialog({ task, lists, tags, onClose }: Props) {
           </div>
           <div>
             <span className="field-label">Effort</span>
-            <EffortFlowers
-              value={task.effort}
-              onChange={(level: EffortLevel) => patch({ effort: level })}
-            />
+            {task.routine ? (
+              <p className="field-hint">Not needed — routines aren’t planned into sessions.</p>
+            ) : (
+              <EffortFlowers
+                value={task.effort}
+                onChange={(level: EffortLevel) => patch({ effort: level })}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="detail-row">
+          <div>
+            <span className="field-label">Repeats</span>
+            <select
+              className="input"
+              value={task.repeat ?? 'none'}
+              onChange={(e) => patch({ repeat: e.target.value as Repeat })}
+            >
+              {REPEATS.map((r) => (
+                <option key={r} value={r}>
+                  {REPEAT_LABELS[r]}
+                </option>
+              ))}
+            </select>
+            {(task.repeat ?? 'none') !== 'none' && (
+              <p className="field-hint">
+                Ticking it off clears it from your lists — it comes back on its next date, not straight away.
+              </p>
+            )}
+          </div>
+          <div>
+            <span className="field-label">Kind</span>
+            <div className="seg">
+              <button
+                className={`seg-item ${!task.routine ? 'seg-item--on' : ''}`}
+                onClick={() => patch({ routine: false })}
+              >
+                Focus work
+              </button>
+              <button
+                className={`seg-item ${task.routine ? 'seg-item--on' : ''}`}
+                onClick={() => patch({ routine: true })}
+              >
+                Routine
+              </button>
+            </div>
+            <p className="field-hint">
+              {task.routine
+                ? 'Just do it — kept out of focus sessions.'
+                : 'Can be picked for a focus session.'}
+            </p>
           </div>
         </div>
 

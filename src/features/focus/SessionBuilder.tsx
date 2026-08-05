@@ -28,7 +28,9 @@ export function SessionBuilder() {
   const queued = queue
     .map((id) => tasks.find((t) => t.id === id))
     .filter((t): t is (typeof tasks)[number] => !!t)
-  const available = tasks.filter((t) => !queue.includes(t.id))
+  // Routine tasks (meds, laundry) are things you just do — putting a 30-minute
+  // timer on them isn't focus, it's theatre.
+  const available = tasks.filter((t) => !queue.includes(t.id) && !t.routine)
 
   function add(id: ID) {
     setQueue((q) => [...q, id])
