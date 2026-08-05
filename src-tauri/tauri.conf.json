@@ -1,20 +1,22 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "lock.in",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "identifier": "com.niceyraiyani.focusgarden",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build"
+    "beforeBuildCommand": "npm run build:desktop"
   },
   "app": {
     "windows": [
       {
         "title": "lock.in",
-        "width": 800,
-        "height": 600,
+        "width": 1180,
+        "height": 820,
+        "minWidth": 380,
+        "minHeight": 520,
         "resizable": true,
         "fullscreen": false
       }
