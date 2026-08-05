@@ -10,15 +10,22 @@ import {
   hasOverride,
   getLastSyncedAt,
   setLastSyncedAt,
+  getKnownRev,
+  setKnownRev,
+  getLocalRev,
+  getSyncedLocalRev,
+  setSyncedLocalRev,
 } from '../data/cloud/config'
 import {
   installChangeHooks,
   subscribeLocalChanges,
-  getCloudUpdatedAt,
+  getCloudMeta,
   pushSnapshot,
+  forcePushSnapshot,
   pullSnapshot,
   localHasData,
   localModifiedAt,
+  CloudConflictError,
 } from '../data/cloud/sync'
 import { decideInitialSync } from '../data/cloud/syncPolicy'
 
@@ -77,42 +84,65 @@ export function CloudProvider({ children }: { children: ReactNode }) {
     setUser(mapped)
   }
 
+  /** Serialises every cloud operation; two pushes overlapping could otherwise
+   *  land out of order and leave the cloud holding the older snapshot. */
+  const queue = useRef<Promise<unknown>>(Promise.resolve())
+  function serial<T>(fn: () => Promise<T>): Promise<T> {
+    const next = queue.current.then(fn, fn)
+    queue.current = next.catch(() => undefined)
+    return next
+  }
+
+  /** Record a successful sync: cloud revision, timestamps, and the local
+   *  change counter we've now captured. */
+  function markSynced(userId: string, at: number, rev: number | null, localRevAtStart: number) {
+    setLastSyncedAt(userId, at)
+    if (rev !== null) setKnownRev(userId, rev)
+    setSyncedLocalRev(userId, localRevAtStart)
+    setLast(at)
+    setSyncState('synced')
+  }
+
   async function runInitialSync(userId: string) {
     if (syncedUsers.current.has(userId)) return
     syncedUsers.current.add(userId)
     setSyncState('syncing')
     setError(null)
     try {
-      const [cloudUpdatedAt, hasData, modAt] = await Promise.all([
-        getCloudUpdatedAt(userId),
-        localHasData(),
-        localModifiedAt(),
-      ])
-      const action = decideInitialSync({
-        cloudUpdatedAt,
-        localModifiedAt: modAt,
-        localHasData: hasData,
-        lastSyncedAt: getLastSyncedAt(userId),
+      await serial(async () => {
+        const localRevAtStart = getLocalRev()
+        const [meta, hasData, modAt] = await Promise.all([
+          getCloudMeta(userId),
+          localHasData(),
+          localModifiedAt(),
+        ])
+        const action = decideInitialSync({
+          cloudUpdatedAt: meta.updatedAt,
+          localModifiedAt: modAt,
+          localHasData: hasData,
+          lastSyncedAt: getLastSyncedAt(userId),
+          localRev: localRevAtStart,
+          syncedLocalRev: getSyncedLocalRev(userId),
+        })
+        if (action === 'push') {
+          const res = await pushSnapshot(userId, meta.rev)
+          markSynced(userId, res.updatedAt, res.rev, localRevAtStart)
+        } else if (action === 'pull') {
+          const res = await pullSnapshot(userId)
+          markSynced(userId, res?.updatedAt ?? Date.now(), res?.rev ?? null, getLocalRev())
+        } else if (action === 'conflict') {
+          setSyncState('conflict')
+        } else {
+          setLast(getLastSyncedAt(userId))
+          setSyncState('synced')
+        }
       })
-      if (action === 'push') {
-        const at = await pushSnapshot(userId)
-        setLastSyncedAt(userId, at)
-        setLast(at)
-        setSyncState('synced')
-      } else if (action === 'pull') {
-        const at = (await pullSnapshot(userId)) ?? Date.now()
-        setLastSyncedAt(userId, at)
-        setLast(at)
-        setSyncState('synced')
-      } else if (action === 'conflict') {
-        setSyncState('conflict')
-      } else {
-        const ms = getLastSyncedAt(userId)
-        setLast(ms)
-        setSyncState('synced')
-      }
     } catch (e) {
       syncedUsers.current.delete(userId)
+      if (e instanceof CloudConflictError) {
+        setSyncState('conflict')
+        return
+      }
       setError(errMessage(e))
       setSyncState('error')
     }
@@ -124,11 +154,17 @@ export function CloudProvider({ children }: { children: ReactNode }) {
     setSyncState('syncing')
     setError(null)
     try {
-      const at = await pushSnapshot(uid)
-      setLastSyncedAt(uid, at)
-      setLast(at)
-      setSyncState('synced')
+      await serial(async () => {
+        const localRevAtStart = getLocalRev()
+        const res = await pushSnapshot(uid, getKnownRev(uid))
+        markSynced(uid, res.updatedAt, res.rev, localRevAtStart)
+      })
     } catch (e) {
+      // A refused push means another device wrote first — ask, don't clobber.
+      if (e instanceof CloudConflictError) {
+        setSyncState('conflict')
+        return
+      }
       setError(errMessage(e))
       setSyncState('error')
     }
@@ -249,7 +285,11 @@ export function CloudProvider({ children }: { children: ReactNode }) {
       },
       async signOut() {
         const sb = getSupabase()
+        const uid = userRef.current?.id
         await sb?.auth.signOut()
+        // Let a later sign-in re-run the initial sync rather than assuming
+        // this device is still up to date.
+        if (uid) syncedUsers.current.delete(uid)
       },
       syncNow: pushNow,
       async resolveConflict(choice) {
@@ -258,10 +298,18 @@ export function CloudProvider({ children }: { children: ReactNode }) {
         setSyncState('syncing')
         setError(null)
         try {
-          const ms = choice === 'cloud' ? (await pullSnapshot(uid)) ?? Date.now() : await pushSnapshot(uid)
-          setLastSyncedAt(uid, ms)
-          setLast(ms)
-          setSyncState('synced')
+          await serial(async () => {
+            if (choice === 'cloud') {
+              const res = await pullSnapshot(uid)
+              markSynced(uid, res?.updatedAt ?? Date.now(), res?.rev ?? null, getLocalRev())
+            } else {
+              // The user chose this device on purpose, so take whatever
+              // revision the cloud is at and overwrite it.
+              const localRevAtStart = getLocalRev()
+              const res = await forcePushSnapshot(uid)
+              markSynced(uid, res.updatedAt, res.rev, localRevAtStart)
+            }
+          })
         } catch (e) {
           setError(errMessage(e))
           setSyncState('error')

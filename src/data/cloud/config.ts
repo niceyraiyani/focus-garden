@@ -72,3 +72,54 @@ export function getLastSyncedAt(userId: string): number | null {
 export function setLastSyncedAt(userId: string, ms: number): void {
   localStorage.setItem(`lockin.cloud.synced.${userId}`, String(ms))
 }
+
+/**
+ * The cloud revision this device last saw. Every push must name the revision
+ * it is replacing; if the cloud has moved on, the write is refused rather than
+ * overwriting whatever another device wrote in the meantime.
+ */
+export function getKnownRev(userId: string): number | null {
+  const v = localStorage.getItem(`lockin.cloud.rev.${userId}`)
+  return v ? Number(v) : null
+}
+
+export function setKnownRev(userId: string, rev: number): void {
+  localStorage.setItem(`lockin.cloud.rev.${userId}`, String(rev))
+}
+
+export function clearKnownRev(userId: string): void {
+  localStorage.removeItem(`lockin.cloud.rev.${userId}`)
+}
+
+/**
+ * A local change counter. Unlike "do we have rows?", this still tells us the
+ * user changed something when the change was a deletion — without it, deleting
+ * your last task offline looks identical to a fresh install and the old cloud
+ * snapshot gets pulled back over it.
+ */
+export function bumpLocalRev(): number {
+  const next = getLocalRev() + 1
+  try {
+    localStorage.setItem('lockin.cloud.localRev', String(next))
+  } catch {
+    /* ignore */
+  }
+  return next
+}
+
+export function getLocalRev(): number {
+  try {
+    return Number(localStorage.getItem('lockin.cloud.localRev') ?? '0')
+  } catch {
+    return 0
+  }
+}
+
+export function getSyncedLocalRev(userId: string): number | null {
+  const v = localStorage.getItem(`lockin.cloud.localRevSynced.${userId}`)
+  return v ? Number(v) : null
+}
+
+export function setSyncedLocalRev(userId: string, rev: number): void {
+  localStorage.setItem(`lockin.cloud.localRevSynced.${userId}`, String(rev))
+}

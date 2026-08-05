@@ -44,6 +44,9 @@ create table if not exists public.snapshots (
   user_id uuid primary key references auth.users on delete cascade,
   data jsonb not null,
   device text,
+  -- Bumped on every write. A device must name the revision it is replacing,
+  -- so a stale device can't overwrite newer work from another one.
+  rev bigint not null default 1,
   updated_at timestamptz not null default now()
 );
 
@@ -61,6 +64,11 @@ You should see **"Success. No rows returned"** — that's what we want.
 
 Row-level security means **only you** can read or write your own row. The anon key below is public
 by design; without your login it can't touch your data.
+
+> **Already created this table without `rev`?** Add the column with:
+> ```sql
+> alter table public.snapshots add column if not exists rev bigint not null default 1;
+> ```
 
 ---
 
@@ -160,8 +168,10 @@ tasks download automatically.
   make a change.
 - Signing in on a **new, empty device** downloads your cloud data.
 - A device with data and an empty cloud **uploads**.
-- If both sides changed since they last synced, lock.in **asks which version to keep** instead of
-  silently overwriting.
+- Every upload names the revision it's replacing. If another device wrote first, the upload is
+  **refused rather than overwriting it**, and lock.in asks you which copy to keep.
+- Deleting things counts as a change, so clearing your tasks on one device is never mistaken for a
+  fresh install and quietly undone by the old cloud copy.
 - Signed out, nothing leaves your browser. Export/Import backups still work exactly as before.
 
 ---
@@ -174,5 +184,6 @@ tasks download automatically.
 | "URL not allowed" / redirect refused | Redo step 16 — the address needs the trailing `/`. |
 | Sign-up appears to do nothing | Authentication → Providers → Email → turn off *Confirm email*, or check your inbox for the confirmation mail. |
 | `relation "snapshots" does not exist` | The SQL in step 6 didn't run. Run it again and confirm "Success". |
+| `column "rev" does not exist` | The table predates the revision check — run the `alter table … add column rev` snippet under step 6. |
 | `new row violates row-level security policy` | The three policies in step 6 didn't all get created — re-run that block. |
 | Stuck on "Syncing…" | Open the browser console; a 401 usually means the anon key was pasted incompletely. |

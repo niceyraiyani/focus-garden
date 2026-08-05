@@ -19,22 +19,41 @@ export interface SyncInputs {
   localHasData: boolean
   /** When this device last successfully synced with the cloud (ms), or null. */
   lastSyncedAt: number | null
+  /**
+   * Local change counter now, and its value at the last successful sync.
+   * These catch deletions, which leave no timestamp behind and can make a
+   * device that deliberately cleared its data look like a fresh install.
+   */
+  localRev?: number
+  syncedLocalRev?: number | null
 }
 
 export function decideInitialSync(input: SyncInputs): SyncAction {
   const { cloudUpdatedAt, localModifiedAt, localHasData, lastSyncedAt } = input
 
+  // Did anything change here since we last synced? A bumped counter catches
+  // deletions that no updatedAt would reveal.
+  const revMoved =
+    input.localRev !== undefined &&
+    input.syncedLocalRev !== undefined &&
+    input.syncedLocalRev !== null &&
+    input.localRev > input.syncedLocalRev
+
   // Nothing in the cloud yet: upload if we have something worth keeping.
   if (cloudUpdatedAt == null) {
-    return localHasData ? 'push' : 'noop'
+    return localHasData || revMoved ? 'push' : 'noop'
   }
 
-  // Cloud has data but this device is empty: just download it.
-  if (!localHasData) return 'pull'
+  // This device is empty. If it synced before and has since changed, that
+  // emptiness is a deliberate deletion — pulling would resurrect the data.
+  if (!localHasData) {
+    if (revMoved) return 'conflict'
+    return 'pull'
+  }
 
   // Both sides have data. Use the last-synced watermark to tell who moved.
   if (lastSyncedAt != null) {
-    const localChanged = (localModifiedAt ?? 0) > lastSyncedAt
+    const localChanged = (localModifiedAt ?? 0) > lastSyncedAt || revMoved
     const cloudChanged = cloudUpdatedAt > lastSyncedAt
     if (localChanged && cloudChanged) return 'conflict'
     if (cloudChanged) return 'pull'
