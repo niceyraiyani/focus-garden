@@ -53,6 +53,8 @@
   /* Flat offset shadow used by the retro chrome (never blurred). */
   --retro-shadow: #0d090a;
   --retro-line: var(--border-strong);
+  /* Modal scrim. */
+  --scrim: rgba(12, 8, 10, 0.62);
 }
 
 [data-theme='light'] {
@@ -98,6 +100,7 @@
   --texture-dot: rgba(184, 124, 75, 0.05);
   --retro-shadow: #b9a68c;
   --retro-line: var(--border-strong);
+  --scrim: rgba(60, 45, 35, 0.35);
 }
 
 /* ===== Vibe base canvases (bg/surfaces/text). Flowers = warm plum base above. ===== */

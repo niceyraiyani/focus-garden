@@ -519,7 +519,7 @@ span.view-icon {
 .checkbox-tick {
   width: 0.95rem;
   height: 0.95rem;
-  color: #241a12;
+  color: var(--primary-fg);
   stroke-width: 2.6;
 }
 
@@ -1349,7 +1349,7 @@ span.view-icon {
   width: 1.3rem;
   height: 1.3rem;
   border-radius: var(--r-pill);
-  background: #fff;
+  background: var(--primary-fg);
   transition: transform 0.15s ease;
 }
 .workday-seg {
