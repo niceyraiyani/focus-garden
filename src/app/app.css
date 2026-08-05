@@ -428,6 +428,10 @@ span.view-icon {
 }
 .quick-add-input {
   flex: 1;
+  /* Inputs have an intrinsic min-width of ~20 characters, and a flex item
+     won't shrink past that by default — with a wider monospace face this
+     pushed the Add button off the page on narrow screens. */
+  min-width: 0;
   border: none;
   background: none;
   outline: none;
@@ -1614,7 +1618,9 @@ span.view-icon {
   background: var(--surface-2);
   color: var(--fg-subtle);
   font: inherit;
-  font-size: 0.85rem;
+  /* Monospace runs wider than the old sans face, so this needs to be a touch
+     smaller to keep "Search or capture" from truncating in the sidebar. */
+  font-size: 0.75rem;
   cursor: pointer;
   text-align: left;
 }

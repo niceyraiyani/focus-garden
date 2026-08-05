@@ -75,9 +75,10 @@
   display: flex;
 }
 [data-retro='on'] .panel-title {
-  font-family: var(--font-pixel);
-  font-size: 0.6rem;
-  letter-spacing: 0.02em;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: lowercase;
 }
 
@@ -132,13 +133,14 @@
   box-shadow: 3px 3px 0 var(--retro-shadow);
 }
 
-/* Section headings pick up the pixel face, small and quiet. */
+/* Section headings: same mono, just tighter and quieter than body text. */
 [data-retro='on'] .group-title,
 [data-retro='on'] .field-label {
-  font-family: var(--font-pixel);
-  font-size: 0.6rem;
-  line-height: 1.7;
-  letter-spacing: 0.02em;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
   text-transform: lowercase;
 }
 [data-retro='on'] .view-title {
@@ -156,16 +158,10 @@
 }
 
 [data-retro='on'] .brand-name {
-  font-family: var(--font-pixel);
-  font-size: 0.78rem;
-}
-
-/* The pixel font has no bold weight; asking for one smears it. */
-[data-retro='on'] .panel-title,
-[data-retro='on'] .group-title,
-[data-retro='on'] .field-label,
-[data-retro='on'] .brand-name {
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* ---------- Folder grid (Lists page) ---------- */
@@ -288,10 +284,10 @@
   box-shadow: 0 0 0 var(--retro-shadow);
 }
 [data-retro='on'] .folder-name {
-  font-family: var(--font-pixel);
-  font-size: 0.56rem;
-  font-weight: 400;
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 @media (max-width: 600px) {

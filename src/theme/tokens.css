@@ -243,8 +243,11 @@
   --r-xl: 28px;
   --r-pill: 999px;
 
-  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-pixel: 'Press Start 2P', 'Nunito', monospace;
+  --font-body: 'Space Mono', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+  /* Reserved for the big focus timer, where a true pixel face reads well.
+     At heading sizes it turns cramped and hard to scan, so nothing small
+     uses it. */
+  --font-pixel: 'Press Start 2P', 'Space Mono', monospace;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;

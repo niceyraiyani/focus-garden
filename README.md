@@ -98,7 +98,8 @@ picks the accent that suits it best, and you can switch anytime.
 **Retro chrome** (on by default) layers little window title bars, chunky
 outlines, and flat drop shadows over whichever vibe you're in — old-desktop
 nostalgia without touching the palette. Turn it off in Settings for a flatter,
-quieter look.
+quieter look. The whole app is set in a monospace face for that terminal feel,
+with a true pixel font saved for the focus timer.
 
 | 🌫️ Plain | 🌸 Flowers | 🤖 Robot |
 |:---:|:---:|:---:|
