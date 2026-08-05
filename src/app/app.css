@@ -411,6 +411,32 @@ span.view-icon {
   color: var(--fg-muted);
   margin-bottom: var(--space-3);
 }
+/* Heading with an inline "…and here's what you can do about it" action. */
+.col-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.col-head .group-title {
+  margin-bottom: 0;
+}
+.group-title-action {
+  flex: none;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--link);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.group-title-action:hover {
+  color: var(--fg);
+}
 
 /* ===== Quick add ===== */
 .quick-add {

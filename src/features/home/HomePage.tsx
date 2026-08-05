@@ -13,6 +13,9 @@ import { Icon, greetingIconFor } from '../../components/Icon'
 import { WeekStrip } from '../../components/WeekStrip'
 import { InboxTriage } from './InboxTriage'
 import { todayFocusedMs, currentStreak, weekBars } from '../insights/aggregations'
+import { rollOverdueToToday, restoreDueDates } from '../../data/tasks'
+import { localDateKey } from '../../lib/date'
+import { useToast } from '../../components/ToastContext'
 import { formatMinutes } from '../../lib/time'
 import { useState } from 'react'
 import type { Task } from '../../domain/types'
@@ -28,6 +31,7 @@ export function HomePage() {
   const [openTask, setOpenTask] = useState<Task | null>(null)
   const [playBurst, setPlayBurst] = useState(0)
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   // Ticks while a session runs so today's number climbs as you focus.
   const nowTs = useNow(session?.status === 'running', 15000)
@@ -48,6 +52,20 @@ export function HomePage() {
 
   // Undated Inbox tasks — the ones that quietly pile up and get forgotten.
   const looseInbox = inbox.filter((t) => !t.dueDate)
+
+  // Past-due tasks. Once there are a few, the list stops being useful and
+  // starts being something you avoid — so offer a one-click reset.
+  const today = localDateKey()
+  const overdue = todayTasks.filter((t) => t.dueDate !== null && t.dueDate < today)
+
+  async function rollOverdue() {
+    const moved = await rollOverdueToToday()
+    if (moved.length === 0) return
+    toast(`Moved ${moved.length} ${moved.length === 1 ? 'task' : 'tasks'} to today. Fresh start.`, {
+      label: 'Undo',
+      onClick: () => restoreDueDates(moved),
+    })
+  }
 
   const openTaskLive = openTask ? todayTasks.find((t) => t.id === openTask.id) ?? openTask : null
 
@@ -115,7 +133,16 @@ export function HomePage() {
 
       <section className="home-tasks">
         <div className="home-col">
-          <h2 className="group-title"><Icon name="calendar" /> Due today &amp; overdue</h2>
+          <div className="col-head">
+            <h2 className="group-title">
+              <Icon name="calendar" /> Due today &amp; overdue
+            </h2>
+            {overdue.length > 1 && (
+              <button className="group-title-action" onClick={rollOverdue}>
+                move {overdue.length} overdue to today
+              </button>
+            )}
+          </div>
           {todayTasks.length === 0 ? (
             <div className="empty empty--sm">
               <Flourish variant="bloom" size={48} float />

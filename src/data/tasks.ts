@@ -1,5 +1,6 @@
 import { db } from './db'
 import { newId } from '../domain/ids'
+import { localDateKey } from '../lib/date'
 import type { Task, Subtask, EffortLevel, Priority, ID } from '../domain/types'
 
 const now = () => Date.now()
@@ -72,6 +73,41 @@ export async function deleteTask(id: ID): Promise<void> {
   await db.transaction('rw', db.tasks, db.subtasks, async () => {
     await db.subtasks.where('taskId').equals(id).delete()
     await db.tasks.delete(id)
+  })
+}
+
+/**
+ * Move every open task that's already past due onto today.
+ *
+ * Guilt control: a long overdue list stops being information and starts being
+ * a wall of red you avoid looking at. Clearing it in one action is kinder --
+ * and more honest -- than pretending last Tuesday's plan still stands.
+ *
+ * Returns each task's previous due date so the move can be undone.
+ */
+export async function rollOverdueToToday(): Promise<{ id: ID; dueDate: string | null }[]> {
+  const today = localDateKey()
+  const overdue = await db.tasks
+    .filter((t) => t.status === 'open' && t.dueDate !== null && t.dueDate < today)
+    .toArray()
+  if (overdue.length === 0) return []
+  const ts = now()
+  const previous = overdue.map((t) => ({ id: t.id, dueDate: t.dueDate }))
+  await db.transaction('rw', db.tasks, async () => {
+    for (const t of overdue) {
+      await db.tasks.update(t.id, { dueDate: today, updatedAt: ts })
+    }
+  })
+  return previous
+}
+
+/** Undo a bulk reschedule by putting the original due dates back. */
+export async function restoreDueDates(entries: { id: ID; dueDate: string | null }[]): Promise<void> {
+  const ts = now()
+  await db.transaction('rw', db.tasks, async () => {
+    for (const e of entries) {
+      await db.tasks.update(e.id, { dueDate: e.dueDate, updatedAt: ts })
+    }
   })
 }
 

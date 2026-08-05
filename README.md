@@ -29,7 +29,8 @@ tasks is paralyzing. lock.in is built around how that actually feels:
 - **A place for stray thoughts.** When your brain throws a random idea mid-focus,
   park it and keep going. It's saved, you can forget it.
 - **Gentle, never punishing.** Timers flex, streaks respect your rest days, and
-  overdue tasks don't yell at you.
+  when overdue tasks pile up you can sweep them all onto today in one click
+  (undoable) instead of scrolling past a wall of red.
 
 ---
 
