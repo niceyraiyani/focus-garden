@@ -109,7 +109,7 @@ export interface FocusSegment {
 
 export type ThemeMode = 'system' | 'light' | 'dark'
 
-export type AccentName = 'white' | 'blush' | 'lavender' | 'mint' | 'sky'
+export type AccentName = 'white' | 'blush' | 'amber' | 'mint' | 'sky' | 'lavender'
 
 /** Decorative style: minimal, floral, or techy. Also sets the base canvas. */
 export type Vibe = 'plain' | 'flowers' | 'robot'

@@ -15,7 +15,7 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  color: var(--accent-lavender);
+  color: var(--link);
   opacity: 0.16;
   line-height: 0;
 }
@@ -390,7 +390,7 @@ span.nav-icon {
   width: 1.55rem;
   height: 1.55rem;
   flex: none;
-  color: var(--accent-lavender);
+  color: var(--link);
 }
 span.view-icon {
   display: inline-flex;
@@ -1247,7 +1247,7 @@ span.view-icon {
 }
 .bar-fill {
   width: 100%;
-  background: var(--accent-lavender);
+  background: var(--link);
   border-radius: var(--r-sm) var(--r-sm) 0 0;
   min-height: 2px;
   transition: height 0.4s ease;
@@ -1537,7 +1537,7 @@ span.view-icon {
 .cal-more {
   border: none;
   background: none;
-  color: var(--accent-lavender);
+  color: var(--link);
   font-size: 0.72rem;
   font-weight: 700;
   text-align: left;

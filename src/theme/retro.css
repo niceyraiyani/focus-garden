@@ -203,7 +203,7 @@
   position: relative;
   display: grid;
   place-items: center;
-  color: var(--accent-lavender);
+  color: var(--link);
 }
 /* The list's own glyph tucked into the folder, like a label on a tab. */
 .folder-badge {

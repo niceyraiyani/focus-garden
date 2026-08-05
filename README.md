@@ -91,9 +91,10 @@ the rest of the time — the same idea as
 ## 🎨 Make it yours
 
 Pick a **vibe** that changes the whole feel — background, decorations, and the
-little celebrations when you finish a task. Then choose an accent color (White,
-Petal, Lavender, Mint, or Sky) and light/dark mode. Each vibe automatically
-picks the accent that suits it best, and you can switch anytime.
+little celebrations when you finish a task. Each is the same machine at a
+different temperature: graphite, cocoa, or slate-teal. Then choose an accent
+(Paper, Petal, Amber, Sage, Sky, or Lavender) and light/dark mode. Each vibe
+automatically picks the accent that suits it best, and you can switch anytime.
 
 **Retro chrome** (on by default) layers little window title bars, chunky
 outlines, and flat drop shadows over whichever vibe you're in — old-desktop
@@ -103,7 +104,7 @@ with a true pixel font saved for the focus timer.
 
 | 🌫️ Plain | 🌸 Flowers | 🤖 Robot |
 |:---:|:---:|:---:|
-| clean black & white | cozy plum + wildflowers | techy dark blue |
+| clean graphite | warm cocoa + wildflowers | cool slate-teal |
 | ![Plain vibe](docs/screenshots/vibe-plain.png) | ![Flowers vibe](docs/screenshots/vibe-flowers.png) | ![Robot vibe](docs/screenshots/vibe-robot.png) |
 
 Everything's designed to be calm and low-stimulation: flat colors (no harsh

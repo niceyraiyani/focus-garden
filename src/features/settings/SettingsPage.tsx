@@ -29,19 +29,20 @@ const THEMES: { mode: ThemeMode; label: string; icon: IconName }[] = [
 ]
 
 const ACCENTS: { name: AccentName; label: string; swatch: string }[] = [
-  { name: 'white', label: 'White', swatch: '#f4f5f7' },
-  // Internal id stays 'blush' so saved settings keep working; the label is
-  // what the user picked.
-  { name: 'blush', label: 'Petal', swatch: '#f6d3d8' },
-  { name: 'lavender', label: 'Lavender', swatch: '#c4b5fd' },
-  { name: 'mint', label: 'Mint', swatch: '#8fe3c0' },
-  { name: 'sky', label: 'Sky', swatch: '#93c1fb' },
+  { name: 'white', label: 'Paper', swatch: '#eceae3' },
+  // Stored ids stay as they were so existing settings keep working; only the
+  // labels and colours changed with the new palette.
+  { name: 'blush', label: 'Petal', swatch: '#e6adb6' },
+  { name: 'amber', label: 'Amber', swatch: '#e6c58c' },
+  { name: 'mint', label: 'Sage', swatch: '#a6ccac' },
+  { name: 'sky', label: 'Sky', swatch: '#a3c4e8' },
+  { name: 'lavender', label: 'Lavender', swatch: '#c1b1e6' },
 ]
 
 const VIBES: { name: Vibe; label: string; hint: string }[] = [
-  { name: 'plain', label: 'Plain', hint: 'clean black & white' },
-  { name: 'flowers', label: 'Flowers', hint: 'cozy plum + wildflowers' },
-  { name: 'robot', label: 'Robot', hint: 'techy dark blue' },
+  { name: 'plain', label: 'Plain', hint: 'clean graphite' },
+  { name: 'flowers', label: 'Flowers', hint: 'warm cocoa + wildflowers' },
+  { name: 'robot', label: 'Robot', hint: 'cool slate-teal' },
 ]
 
 const GOAL_CHOICES = [30, 60, 90, 120, 180, 240]

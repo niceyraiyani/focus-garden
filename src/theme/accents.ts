@@ -1,7 +1,8 @@
 import type { AccentName, Vibe } from '../domain/types'
 
-/** All selectable accents, in picker order. Kept small on purpose (calm, not overwhelming). */
-export const ACCENT_NAMES: AccentName[] = ['white', 'blush', 'lavender', 'mint', 'sky']
+/** All selectable accents, in picker order. Kept small on purpose (calm, not
+ *  overwhelming), with one comfortable option per canvas temperature. */
+export const ACCENT_NAMES: AccentName[] = ['white', 'blush', 'amber', 'mint', 'sky', 'lavender']
 
 /**
  * The accent that best matches each vibe's canvas. Applied automatically when a

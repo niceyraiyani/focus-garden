@@ -1,242 +1,291 @@
 /*
- * lock.in design tokens — warm, cozy, flat. No gradients, no blurred glows.
- * Flat colors only: no gradients, no blurred glows. Emphasis uses a flat
- * semi-transparent outline ring. Dark is the signature theme.
+ * lock.in colour system — "Softworks".
+ *
+ * A friendly retro computer you can sit at for hours. The casing carries the
+ * mood, not the accents: each vibe is the same machine at a different
+ * temperature — Plain is graphite, Flowers cocoa, Robot slate-teal — built on
+ * one shared lightness ramp so they layer identically.
+ *
+ * Flat colours only: no gradients, no blurred glows. Emphasis is a flat
+ * semi-transparent ring, and a "shadow" is a solid colour offset a few pixels.
+ * Text is never pure white or pure black, to keep long sessions comfortable.
+ *
+ * Two colour families, deliberately kept apart:
+ *  - --accent-* are six FIXED decorative pigments (rose, coral, gold, green,
+ *    blue, violet) used for list colours, tags, effort icons and chart series.
+ *    They stay put whatever accent is chosen, so choosing an accent can never
+ *    silently recolour a chart or make one series disappear.
+ *  - --primary / --link / --ring / --soft-lavender track the chosen accent.
  */
 
 :root,
 [data-theme='dark'] {
   color-scheme: dark;
 
-  /* Warm plum base + raised surfaces (warm, subtle purple-brown, no blue). */
-  --bg: #1c1416;
-  --surface: #271d20;
-  --surface-2: #32262a;
-  --surface-3: #3d2f34;
-  --border: #433339;
-  --border-strong: #564350;
+  /* Canvas — Flowers (cocoa) is the default vibe, so it lives in the base. */
+  --bg: #201619;
+  --surface: #2b1f22;
+  --surface-2: #37292c;
+  --surface-3: #433337;
+  --border: #49373b;
+  --border-strong: #5e484d;
 
-  /* Body text: warm cream, never pure white. */
-  --fg: #efe6d6;
-  --fg-muted: #b8aa93;
-  --fg-subtle: #877962;
+  --fg: #f1e8de;
+  --fg-muted: #bfaaa1;
+  --fg-subtle: #8d7973;
 
-  /* Flat earthy accents (no blue). */
-  --accent-lavender: #d3a67d; /* warm clay (primary tone) */
-  --accent-pink: #e1a49c; /* dusty rose */
-  --accent-mint: #a9c8a3; /* sage */
-  --accent-blue: #97b98f; /* soft moss (replaces blue) */
-  --accent-peach: #edb28d;
-  --accent-yellow: #e4c67d; /* honey */
+  /* Six fixed decorative pigments, evenly spread around the wheel and near
+     equal in lightness, so they stay distinct even as a 12px dot. */
+  --accent-pink: #dba0aa;
+  --accent-peach: #e3a888;
+  --accent-yellow: #d7bd7c;
+  --accent-mint: #8ac6a0;
+  --accent-blue: #93b4dc;
+  --accent-lavender: #ad9dd8;
 
-  /* Primary interactive (flat, hard hover swap). */
-  --primary: #d3a67d;
-  --primary-fg: #241a12;
-  --primary-hover: #e4b88f;
+  --soft-pink: rgba(219, 160, 170, 0.14);
+  --soft-peach: rgba(227, 168, 136, 0.14);
+  --soft-yellow: rgba(215, 189, 124, 0.14);
+  --soft-mint: rgba(138, 198, 160, 0.14);
+  --soft-blue: rgba(147, 180, 220, 0.14);
 
-  /* Emphasis ring that replaces glow (flat, semi-transparent). */
-  --ring: rgba(211, 166, 125, 0.5);
+  --danger: #e0857c;
+  --success: #7cc091;
 
-  /* Chip/soft accent fills (flat translucent). */
-  --soft-lavender: rgba(211, 166, 125, 0.16);
-  --soft-pink: rgba(225, 164, 156, 0.16);
-  --soft-mint: rgba(169, 200, 163, 0.16);
-  --soft-blue: rgba(151, 185, 143, 0.16);
-  --soft-peach: rgba(237, 178, 141, 0.16);
-  --soft-yellow: rgba(228, 198, 125, 0.16);
+  /* Accent-driven. Overridden per accent below; these mirror Paper, the
+     default, so the app looks right before settings finish loading. */
+  --primary: #eceae3;
+  --primary-hover: #f7f5ef;
+  --primary-fg: #201d18;
+  --link: #eceae3;
+  --ring: rgba(236, 234, 227, 0.42);
+  --soft-lavender: rgba(236, 234, 227, 0.14);
 
-  --danger: #e0897c;
-  --success: #a9c8a3;
-
-  /* Subtle texture dot color. */
-  --texture-dot: rgba(211, 166, 125, 0.06);
-  /* Flat offset shadow used by the retro chrome (never blurred). */
-  --retro-shadow: #0d090a;
+  --retro-shadow: #0f090b;
   --retro-line: var(--border-strong);
-  /* Modal scrim. */
   --scrim: rgba(12, 8, 10, 0.62);
+  --texture-dot: rgba(219, 160, 170, 0.05);
 }
 
 [data-theme='light'] {
   color-scheme: light;
 
-  /* Warm cream, no blue. */
-  --bg: #f7f0e5;
-  --surface: #fffdf8;
-  --surface-2: #f3ead9;
-  --surface-3: #ece0ca;
-  --border: #e7dcc6;
-  --border-strong: #d8c8ab;
+  --bg: #f6efe8;
+  --surface: #fffbf6;
+  --surface-2: #f1e7dd;
+  --surface-3: #e9ddd0;
+  --border: #e6dacd;
+  --border-strong: #d4c3b2;
 
-  /* Warm dark brown text, not pure black. */
-  --fg: #3a3125;
-  --fg-muted: #6c6250;
-  --fg-subtle: #968a75;
+  --fg: #342821;
+  --fg-muted: #6f5f54;
+  --fg-subtle: #9c8a7d;
 
-  /* Same earthy identity, deepened for contrast on cream. */
-  --accent-lavender: #b87c4b; /* clay */
-  --accent-pink: #cf7d73;
-  --accent-mint: #6f9d68;
-  --accent-blue: #789e6b; /* moss (replaces blue) */
-  --accent-peach: #cf885c;
-  --accent-yellow: #bf963c;
+  --accent-pink: #b56672;
+  --accent-peach: #bd7048;
+  --accent-yellow: #9c7d2e;
+  --accent-mint: #4f9068;
+  --accent-blue: #4f79ad;
+  --accent-lavender: #7d68b8;
 
-  --primary: #b87c4b;
-  --primary-fg: #fffdf8;
-  --primary-hover: #a56b3d;
+  --soft-pink: rgba(181, 102, 114, 0.13);
+  --soft-peach: rgba(189, 112, 72, 0.13);
+  --soft-yellow: rgba(156, 125, 46, 0.13);
+  --soft-mint: rgba(79, 144, 104, 0.13);
+  --soft-blue: rgba(79, 121, 173, 0.13);
 
-  --ring: rgba(184, 124, 75, 0.35);
+  --danger: #b8503f;
+  --success: #3c7f52;
 
-  --soft-lavender: rgba(184, 124, 75, 0.14);
-  --soft-pink: rgba(207, 125, 115, 0.14);
-  --soft-mint: rgba(111, 157, 104, 0.16);
-  --soft-blue: rgba(120, 158, 107, 0.16);
-  --soft-peach: rgba(207, 136, 92, 0.16);
-  --soft-yellow: rgba(191, 150, 60, 0.16);
+  --primary: #3b3b40;
+  --primary-hover: #2c2c30;
+  --primary-fg: #f7f6f2;
+  --link: #3b3b40;
+  --ring: rgba(59, 59, 64, 0.28);
+  --soft-lavender: rgba(59, 59, 64, 0.1);
 
-  --danger: #cf6a5c;
-  --success: #4f8a48;
-
-  --texture-dot: rgba(184, 124, 75, 0.05);
-  --retro-shadow: #b9a68c;
-  --retro-line: var(--border-strong);
-  --scrim: rgba(60, 45, 35, 0.35);
+  /* A soft mid-tone, not black: on a light canvas the hard edge of the offset
+     does the depth work, and a dark shadow would read harsh. */
+  --retro-shadow: #d5c1ad;
+  --scrim: rgba(80, 60, 48, 0.34);
+  --texture-dot: rgba(181, 102, 114, 0.05);
 }
 
-/* ===== Vibe base canvases (bg/surfaces/text). Flowers = warm plum base above. ===== */
+/* ===== Vibe canvases. Flowers is the base above; these retune the casing. ===== */
 
-/* Plain — clean neutral black/white. */
+/* Plain — graphite, neutral. */
 [data-theme='dark'][data-vibe='plain'] {
-  --bg: #0e0e10;
-  --surface: #1a1a1d;
-  --surface-2: #242428;
-  --surface-3: #2e2e33;
-  --border: #313136;
-  --border-strong: #45454c;
-  --fg: #ededef;
-  --fg-muted: #a6a6ad;
-  --fg-subtle: #72727a;
+  --bg: #18181b;
+  --surface: #212125;
+  --surface-2: #2a2a2f;
+  --surface-3: #343439;
+  --border: #38383e;
+  --border-strong: #4c4c53;
+  --fg: #eae9ec;
+  --fg-muted: #a6a5ac;
+  --fg-subtle: #727178;
+  --retro-shadow: #060608;
+  --scrim: rgba(8, 8, 10, 0.62);
   --texture-dot: rgba(255, 255, 255, 0.035);
-  --retro-shadow: #000000;
 }
 [data-theme='light'][data-vibe='plain'] {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --surface-2: #f2f2f4;
-  --surface-3: #e9e9ec;
-  --border: #e4e4e7;
-  --border-strong: #d3d3d8;
-  --fg: #1b1b1e;
-  --fg-muted: #55555c;
-  --fg-subtle: #86868d;
+  --bg: #f3f3f4;
+  --surface: #fcfcfd;
+  --surface-2: #eeeef0;
+  --surface-3: #e6e6e9;
+  --border: #e1e1e4;
+  --border-strong: #cfcfd5;
+  --fg: #202024;
+  --fg-muted: #5b5b62;
+  --fg-subtle: #8b8b93;
+  --retro-shadow: #c7c7cd;
+  --scrim: rgba(40, 40, 46, 0.32);
   --texture-dot: rgba(0, 0, 0, 0.03);
-  --retro-shadow: #c9c9d0;
 }
 
-/* Robot — dark bluish, techy. */
+/* Robot — slate-teal, cool. */
 [data-theme='dark'][data-vibe='robot'] {
-  --bg: #0c111d;
-  --surface: #131a29;
-  --surface-2: #1a2334;
-  --surface-3: #232f45;
-  --border: #2a3650;
-  --border-strong: #394868;
-  --fg: #e3e9f5;
-  --fg-muted: #9db0d0;
-  --fg-subtle: #68789a;
-  --texture-dot: rgba(140, 170, 220, 0.06);
-  --retro-shadow: #05080f;
+  --bg: #101820;
+  --surface: #17222c;
+  --surface-2: #1f2d38;
+  --surface-3: #283a48;
+  --border: #2d404f;
+  --border-strong: #3c5466;
+  --fg: #e4ecf2;
+  --fg-muted: #9fb2c1;
+  --fg-subtle: #6a8092;
+  --retro-shadow: #05090d;
+  --scrim: rgba(6, 10, 14, 0.62);
+  --texture-dot: rgba(147, 180, 220, 0.06);
 }
 [data-theme='light'][data-vibe='robot'] {
-  --bg: #eef2f9;
-  --surface: #ffffff;
-  --surface-2: #e7edf7;
-  --surface-3: #dce5f2;
-  --border: #d4deec;
-  --border-strong: #c0cce1;
-  --fg: #1d2740;
-  --fg-muted: #54607b;
-  --fg-subtle: #8591a9;
-  --texture-dot: rgba(40, 70, 120, 0.05);
-  --retro-shadow: #b7c3d8;
+  --bg: #eef2f6;
+  --surface: #fdfeff;
+  --surface-2: #e6ecf2;
+  --surface-3: #dce4ec;
+  --border: #d5dee7;
+  --border-strong: #c0cdda;
+  --fg: #1e2733;
+  --fg-muted: #566472;
+  --fg-subtle: #8493a2;
+  --retro-shadow: #bdcad7;
+  --scrim: rgba(30, 45, 60, 0.32);
+  --texture-dot: rgba(79, 121, 173, 0.05);
 }
 
-/* ===== Accent presets (swap the dominant hue; base canvas stays) ===== */
-/* White is the neutral default; base tokens hold the fallback tone. */
+/*
+ * ===== Accent presets =====
+ * Dim-lit signage: soft, desaturated lights that read as glowing without any
+ * glow, and stay calm on all three canvases. Paper is the default.
+ * Stored ids are unchanged so existing settings keep working.
+ */
 
+/* Paper */
 [data-theme='dark'][data-accent='white'] {
-  --primary: #f4f5f7;
-  --primary-hover: #ffffff;
-  --accent-lavender: #f4f5f7;
-  --ring: rgba(244, 245, 247, 0.4);
-  --soft-lavender: rgba(244, 245, 247, 0.14);
+  --primary: #eceae3;
+  --primary-hover: #f7f5ef;
+  --primary-fg: #201d18;
+  --link: #eceae3;
+  --ring: rgba(236, 234, 227, 0.42);
+  --soft-lavender: rgba(236, 234, 227, 0.14);
 }
 [data-theme='light'][data-accent='white'] {
-  --primary: #3a3a40;
-  --primary-hover: #2b2b30;
-  --accent-lavender: #3a3a40;
-  --ring: rgba(58, 58, 64, 0.28);
-  --soft-lavender: rgba(58, 58, 64, 0.1);
+  --primary: #3b3b40;
+  --primary-hover: #2c2c30;
+  --primary-fg: #f7f6f2;
+  --link: #3b3b40;
+  --ring: rgba(59, 59, 64, 0.28);
+  --soft-lavender: rgba(59, 59, 64, 0.1);
 }
 
+/* Petal */
 [data-theme='dark'][data-accent='blush'] {
-  --primary: #f6d3d8;
-  --primary-hover: #fbe4e7;
-  --accent-lavender: #f6d3d8;
-  --ring: rgba(246, 211, 216, 0.45);
-  --soft-lavender: rgba(246, 211, 216, 0.14);
+  --primary: #e6adb6;
+  --primary-hover: #efbfc7;
+  --primary-fg: #2a1a1d;
+  --link: #e6adb6;
+  --ring: rgba(230, 173, 182, 0.42);
+  --soft-lavender: rgba(230, 173, 182, 0.14);
 }
 [data-theme='light'][data-accent='blush'] {
-  --primary: #b8737f;
-  --primary-hover: #a46471;
-  --accent-lavender: #b8737f;
-  --ring: rgba(184, 115, 127, 0.32);
-  --soft-lavender: rgba(184, 115, 127, 0.14);
+  --primary: #a05c67;
+  --primary-hover: #8e4f5a;
+  --primary-fg: #fdf7f4;
+  --link: #a05c67;
+  --ring: rgba(160, 92, 103, 0.3);
+  --soft-lavender: rgba(160, 92, 103, 0.13);
 }
 
-[data-theme='dark'][data-accent='lavender'] {
-  --primary: #c4b5fd;
-  --primary-hover: #d3c7fe;
-  --accent-lavender: #c4b5fd;
-  --ring: rgba(196, 181, 253, 0.5);
-  --soft-lavender: rgba(196, 181, 253, 0.16);
+/* Amber */
+[data-theme='dark'][data-accent='amber'] {
+  --primary: #e6c58c;
+  --primary-hover: #eecf97;
+  --primary-fg: #2a2015;
+  --link: #e6c58c;
+  --ring: rgba(230, 197, 140, 0.42);
+  --soft-lavender: rgba(230, 197, 140, 0.14);
 }
-[data-theme='light'][data-accent='lavender'] {
-  --primary: #7c5fd0;
-  --primary-hover: #6b4ec2;
-  --accent-lavender: #7c5fd0;
-  --ring: rgba(124, 95, 208, 0.32);
-  --soft-lavender: rgba(124, 95, 208, 0.14);
+[data-theme='light'][data-accent='amber'] {
+  --primary: #8c6023;
+  --primary-hover: #79521c;
+  --primary-fg: #fff9f0;
+  --link: #8c6023;
+  --ring: rgba(140, 96, 35, 0.3);
+  --soft-lavender: rgba(140, 96, 35, 0.14);
 }
 
+/* Sage */
 [data-theme='dark'][data-accent='mint'] {
-  --primary: #8fe3c0;
-  --primary-hover: #a6ead0;
-  --accent-lavender: #8fe3c0;
-  --ring: rgba(143, 227, 192, 0.5);
-  --soft-lavender: rgba(143, 227, 192, 0.16);
+  --primary: #a6ccac;
+  --primary-hover: #b6d6bb;
+  --primary-fg: #1b241c;
+  --link: #a6ccac;
+  --ring: rgba(166, 204, 172, 0.42);
+  --soft-lavender: rgba(166, 204, 172, 0.14);
 }
 [data-theme='light'][data-accent='mint'] {
-  --primary: #3f9b78;
-  --primary-hover: #358a69;
-  --accent-lavender: #3f9b78;
-  --ring: rgba(63, 155, 120, 0.32);
-  --soft-lavender: rgba(63, 155, 120, 0.16);
+  --primary: #3f7b4f;
+  --primary-hover: #356b43;
+  --primary-fg: #f6fbf6;
+  --link: #3f7b4f;
+  --ring: rgba(63, 123, 79, 0.3);
+  --soft-lavender: rgba(63, 123, 79, 0.14);
 }
 
+/* Sky */
 [data-theme='dark'][data-accent='sky'] {
-  --primary: #93c1fb;
-  --primary-hover: #a9cffc;
-  --accent-lavender: #93c1fb;
-  --ring: rgba(147, 193, 251, 0.5);
-  --soft-lavender: rgba(147, 193, 251, 0.16);
+  --primary: #a3c4e8;
+  --primary-hover: #b3cfec;
+  --primary-fg: #16212e;
+  --link: #a3c4e8;
+  --ring: rgba(163, 196, 232, 0.42);
+  --soft-lavender: rgba(163, 196, 232, 0.14);
 }
 [data-theme='light'][data-accent='sky'] {
-  --primary: #3f7fca;
-  --primary-hover: #356fb5;
-  --accent-lavender: #3f7fca;
-  --ring: rgba(63, 127, 202, 0.32);
-  --soft-lavender: rgba(63, 127, 202, 0.14);
+  --primary: #40699a;
+  --primary-hover: #375a86;
+  --primary-fg: #f5f9fd;
+  --link: #40699a;
+  --ring: rgba(64, 105, 154, 0.3);
+  --soft-lavender: rgba(64, 105, 154, 0.13);
+}
+
+/* Lavender */
+[data-theme='dark'][data-accent='lavender'] {
+  --primary: #c1b1e6;
+  --primary-hover: #cec1ec;
+  --primary-fg: #211c2e;
+  --link: #c1b1e6;
+  --ring: rgba(193, 177, 230, 0.42);
+  --soft-lavender: rgba(193, 177, 230, 0.14);
+}
+[data-theme='light'][data-accent='lavender'] {
+  --primary: #6a56ab;
+  --primary-hover: #5c489b;
+  --primary-fg: #f8f6fd;
+  --link: #6a56ab;
+  --ring: rgba(106, 86, 171, 0.3);
+  --soft-lavender: rgba(106, 86, 171, 0.13);
 }
 
 :root {
