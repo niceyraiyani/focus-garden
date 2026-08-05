@@ -73,6 +73,12 @@ export interface FocusSession {
   activeTaskId: ID | null
   /** Task ids captured to the Parking Lot during this session. */
   parkingLot: ID[]
+  /**
+   * Tasks finished during this session, in completion order. Kept separately
+   * because finishing a task removes it from `queue`, and the review still
+   * needs to report what you got done.
+   */
+  completedTaskIds?: ID[]
   minMinutes: number
   startedAt: number
   endedAt: number | null

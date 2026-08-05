@@ -46,6 +46,7 @@ export async function startSession(queue: ID[], minMinutes: number): Promise<Foc
     queue: [...queue],
     activeTaskId,
     parkingLot: [],
+    completedTaskIds: [],
     minMinutes,
     startedAt: ts,
     endedAt: null,
@@ -55,6 +56,10 @@ export async function startSession(queue: ID[], minMinutes: number): Promise<Foc
     updatedAt: ts,
   }
   await db.transaction('rw', db.sessions, db.segments, async () => {
+    // A double-clicked Start would otherwise leave two running sessions, both
+    // accruing time while only one is ever shown.
+    const existing = await getActiveSession()
+    if (existing) throw new Error('A focus session is already running.')
     await db.sessions.add(session)
     await openSegment(session.id, activeTaskId)
   })
@@ -63,6 +68,8 @@ export async function startSession(queue: ID[], minMinutes: number): Promise<Foc
 
 export async function pauseSession(id: ID): Promise<void> {
   await db.transaction('rw', db.sessions, db.segments, async () => {
+    const s = await db.sessions.get(id)
+    if (!s || s.status !== 'running') return
     await closeOpenSegment(id)
     await db.sessions.update(id, { status: 'paused', updatedAt: now() })
   })
@@ -71,7 +78,10 @@ export async function pauseSession(id: ID): Promise<void> {
 export async function resumeSession(id: ID): Promise<void> {
   await db.transaction('rw', db.sessions, db.segments, async () => {
     const s = await db.sessions.get(id)
-    if (!s) return
+    // Only a paused session can resume; guarding the status stops a
+    // double-clicked Resume from opening two overlapping segments.
+    if (!s || s.status !== 'paused') return
+    await closeOpenSegment(id)
     await openSegment(id, s.activeTaskId)
     await db.sessions.update(id, { status: 'running', updatedAt: now() })
   })
@@ -103,20 +113,32 @@ export async function removeFromQueue(id: ID, taskId: ID): Promise<void> {
   await db.sessions.update(id, { queue, activeTaskId, updatedAt: now() })
 }
 
-/** Mark the given task complete and advance the queue to the next open task. */
+/**
+ * Mark the given task complete and advance the queue to the next open task.
+ *
+ * The task write shares the session transaction so a failure can't leave a
+ * task completed while the session still thinks it's active.
+ */
 export async function completeQueuedTask(id: ID, taskId: ID): Promise<void> {
-  await setTaskComplete(taskId, true)
-  await db.transaction('rw', db.sessions, db.segments, async () => {
+  await db.transaction('rw', db.sessions, db.segments, db.tasks, db.subtasks, async () => {
     const s = await db.sessions.get(id)
     if (!s) return
+    await setTaskComplete(taskId, true)
     const queue = s.queue.filter((t) => t !== taskId)
+    const done = s.completedTaskIds ?? []
+    const completedTaskIds = done.includes(taskId) ? done : [...done, taskId]
     if (s.activeTaskId === taskId) {
       const nextTask = queue[0] ?? null
       await closeOpenSegment(id)
       if (s.status === 'running') await openSegment(id, nextTask)
-      await db.sessions.update(id, { queue, activeTaskId: nextTask, updatedAt: now() })
+      await db.sessions.update(id, {
+        queue,
+        completedTaskIds,
+        activeTaskId: nextTask,
+        updatedAt: now(),
+      })
     } else {
-      await db.sessions.update(id, { queue, updatedAt: now() })
+      await db.sessions.update(id, { queue, completedTaskIds, updatedAt: now() })
     }
   })
 }
@@ -136,6 +158,8 @@ export async function markNotified(id: ID): Promise<void> {
 
 export async function stopSession(id: ID): Promise<void> {
   await db.transaction('rw', db.sessions, db.segments, async () => {
+    const s = await db.sessions.get(id)
+    if (!s || s.status === 'completed') return
     await closeOpenSegment(id)
     await db.sessions.update(id, { status: 'completed', endedAt: now(), updatedAt: now() })
   })
@@ -156,6 +180,8 @@ export async function touchSession(id: ID): Promise<void> {
  */
 export async function endSessionAt(id: ID, endAt: number): Promise<void> {
   await db.transaction('rw', db.sessions, db.segments, async () => {
+    const s = await db.sessions.get(id)
+    if (!s || s.status === 'completed') return
     const open = await db.segments
       .where('sessionId')
       .equals(id)

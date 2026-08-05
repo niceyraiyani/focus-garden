@@ -27,6 +27,7 @@ export function CommandPalette() {
   const [index, setIndex] = useState(0)
   const [openTask, setOpenTask] = useState<Task | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const capturing = useRef(false)
   const { toast } = useToast()
 
   const tasks = useLiveQuery(() => db.tasks.toArray(), [], [])
@@ -83,10 +84,17 @@ export function CommandPalette() {
 
   async function capture() {
     const title = trimmed
-    if (!title) return
-    await createTask({ title, listId: null })
-    toast('Captured to your Inbox')
-    close()
+    if (!title || capturing.current) return
+    // Holding Enter fires repeatedly; without this guard each repeat creates
+    // another copy of the same thought before the first write lands.
+    capturing.current = true
+    try {
+      await createTask({ title, listId: null })
+      toast('Captured to your Inbox')
+      close()
+    } finally {
+      capturing.current = false
+    }
   }
 
   function choose(i: number) {

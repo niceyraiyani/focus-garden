@@ -81,4 +81,52 @@ describe('focus session engine', () => {
     await stopSession(session.id)
     expect(await getActiveSession()).toBeUndefined()
   })
+
+  it('refuses to start a second session while one is active', async () => {
+    const a = await createTask({ title: 'a' })
+    await startSession([a.id], 25)
+    await expect(startSession([a.id], 25)).rejects.toThrow(/already running/i)
+    expect(await db.sessions.count()).toBe(1)
+  })
+
+  it('remembers tasks completed during the session', async () => {
+    const a = await createTask({ title: 'a' })
+    const b = await createTask({ title: 'b' })
+    const session = await startSession([a.id, b.id], 30)
+
+    await completeQueuedTask(session.id, a.id)
+    await completeQueuedTask(session.id, b.id)
+
+    const s = (await db.sessions.get(session.id))!
+    // The queue empties as tasks finish, so the review would otherwise report
+    // nothing was done.
+    expect(s.queue).toEqual([])
+    expect(s.completedTaskIds).toEqual([a.id, b.id])
+  })
+
+  it('does not double-count a task completed twice', async () => {
+    const a = await createTask({ title: 'a' })
+    const session = await startSession([a.id], 30)
+    await completeQueuedTask(session.id, a.id)
+    await completeQueuedTask(session.id, a.id)
+    expect((await db.sessions.get(session.id))!.completedTaskIds).toEqual([a.id])
+  })
+
+  it('ignores resume unless the session is paused', async () => {
+    const a = await createTask({ title: 'a' })
+    const session = await startSession([a.id], 30)
+    // A double-clicked Resume must not open a second overlapping segment.
+    await resumeSession(session.id)
+    await resumeSession(session.id)
+    expect(await openSegments(session.id)).toHaveLength(1)
+  })
+
+  it('ignores a repeated stop and keeps the original end time', async () => {
+    const a = await createTask({ title: 'a' })
+    const session = await startSession([a.id], 30)
+    await stopSession(session.id)
+    const first = (await db.sessions.get(session.id))!.endedAt
+    await stopSession(session.id)
+    expect((await db.sessions.get(session.id))!.endedAt).toBe(first)
+  })
 })

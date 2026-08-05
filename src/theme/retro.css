@@ -259,6 +259,18 @@
   color: var(--primary);
 }
 
+/* A pasted URL with no spaces would otherwise stretch its row and, before the
+   minmax fixes, the whole page. Wrap user-entered text instead. */
+.task-title,
+.queue-title,
+.pool-title,
+.folder-name,
+.palette-row-title,
+.parked-item,
+.breakdown-name {
+  overflow-wrap: anywhere;
+}
+
 [data-retro='on'] .folder-card {
   border-width: 2px;
   border-color: var(--retro-line);

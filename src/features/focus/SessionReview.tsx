@@ -12,7 +12,12 @@ export function SessionReview({ sessionId, onClose }: { sessionId: string; onClo
   const navigate = useNavigate()
   const session = useLiveQuery(() => db.sessions.get(sessionId), [sessionId])
   const segments = useSessionSegments(sessionId)
-  const queueTasks = useTasksByIds(session?.queue ?? [])
+  // Finished tasks are removed from the queue, so the review has to look at
+  // both to report what actually happened.
+  const reviewedIds = session
+    ? [...new Set([...(session.completedTaskIds ?? []), ...session.queue])]
+    : []
+  const queueTasks = useTasksByIds(reviewedIds)
   const parked = useTasksByIds(session?.parkingLot ?? [])
 
   if (!session) return null
@@ -23,7 +28,9 @@ export function SessionReview({ sessionId, onClose }: { sessionId: string; onClo
     .filter((x) => x.ms > 0)
     .sort((a, b) => b.ms - a.ms)
 
-  const completedCount = queueTasks.filter((t) => t.status === 'completed').length
+  const completedCount = session
+    ? new Set(session.completedTaskIds ?? []).size
+    : 0
 
   return (
     <div className="review">

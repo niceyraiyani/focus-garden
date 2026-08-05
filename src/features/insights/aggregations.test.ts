@@ -175,3 +175,65 @@ describe('focusHeatmap', () => {
     expect(new Set(labels).size).toBe(labels.length)
   })
 })
+
+describe('focusedMsByDay across midnight', () => {
+  const at = (y: number, m: number, d: number, h: number, min = 0) =>
+    new Date(y, m, d, h, min, 0, 0).getTime()
+
+  it('splits a segment at the local day boundary', () => {
+    // 23:40 -> 00:20 = 40 min, split 20/20 across the two days.
+    const seg = {
+      id: 'x', sessionId: 's', taskId: null,
+      startedAt: at(2026, 0, 5, 23, 40),
+      endedAt: at(2026, 0, 6, 0, 20),
+    }
+    const map = focusedMsByDay([seg])
+    expect(map.get('2026-01-05')).toBe(20 * 60000)
+    expect(map.get('2026-01-06')).toBe(20 * 60000)
+  })
+
+  it('keeps the total intact when splitting', () => {
+    const seg = {
+      id: 'x', sessionId: 's', taskId: null,
+      startedAt: at(2026, 0, 5, 22, 0),
+      endedAt: at(2026, 0, 6, 3, 0),
+    }
+    const map = focusedMsByDay([seg])
+    const total = [...map.values()].reduce((a, b) => a + b, 0)
+    expect(total).toBe(5 * 3600000)
+  })
+
+  it('spans more than two days', () => {
+    const seg = {
+      id: 'x', sessionId: 's', taskId: null,
+      startedAt: at(2026, 0, 5, 12, 0),
+      endedAt: at(2026, 0, 7, 12, 0),
+    }
+    const map = focusedMsByDay([seg])
+    expect(map.get('2026-01-05')).toBe(12 * 3600000)
+    expect(map.get('2026-01-06')).toBe(24 * 3600000)
+    expect(map.get('2026-01-07')).toBe(12 * 3600000)
+  })
+
+  it('leaves a same-day segment on its own day', () => {
+    const map = focusedMsByDay([daySeg(2026, 0, 5, 45)])
+    expect(map.get('2026-01-05')).toBe(45 * 60000)
+    expect(map.size).toBe(1)
+  })
+
+  it('splits an open segment measured up to now', () => {
+    const map = focusedMsByDay(
+      [{ id: 'o', sessionId: 's', taskId: null, startedAt: at(2026, 0, 5, 23, 30), endedAt: null }],
+      at(2026, 0, 6, 0, 30),
+    )
+    expect(map.get('2026-01-05')).toBe(30 * 60000)
+    expect(map.get('2026-01-06')).toBe(30 * 60000)
+  })
+
+  it('ignores a segment whose end precedes its start', () => {
+    const map = focusedMsByDay([
+      { id: 'b', sessionId: 's', taskId: null, startedAt: at(2026, 0, 5, 10), endedAt: at(2026, 0, 5, 9) },
+    ])
+    expect(map.size).toBe(0)
+  })
+})

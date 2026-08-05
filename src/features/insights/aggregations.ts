@@ -10,16 +10,37 @@ import type { FocusSegment, FocusSession, Task, Settings, Weekday } from '../../
 /**
  * Focused ms per local date key, from all session segments.
  *
+ * A segment that runs past midnight is split at the local day boundary so a
+ * late-night session lands partly on each day instead of banking the whole
+ * stretch on the day it started. The split walks real calendar days, so DST
+ * shifts are handled by the Date object rather than assuming 24-hour days.
+ *
  * Pass `nowTs` to include the session that's running right now (its open
  * segment counts up to that moment) so today's number climbs live. Leave it
  * out for historical reporting, where only finished segments count.
  */
 export function focusedMsByDay(segments: FocusSegment[], nowTs?: number): Map<string, number> {
   const map = new Map<string, number>()
+  const add = (key: string, ms: number) => {
+    if (ms > 0) map.set(key, (map.get(key) ?? 0) + ms)
+  }
+
   for (const seg of segments) {
     if (seg.endedAt === null && nowTs === undefined) continue
-    const key = localDateKey(seg.startedAt)
-    map.set(key, (map.get(key) ?? 0) + segmentMs(seg, seg.endedAt ?? nowTs ?? 0))
+    const end = seg.endedAt ?? nowTs ?? 0
+    let cursor = seg.startedAt
+    // Guard against a clock change leaving end before start.
+    if (end <= cursor) continue
+
+    while (cursor < end) {
+      const dayStart = new Date(cursor)
+      dayStart.setHours(0, 0, 0, 0)
+      const nextDay = new Date(dayStart)
+      nextDay.setDate(nextDay.getDate() + 1)
+      const boundary = Math.min(end, nextDay.getTime())
+      add(localDateKey(cursor), boundary - cursor)
+      cursor = boundary
+    }
   }
   return map
 }

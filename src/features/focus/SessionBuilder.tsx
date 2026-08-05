@@ -9,6 +9,7 @@ import { Flourish } from '../../components/Flourish'
 import type { ID } from '../../domain/types'
 import { BlocklistEditor } from './BlocklistEditor'
 import { isDesktop } from './nativeBlocker'
+import { useToast } from '../../components/ToastContext'
 
 const DURATION_CHOICES = [15, 25, 30, 45, 60]
 
@@ -16,9 +17,13 @@ export function SessionBuilder() {
   const tasks = useAllOpenTasks()
   const lists = useLists()
   const { settings } = useSettings()
+  const { toast } = useToast()
 
   const [queue, setQueue] = useState<ID[]>([])
   const [minutes, setMinutes] = useState(settings.defaultMinMinutes)
+  // Guards a double-clicked Start, which would otherwise be rejected by the
+  // data layer and surface as an error the user didn't cause.
+  const [starting, setStarting] = useState(false)
 
   const queued = queue
     .map((id) => tasks.find((t) => t.id === id))
@@ -147,8 +152,14 @@ export function SessionBuilder() {
             variant="primary"
             size="lg"
             className="start-btn"
-            disabled={queued.length === 0}
-            onClick={() => startSession(queue, minutes)}
+            disabled={queued.length === 0 || starting}
+            onClick={() => {
+              setStarting(true)
+              startSession(queue, minutes).catch((e) => {
+                setStarting(false)
+                toast(e instanceof Error ? e.message : 'Could not start the session.')
+              })
+            }}
           >
             <Icon name="play" filled /> Start focusing
           </Button>

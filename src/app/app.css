@@ -610,7 +610,7 @@ span.view-icon {
 }
 .detail-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-4);
 }
 .seg {
@@ -736,7 +736,7 @@ span.view-icon {
 }
 .home-stats {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
@@ -819,7 +819,7 @@ span.view-icon {
 }
 .home-tasks {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: var(--space-5);
 }
 .muted-note {
@@ -881,7 +881,7 @@ span.view-icon {
 }
 .builder-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-4);
   align-items: start;
 }
@@ -1036,7 +1036,7 @@ span.view-icon {
 }
 .session-body {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   gap: var(--space-4);
   width: 100%;
   align-items: start;
@@ -1438,7 +1438,7 @@ span.view-icon {
 }
 .cal-layout {
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: minmax(0, 1fr) 240px;
   gap: var(--space-4);
   align-items: start;
 }

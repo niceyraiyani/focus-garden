@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { useActiveSession } from './useFocusSession'
 import { useSettings } from '../../app/SettingsContext'
@@ -44,16 +44,16 @@ export function useNativeBlocker(): void {
   const active = !!session
   const blocklist = settings.blocklist ?? []
   const key = blocklist.join(',')
-  const wasActive = useRef(false)
 
   useEffect(() => {
     if (!isDesktop()) return
     if (active) {
       void startBlock(blocklist).catch((e) => console.error('start_block failed:', e))
-      wasActive.current = true
-    } else if (wasActive.current) {
+    } else {
+      // Always clear on a non-active session, not just when this mount saw one
+      // start. If the app was killed mid-session the hosts file still carries
+      // our block, and only an unconditional stop can release it.
       void stopBlock().catch((e) => console.error('stop_block failed:', e))
-      wasActive.current = false
     }
     // Re-run when the session starts/stops or the blocklist changes mid-session.
     // eslint-disable-next-line react-hooks/exhaustive-deps

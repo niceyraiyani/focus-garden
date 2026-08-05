@@ -23,15 +23,22 @@ export interface BackupData {
 }
 
 export async function exportBackup(): Promise<BackupData> {
-  const [tasks, subtasks, lists, tags, sessions, segments, settings] = await Promise.all([
-    db.tasks.toArray(),
-    db.subtasks.toArray(),
-    db.lists.toArray(),
-    db.tags.toArray(),
-    db.sessions.toArray(),
-    db.segments.toArray(),
-    db.settings.get('app'),
-  ])
+  // One read transaction so a concurrent edit can't produce a snapshot with,
+  // say, a task whose list is missing.
+  const [tasks, subtasks, lists, tags, sessions, segments, settings] = await db.transaction(
+    'r',
+    [db.tasks, db.subtasks, db.lists, db.tags, db.sessions, db.segments, db.settings],
+    async () =>
+      Promise.all([
+        db.tasks.toArray(),
+        db.subtasks.toArray(),
+        db.lists.toArray(),
+        db.tags.toArray(),
+        db.sessions.toArray(),
+        db.segments.toArray(),
+        db.settings.get('app'),
+      ]),
+  )
   return {
     format: 'focus-garden-backup',
     version: 1,

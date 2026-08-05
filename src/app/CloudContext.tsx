@@ -64,6 +64,10 @@ export function CloudProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   const userRef = useRef<CloudUser | null>(null)
+  // Mirrors syncState so the change subscription (created once) can read the
+  // current value instead of closing over a stale one.
+  const syncStateRef = useRef<SyncState>('off')
+  syncStateRef.current = syncState
   const syncedUsers = useRef<Set<string>>(new Set())
   const pushTimer = useRef<number | null>(null)
 
@@ -168,8 +172,15 @@ export function CloudProvider({ children }: { children: ReactNode }) {
     if (!configured) return
     const unsub = subscribeLocalChanges(() => {
       if (!userRef.current) return
+      // Never push while the initial sync is still deciding, or while a
+      // conflict is waiting on the user — either would overwrite the cloud
+      // copy with data the user hasn't chosen to keep. The edit still lands
+      // locally and will be pushed once the state settles.
+      const state = syncStateRef.current
+      if (state === 'syncing' || state === 'conflict') return
       if (pushTimer.current) clearTimeout(pushTimer.current)
       pushTimer.current = window.setTimeout(() => {
+        if (syncStateRef.current === 'syncing' || syncStateRef.current === 'conflict') return
         void pushNow()
       }, 4000)
     })
