@@ -44,6 +44,7 @@ export type IconName =
   | 'circle'
   | 'folder'
   | 'folder-open'
+  | 'lock'
 
 const PATHS: Record<IconName, ReactNode> = {
   sun: (
@@ -220,6 +221,14 @@ const PATHS: Record<IconName, ReactNode> = {
     <>
       <path d="M3 7.5a1.5 1.5 0 0 1 1.5-1.5h4.2a1.5 1.5 0 0 1 1.06.44l1.3 1.3a1.5 1.5 0 0 0 1.06.44h5.38A1.5 1.5 0 0 1 18 9.68v1.32" />
       <path d="M3 18V7.5M3 18a1.5 1.5 0 0 0 1.5 1.5h13.1a1.5 1.5 0 0 0 1.44-1.08l1.6-5.4A1 1 0 0 0 19.68 11H7.4a1.5 1.5 0 0 0-1.44 1.08z" />
+    </>
+  ),
+  lock: (
+    <>
+      <path d="M8 10.5V7.2a4 4 0 0 1 8 0v3.3" />
+      <rect x="4.6" y="10.5" width="14.8" height="9.4" rx="2.6" />
+      <circle cx="12" cy="14.4" r="1.35" />
+      <path d="M12 15.75v1.7" />
     </>
   ),
 }

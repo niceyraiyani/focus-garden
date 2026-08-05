@@ -9,7 +9,6 @@ import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { useSessionPresence } from '../features/focus/useSessionPresence'
 import { todayFocusedMs } from '../features/insights/aggregations'
 import { formatMinutes } from '../lib/time'
-import { Flourish } from '../components/Flourish'
 import { Icon, ListGlyph } from '../components/Icon'
 import type { IconName } from '../components/Icon'
 import { DecorBackground } from '../components/DecorBackground'
@@ -59,7 +58,7 @@ export function Layout() {
       <DecorBackground />
       <aside className="sidebar">
         <div className="brand">
-          <Flourish variant="bloom" size={30} color="var(--accent-pink)" />
+          <Icon name="lock" className="brand-mark" />
           <span className="brand-name">lock.in</span>
         </div>
 

@@ -251,6 +251,12 @@
   color: var(--fg-subtle);
 }
 
+.brand-mark {
+  font-size: 1.6rem;
+  color: var(--primary);
+  flex: none;
+}
+
 .nav-section-link {
   color: inherit;
   text-decoration: none;

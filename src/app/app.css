@@ -819,7 +819,10 @@ span.view-icon {
 }
 .home-tasks {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  /* Quick capture only needs room for one input, so give the task list the
+     space — at an even split the rows looked cramped against the full-width
+     cards above them. */
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
   gap: var(--space-5);
 }
 .muted-note {
