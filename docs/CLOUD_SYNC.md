@@ -62,7 +62,7 @@ create policy "own snapshot update" on public.snapshots
 
 You should see **"Success. No rows returned"** — that's what we want.
 
-Row-level security means **only you** can read or write your own row. The anon key below is public
+Row-level security means **only you** can read or write your own row. The public key below is public
 by design; without your login it can't touch your data.
 
 > **Already created this table without `rev`?** Add the column with:
@@ -74,13 +74,17 @@ by design; without your login it can't touch your data.
 
 ## Part 3 — Connect lock.in (2 min)
 
-7. Sidebar → **Project Settings** (gear, bottom left) → **API**.
+7. Sidebar → **Project Settings** (gear, bottom left) → **API Keys**.
 8. Copy two values:
-   - **Project URL** — like `https://abcdefgh.supabase.co`
-   - **anon public** key — a long string starting with `eyJ...`
+   - **Project URL** — like `https://abcdefgh.supabase.co`. If it isn't on this page, it's under
+     **Project Settings → Data API**, or you can rebuild it from the project ref shown in your
+     dashboard address bar: `https://<project-ref>.supabase.co`.
+   - The **public** key. Supabase has two generations of these and *either* works:
+     - new format — **Publishable key**, starts `sb_publishable_…`
+     - legacy — **anon public**, a long string starting `eyJ…`
 
-   > Use the key labelled **anon public**, *not* `service_role`. The service key bypasses row-level
-   > security and must never go in a browser.
+   > Never use **Secret key** (`sb_secret_…`) or the legacy `service_role`. Those bypass row-level
+   > security entirely and must never reach a browser.
 
 9. Open lock.in → **Settings** → **Account & cloud sync** → **Use my own Supabase project**.
 10. Paste both values and click **Connect**.
@@ -136,14 +140,14 @@ So nobody else has to repeat any of this, bake the project into the deployed bui
 | Name | Value |
 | --- | --- |
 | `VITE_SUPABASE_URL` | your Project URL from step 8 |
-| `VITE_SUPABASE_ANON_KEY` | your **anon public** key from step 8 |
+| `VITE_SUPABASE_ANON_KEY` | your public key from step 8 (`sb_publishable_…` or legacy `eyJ…`) |
 
 18. Re-run the deploy: **Actions** → **Deploy to GitHub Pages** → **Run workflow**.
 
 From then on, anyone opening the app sees **Continue with Google** straight away, with
 *Use my own Supabase project* tucked underneath for anyone who prefers their own.
 
-> **Variables, not Secrets.** The anon key is public by design — it's compiled into the JavaScript
+> **Variables, not Secrets.** The public key is public by design — it's compiled into the JavaScript
 > the browser downloads, so it can't be hidden, and it doesn't need to be. Row-level security is what
 > keeps each person's data private. Never put the `service_role` key here.
 
@@ -186,4 +190,5 @@ tasks download automatically.
 | `relation "snapshots" does not exist` | The SQL in step 6 didn't run. Run it again and confirm "Success". |
 | `column "rev" does not exist` | The table predates the revision check — run the `alter table … add column rev` snippet under step 6. |
 | `new row violates row-level security policy` | The three policies in step 6 didn't all get created — re-run that block. |
-| Stuck on "Syncing…" | Open the browser console; a 401 usually means the anon key was pasted incompletely. |
+| Stuck on "Syncing…" | Open the browser console; a 401 usually means the public key was pasted incompletely. |
+| `Invalid API key` | You pasted a **Secret** key (`sb_secret_…` / `service_role`) instead of the publishable/anon one, or only part of it. |

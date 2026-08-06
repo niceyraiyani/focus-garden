@@ -72,7 +72,7 @@ export function AccountCard() {
                 </a>
                 .
               </li>
-              <li>Paste your Project URL and anon key below.</li>
+              <li>Paste your Project URL and publishable (or anon) key below.</li>
             </ol>
             <input
               className="input"
@@ -85,8 +85,8 @@ export function AccountCard() {
               className="input"
               value={key}
               onChange={(e) => setKey(e.target.value)}
-              placeholder="anon public key"
-              aria-label="Supabase anon key"
+              placeholder="sb_publishable_… or anon key"
+              aria-label="Supabase publishable or anon key"
             />
             <Button
               variant="primary"
@@ -187,8 +187,8 @@ export function AccountCard() {
                   className="input"
                   value={key}
                   onChange={(e) => setKey(e.target.value)}
-                  placeholder="anon public key"
-                  aria-label="Supabase anon key"
+                  placeholder="sb_publishable_… or anon key"
+                  aria-label="Supabase publishable or anon key"
                 />
                 <Button
                   variant="primary"
