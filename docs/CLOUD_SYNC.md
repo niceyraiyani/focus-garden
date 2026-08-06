@@ -98,19 +98,32 @@ password, and you're syncing.
 
 ## Part 4 — Add "Continue with Google" (5 min, optional)
 
+Google reorganised this console — it's now **Google Auth Platform**, not *APIs & Services →
+Credentials*. Email + password works without any of this.
+
 11. Supabase sidebar → **Authentication** → **Sign In / Providers** → **Google** → toggle **Enable**.
-12. Leave that panel open — it shows a **Callback URL** like
-    `https://abcdefgh.supabase.co/auth/v1/callback`. Copy it.
-13. In a new tab open the
-    [Google Cloud Console credentials page](https://console.cloud.google.com/apis/credentials).
-    - Create a project if prompted (any name).
-    - If it asks you to configure the **OAuth consent screen** first: choose **External**, fill in an
-      app name and your email, then **Save and continue** through the remaining steps.
-14. Click **+ Create Credentials** → **OAuth client ID**:
+12. Leave that panel open. Copy its **Callback URL** — `https://<project-ref>.supabase.co/auth/v1/callback`.
+13. In a new tab open the [Google Cloud Console](https://console.cloud.google.com/) and create a
+    project (any name).
+14. Go to **Google Auth Platform → Branding**. Set an app name and your email, then save. Under
+    **Authorized domains** add `supabase.co`.
+15. **Google Auth Platform → Audience**: choose **External**. It starts in *Testing*, where only
+    named accounts can sign in — so click **Add users** and add your own Google address.
+
+    > Skipping this is the usual cause of "Access blocked: app has not completed verification".
+    > For a personal app, staying in Testing with yourself as the only user is fine and avoids
+    > Google's verification review entirely.
+
+16. **Google Auth Platform → Clients** → **Create client**:
     - **Application type:** Web application
-    - **Authorized redirect URIs** → **+ Add URI** → paste the callback URL from step 12
-    - Click **Create**
-15. Copy the **Client ID** and **Client Secret** into the Supabase Google provider panel → **Save**.
+    - **Authorized redirect URIs** → **Add URI** → paste the callback URL from step 12.
+      This is the *Supabase* callback, not your app's address — a very easy one to get wrong.
+    - **Authorized JavaScript origins** → add `https://niceyraiyani.github.io`
+    - **Create**
+17. Copy the **Client ID** and **Client Secret** into the Supabase Google panel → **Save**.
+
+lock.in asks your project which providers are enabled, so the **Continue with Google** button
+appears by itself on the next page load. No redeploy needed.
 
 ---
 
@@ -184,7 +197,8 @@ tasks download automatically.
 
 | What you see | Fix |
 | --- | --- |
-| `redirect_uri_mismatch` | The URI in step 14 doesn't exactly match the Supabase callback from step 12. |
+| `redirect_uri_mismatch` | The URI in step 16 doesn't exactly match the Supabase callback from step 12. It's the *Supabase* callback, not your app's address. |
+| `Access blocked: … has not completed verification` | Your Google app is in *Testing* and your account isn't listed — add it under Google Auth Platform → **Audience** → *Test users* (step 15). |
 | "URL not allowed" / redirect refused | Redo step 16 — the address needs the trailing `/`. |
 | Sign-up appears to do nothing | Authentication → Providers → Email → turn off *Confirm email*, or check your inbox for the confirmation mail. |
 | `relation "snapshots" does not exist` | The SQL in step 6 didn't run. Run it again and confirm "Success". |
