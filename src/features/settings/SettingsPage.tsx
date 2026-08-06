@@ -55,7 +55,6 @@ export function SettingsPage() {
   const confirm = useConfirm()
   const fileRef = useRef<HTMLInputElement>(null)
   const [importing, setImporting] = useState(false)
-  const blocklist = settings.blocklist ?? []
   const desktop = isDesktop()
 
   function toggleWorkday(day: Weekday) {
@@ -230,29 +229,20 @@ export function SettingsPage() {
         </p>
       </div>
 
-      <div className="card setting-block setting-block--accent">
-        <h3 className="group-title">
-          <Icon name="ban" className="view-icon" /> Focus site blocker
-        </h3>
-        <p className="setting-hint">
-          {desktop
-            ? 'These sites are blocked while a focus session is running, and work normally when it’s off. The app needs administrator/root permission to change blocking.'
-            : 'These sites will be blocked while a focus session runs — but only in the desktop app, which can edit your computer’s hosts file. In this browser tab the list is saved but not enforced.'}
-        </p>
-        {!desktop && (
+      {/* Desktop only — a browser tab can't edit the hosts file, so offering
+          the setting on the web would be pure decoration. */}
+      {desktop && (
+        <div className="card setting-block setting-block--accent">
+          <h3 className="group-title">
+            <Icon name="ban" className="view-icon" /> Focus site blocker
+          </h3>
           <p className="setting-hint">
-            Want real blocking?{' '}
-            <a href="https://github.com/niceyraiyani/lock.in/releases" target="_blank" rel="noreferrer">
-              Download the desktop app
-            </a>{' '}
-            (macOS &amp; Windows).
+            These sites are blocked while a focus session is running, and work normally when it’s off. The app needs
+            administrator/root permission to change blocking.
           </p>
-        )}
-        <BlocklistEditor />
-        {!desktop && blocklist.length > 0 && (
-          <p className="setting-hint">Open lock.in in the desktop app to actually block these.</p>
-        )}
-      </div>
+          <BlocklistEditor />
+        </div>
+      )}
 
       <div className="card setting-block">
         <h3 className="group-title">Goals &amp; streaks</h3>

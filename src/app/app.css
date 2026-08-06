@@ -40,6 +40,38 @@
   gap: var(--space-2);
   margin-bottom: var(--space-2);
 }
+/* Collapsed by default so the blocklist doesn't dominate the screen you're
+   supposed to be using to pick what to work on. */
+.builder-disclosure {
+  margin-bottom: var(--space-4);
+}
+.builder-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--fg-muted);
+  list-style: none;
+}
+.builder-summary::-webkit-details-marker {
+  display: none;
+}
+.builder-summary::after {
+  content: '+';
+  margin-left: auto;
+  font-weight: 800;
+  color: var(--fg-subtle);
+}
+.builder-disclosure[open] .builder-summary::after {
+  content: '–';
+}
+.builder-summary:hover {
+  color: var(--link);
+}
 
 .cloud-setup {
   display: flex;
@@ -149,21 +181,45 @@
   opacity: 0.75;
 }
 
-.today-tally {
-  display: block;
+/* Two glanceable numbers, always in view. The point is that progress should be
+   something you keep noticing, not something you go looking for. */
+.tally-card {
+  display: flex;
+  align-items: stretch;
   margin-top: var(--space-2);
-  padding: 0 var(--space-2);
-  font-size: 0.78rem;
-  color: var(--fg-subtle);
+  padding: var(--space-3) var(--space-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
   text-decoration: none;
-  text-align: center;
+  color: inherit;
 }
-.today-tally strong {
+.tally-stat {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.tally-stat strong {
   color: var(--link);
   font-weight: 800;
+  font-size: 1rem;
+  line-height: 1;
 }
-.today-tally:hover {
-  color: var(--fg-muted);
+.tally-stat small {
+  font-size: 0.66rem;
+  color: var(--fg-subtle);
+  line-height: 1;
+  white-space: nowrap;
+}
+.tally-split {
+  flex: none;
+  width: 1.5px;
+  background: var(--border);
+}
+.tally-card:hover {
+  border-color: var(--link);
 }
 
 /* ===== Year-of-focus heatmap ===== */

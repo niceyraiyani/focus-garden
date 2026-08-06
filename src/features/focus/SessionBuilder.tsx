@@ -138,17 +138,17 @@ export function SessionBuilder() {
             </p>
           </div>
 
-          <div className="builder-block">
-            <span className="field-label">
-              <Icon name="ban" /> Blocked while you focus
-            </span>
-            <p className="duration-hint">
-              {isDesktop()
-                ? 'These stay closed until you stop. Tweak the list before you dive in.'
-                : 'Line up your no-go sites now. Real blocking runs in the desktop app — here it’s saved for focus time.'}
-            </p>
-            <BlocklistEditor />
-          </div>
+          {/* Desktop only. On the web there's nothing we can actually block, so
+              mentioning it at all just makes a promise the browser can't keep. */}
+          {isDesktop() && (
+            <details className="builder-block builder-disclosure">
+              <summary className="builder-summary">
+                <Icon name="ban" /> Blocked while you focus
+              </summary>
+              <p className="duration-hint">These stay closed until you stop. Tweak the list before you dive in.</p>
+              <BlocklistEditor />
+            </details>
+          )}
 
           <Button
             variant="primary"

@@ -8,7 +8,8 @@ import { useActiveSession, useNow } from '../features/focus/useFocusSession'
 import { useNativeBlocker } from '../features/focus/nativeBlocker'
 import { useSessionPresence } from '../features/focus/useSessionPresence'
 import { useDailyNudge } from '../features/focus/useDailyNudge'
-import { todayFocusedMs } from '../features/insights/aggregations'
+import { todayFocusedMs, currentStreak, weekComparison } from '../features/insights/aggregations'
+import { useSettings } from './SettingsContext'
 import { formatMinutes } from '../lib/time'
 import { Icon, ListGlyph } from '../components/Icon'
 import type { IconName } from '../components/Icon'
@@ -27,6 +28,7 @@ function NavItem({ to, icon, label, end }: { to: string; icon: IconName; label: 
 export function Layout() {
   const lists = useActiveLists()
   const session = useActiveSession()
+  const { settings } = useSettings()
   const navigate = useNavigate()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
@@ -44,6 +46,8 @@ export function Layout() {
   const segments = useLiveQuery(() => db.segments.toArray(), [], [])
   const nowTs = useNow(session?.status === 'running', 15000)
   const todayMs = todayFocusedMs(segments, nowTs)
+  const streak = currentStreak(segments, settings)
+  const { thisWeekMs } = weekComparison(segments)
 
   async function addList() {
     const trimmed = name.trim()
@@ -78,6 +82,7 @@ export function Layout() {
           <NavItem to="/lists" icon="folder" label="Lists" />
           <NavItem to="/calendar" icon="calendar" label="Calendar" />
           <NavItem to="/all" icon="flower" label="All tasks" />
+          <NavItem to="/insights" icon="chart" label="Insights" />
           <NavItem to="/completed" icon="trophy" label="Completed" />
         </nav>
 
@@ -128,17 +133,27 @@ export function Layout() {
             <span>Focus</span>
             {session && <span className="focus-live" aria-label="Session in progress" />}
           </NavLink>
-          <Link to="/insights" className="today-tally">
-            {todayMs > 0 ? (
-              <>
-                <strong>{formatMinutes(todayMs / 60000)}</strong> focused today
-              </>
+          <Link to="/insights" className="tally-card" aria-label="See your insights">
+            <span className="tally-stat">
+              <strong>{todayMs > 0 ? formatMinutes(todayMs / 60000) : '0m'}</strong>
+              <small>today</small>
+            </span>
+            <span className="tally-split" aria-hidden="true" />
+            {streak > 0 ? (
+              <span className="tally-stat">
+                <strong>{streak}</strong>
+                <small>day streak</small>
+              </span>
             ) : (
-              'No focus yet today'
+              /* A bare "0 day streak" is a daily little telling-off. Show the
+                 week's total instead — almost always a number worth seeing. */
+              <span className="tally-stat">
+                <strong>{formatMinutes(thisWeekMs / 60000)}</strong>
+                <small>this week</small>
+              </span>
             )}
           </Link>
           <div className="nav">
-            <NavItem to="/insights" icon="chart" label="Insights" />
             <NavItem to="/settings" icon="gear" label="Settings" />
           </div>
         </div>
