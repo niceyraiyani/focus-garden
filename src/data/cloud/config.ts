@@ -19,9 +19,26 @@ export interface CloudConfig {
   anonKey: string
 }
 
+/**
+ * Tidy a pasted project URL into the bare origin supabase-js expects.
+ *
+ * Supabase's dashboard shows the Data API URL as
+ * `https://<ref>.supabase.co/rest/v1/`, and it's an easy thing to copy whole.
+ * Left alone it produces requests to `/rest/v1/rest/v1/…` that fail in a way
+ * that looks nothing like the actual mistake.
+ */
+export function normalizeProjectUrl(raw: string): string {
+  let url = raw.trim()
+  if (!url) return url
+  if (!/^https?:\/\//i.test(url)) url = `https://${url}`
+  url = url.replace(/\/+$/, '')
+  url = url.replace(/\/(rest|auth|storage|realtime)\/v\d+$/i, '')
+  return url.replace(/\/+$/, '')
+}
+
 /** The project compiled into this build, if one was configured. */
 export function getBuiltInConfig(): CloudConfig | null {
-  const url = import.meta.env.VITE_SUPABASE_URL?.trim()
+  const url = normalizeProjectUrl(import.meta.env.VITE_SUPABASE_URL ?? '')
   const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
   return url && anonKey ? { url, anonKey } : null
 }
@@ -32,7 +49,7 @@ export function hasBuiltInConfig(): boolean {
 
 function getOverride(): CloudConfig | null {
   try {
-    const url = localStorage.getItem(URL_KEY)?.trim()
+    const url = normalizeProjectUrl(localStorage.getItem(URL_KEY) ?? '')
     const anonKey = localStorage.getItem(ANON_KEY)?.trim()
     if (url && anonKey) return { url, anonKey }
   } catch {
@@ -50,7 +67,7 @@ export function getCloudConfig(): CloudConfig | null {
 }
 
 export function setCloudConfig(cfg: CloudConfig): void {
-  localStorage.setItem(URL_KEY, cfg.url.trim())
+  localStorage.setItem(URL_KEY, normalizeProjectUrl(cfg.url))
   localStorage.setItem(ANON_KEY, cfg.anonKey.trim())
 }
 
