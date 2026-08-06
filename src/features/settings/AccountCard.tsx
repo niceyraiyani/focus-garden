@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useCloud } from '../../app/CloudContext'
+import { useAuthProviders } from '../../data/cloud/useAuthProviders'
 import { Button } from '../../components/Button'
 import { Icon } from '../../components/Icon'
 import { useToast } from '../../components/ToastContext'
@@ -16,6 +17,7 @@ function formatWhen(ms: number | null): string {
 export function AccountCard() {
   const cloud = useCloud()
   const { toast } = useToast()
+  const providers = useAuthProviders()
 
   const [url, setUrl] = useState('')
   const [key, setKey] = useState('')
@@ -109,10 +111,12 @@ export function AccountCard() {
           <Icon name="cloud" className="view-icon" /> Account &amp; cloud sync
         </h3>
         <p className="setting-hint">Sign in to sync your tasks across every device.</p>
-        <Button variant="primary" disabled={busy} onClick={() => run(() => cloud.signInGoogle())}>
-          <Icon name="sparkle" /> Continue with Google
-        </Button>
-        <p className="setting-hint cloud-or">or use an email &amp; password</p>
+        {providers.google && (
+          <Button variant="primary" disabled={busy} onClick={() => run(() => cloud.signInGoogle())}>
+            <Icon name="sparkle" /> Continue with Google
+          </Button>
+        )}
+        {providers.google && <p className="setting-hint cloud-or">or use an email &amp; password</p>}
         <div className="cloud-setup">
           <input
             className="input"
