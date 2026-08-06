@@ -61,6 +61,12 @@
   --ring: rgba(236, 234, 227, 0.42);
   --soft-lavender: rgba(236, 234, 227, 0.14);
 
+  /* Accent for filled data graphics — bars, heatmap cells, progress.
+     On dark this is just the link colour, which is already a readable pastel.
+     Light themes override it with a softer mid-tone: charts only need 3:1, and
+     the text-grade colour reads as heavy on cream. */
+  --accent-mid: var(--link);
+
   --retro-shadow: #0f090b;
   --retro-line: var(--border-strong);
   --scrim: rgba(12, 8, 10, 0.62);
@@ -101,6 +107,7 @@
   --primary-hover: #dcd7ca;
   --primary-fg: #3a352c;
   --link: #4a4438;
+  --accent-mid: #9a917d;
   --ring: rgba(74, 68, 56, 0.28);
   --soft-lavender: rgba(74, 68, 56, 0.1);
 
@@ -195,6 +202,7 @@
   --primary-hover: #dcd7ca;
   --primary-fg: #3a352c;
   --link: #4a4438;
+  --accent-mid: #9a917d;
   --ring: rgba(74, 68, 56, 0.28);
   --soft-lavender: rgba(74, 68, 56, 0.1);
 }
@@ -213,6 +221,7 @@
   --primary-hover: #efbdc7;
   --primary-fg: #562f36;
   --link: #9c5763;
+  --accent-mid: #b7858e;
   --ring: rgba(156, 87, 99, 0.3);
   --soft-lavender: rgba(156, 87, 99, 0.13);
 }
@@ -231,6 +240,7 @@
   --primary-hover: #ecd19a;
   --primary-fg: #533e14;
   --link: #86601f;
+  --accent-mid: #bc8933;
   --ring: rgba(134, 96, 31, 0.3);
   --soft-lavender: rgba(134, 96, 31, 0.14);
 }
@@ -249,6 +259,7 @@
   --primary-hover: #b9d6bd;
   --primary-fg: #26402c;
   --link: #3d7449;
+  --accent-mid: #5aa169;
   --ring: rgba(61, 116, 73, 0.3);
   --soft-lavender: rgba(61, 116, 73, 0.14);
 }
@@ -267,6 +278,7 @@
   --primary-hover: #b8cfea;
   --primary-fg: #1f364d;
   --link: #3c6592;
+  --accent-mid: #6f95bf;
   --ring: rgba(60, 101, 146, 0.3);
   --soft-lavender: rgba(60, 101, 146, 0.13);
 }
@@ -285,6 +297,7 @@
   --primary-hover: #c9bce9;
   --primary-fg: #322a50;
   --link: #63519f;
+  --accent-mid: #978ac0;
   --ring: rgba(99, 81, 159, 0.3);
   --soft-lavender: rgba(99, 81, 159, 0.13);
 }

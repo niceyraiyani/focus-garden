@@ -228,7 +228,7 @@
   color: var(--fg-subtle);
 }
 .folder-due {
-  color: var(--primary);
+  color: var(--link);
   font-weight: 800;
 }
 .folder-card--new {
@@ -249,7 +249,7 @@
 
 .brand-mark {
   font-size: 1.6rem;
-  color: var(--primary);
+  color: var(--link);
   flex: none;
 }
 
@@ -258,7 +258,7 @@
   text-decoration: none;
 }
 .nav-section-link:hover {
-  color: var(--primary);
+  color: var(--link);
 }
 
 /* A pasted URL with no spaces would otherwise stretch its row and, before the
