@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAllOpenTasks, useLists } from '../tasks/hooks'
+import { QuickAdd } from '../tasks/QuickAdd'
 import { useSettings } from '../../app/SettingsContext'
 import { startSession } from '../../data/sessions'
 import { Button } from '../../components/Button'
@@ -31,6 +32,15 @@ export function SessionBuilder() {
   // Routine tasks (meds, laundry) are things you just do — putting a 30-minute
   // timer on them isn't focus, it's theatre.
   const available = tasks.filter((t) => !queue.includes(t.id) && !t.routine)
+
+  // "No open tasks" was a lie whenever everything was already queued or was a
+  // routine — and it left you staring at a dead end either way.
+  const emptyPoolMessage =
+    tasks.length === 0
+      ? 'Nothing to pick from yet — add your first one above.'
+      : queue.length > 0
+        ? 'That’s everything — it’s all in your queue.'
+        : 'Only routines right now. Those don’t need a timer — just do them.'
 
   function add(id: ID) {
     setQueue((q) => [...q, id])
@@ -68,10 +78,17 @@ export function SessionBuilder() {
       <div className="builder-grid">
         <section className="card builder-pool">
           <h2 className="group-title">Choose tasks</h2>
+          {/* Capture right here: the moment you're deciding what to work on is
+              exactly when you remember the thing you forgot to write down. */}
+          <QuickAdd
+            listId={null}
+            placeholder="Add something to work on…"
+            onAdded={(task) => setQueue((q) => [...q, task.id])}
+          />
           {available.length === 0 ? (
             <div className="empty empty--sm">
               <Flourish variant="sprig" size={48} />
-              <p>No open tasks to add. Capture a few first!</p>
+              <p>{emptyPoolMessage}</p>
             </div>
           ) : (
             <div className="pool-list">

@@ -1019,6 +1019,11 @@ span.view-icon {
   gap: var(--space-2);
   max-height: 60vh;
   overflow-y: auto;
+  margin-top: var(--space-3);
+}
+/* Capture sits under the heading, above the list it feeds. */
+.builder-pool .quick-add {
+  margin-top: var(--space-1);
 }
 .pool-item {
   display: flex;

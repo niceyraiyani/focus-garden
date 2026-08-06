@@ -3,13 +3,13 @@ import type { FormEvent } from 'react'
 import { createTask } from '../../data/tasks'
 import { Icon, captureIconFor } from '../../components/Icon'
 import { useSettings } from '../../app/SettingsContext'
-import type { ID } from '../../domain/types'
+import type { ID, Task } from '../../domain/types'
 
 interface QuickAddProps {
   listId: ID | null
   placeholder?: string
   autoFocus?: boolean
-  onAdded?: (title: string) => void
+  onAdded?: (task: Task) => void
 }
 
 /** Fast capture: type a title, press Enter, keep going. */
@@ -21,9 +21,9 @@ export function QuickAdd({ listId, placeholder, autoFocus, onAdded }: QuickAddPr
     e.preventDefault()
     const trimmed = title.trim()
     if (!trimmed) return
-    await createTask({ title: trimmed, listId })
+    const task = await createTask({ title: trimmed, listId })
     setTitle('')
-    onAdded?.(trimmed)
+    onAdded?.(task)
   }
 
   return (
