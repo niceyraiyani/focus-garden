@@ -61,10 +61,30 @@ export const DEFAULT_SETTINGS: Settings = {
   version: 1,
 }
 
-/** Ensure a settings row exists. Safe to call repeatedly. */
+/**
+ * Ensure a settings row exists, and that it has every key the app now expects.
+ *
+ * Backfilling matters more than it looks. Settings saved by an older build
+ * simply lack fields added since, and the day any code reads one of those
+ * without a `??` fallback it breaks — but only for people who already had
+ * data, never in fresh testing. Filling the gaps here means an old row and a
+ * new one are the same shape, so that class of bug can't happen.
+ *
+ * Existing values always win; this only ever adds what's missing.
+ */
 export async function ensureSeeded(): Promise<void> {
   const existing = await db.settings.get('app')
   if (!existing) {
     await db.settings.put({ ...DEFAULT_SETTINGS })
+    return
+  }
+  const missing: Partial<Settings> = {}
+  for (const [key, value] of Object.entries(DEFAULT_SETTINGS)) {
+    if (!(key in existing)) {
+      Object.assign(missing, { [key]: value })
+    }
+  }
+  if (Object.keys(missing).length > 0) {
+    await db.settings.update('app', missing)
   }
 }
