@@ -311,7 +311,11 @@ mod tests {
         let once = ensure_anchor_in_conf(conf);
         let twice = ensure_anchor_in_conf(&once);
         assert_eq!(once, twice, "re-running must not stack anchors");
-        assert_eq!(once.matches(ANCHOR_FILE).count(), 2, "anchor + load lines");
+        // The path appears only in the `load anchor ... from "<path>"` line;
+        // the declaration above it names the anchor, not the file.
+        assert_eq!(once.matches(ANCHOR_FILE).count(), 1);
+        assert!(once.contains(&format!("anchor \"{ANCHOR}\"\n")));
+        assert!(once.contains("scrub-anchor \"com.apple/*\""), "existing rules kept");
     }
 
     #[test]
