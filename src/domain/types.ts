@@ -166,5 +166,20 @@ export interface Settings {
   celebrations: boolean
   /** Domains to block during a focus session (used by the desktop blocker). */
   blocklist: string[]
+  /**
+   * Links shown on the launch page. Kept deliberately small — this is a
+   * jumping-off point, not a bookmark manager.
+   */
+  quickLinks?: QuickLink[]
+  /**
+   * What you said you'd start on next, captured when a session ends. Shown on
+   * the launch page so the decision is already made when you sit down.
+   */
+  nextUp?: string | null
   version: number
+}
+
+export interface QuickLink {
+  label: string
+  url: string
 }

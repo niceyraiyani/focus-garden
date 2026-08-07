@@ -12,6 +12,7 @@ import { CalendarPage } from '../features/calendar/CalendarPage'
 import { FocusPage } from '../features/focus/FocusPage'
 import { InsightsPage } from '../features/insights/InsightsPage'
 import { SettingsPage } from '../features/settings/SettingsPage'
+import { LaunchPage } from '../features/launch/LaunchPage'
 
 export function App() {
   return (
@@ -22,6 +23,9 @@ export function App() {
             <ConfirmProvider>
               <HashRouter>
                 <Routes>
+                  {/* Standalone: this is the browser-startup page, so it gets
+                      no sidebar or chrome — one clock, one button, one move. */}
+                  <Route path="start" element={<LaunchPage />} />
                   <Route element={<Layout />}>
                     <Route index element={<HomePage />} />
                     <Route path="inbox" element={<InboxPage />} />

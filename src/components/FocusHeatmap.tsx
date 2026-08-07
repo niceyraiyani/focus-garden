@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import type { Heatmap } from '../features/insights/aggregations'
 import { formatMinutes } from '../lib/time'
 
@@ -6,11 +7,21 @@ const ROW_LABELS = ['', 'Mon', '', 'Wed', '', 'Fri', '']
 /**
  * A year of focus at a glance, in the spirit of a contribution graph. Intensity
  * is relative to the daily goal, so the darkest square always means "goal met".
+ *
+ * `scrollToEnd` pins the view to the most recent weeks. A year rarely fits, and
+ * the useful end is today's — showing January by default would be backwards.
  */
-export function FocusHeatmap({ map }: { map: Heatmap }) {
+export function FocusHeatmap({ map, scrollToEnd }: { map: Heatmap; scrollToEnd?: boolean }) {
+  const scroller = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!scrollToEnd || !scroller.current) return
+    scroller.current.scrollLeft = scroller.current.scrollWidth
+  }, [scrollToEnd, map])
+
   return (
     <div className="heatmap">
-      <div className="heatmap-scroll">
+      <div className="heatmap-scroll" ref={scroller}>
         <div className="heatmap-months">
           {map.weeks.map((w, i) => (
             <span key={i} className="heatmap-month">

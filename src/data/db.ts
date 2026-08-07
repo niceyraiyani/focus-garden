@@ -56,6 +56,8 @@ export const DEFAULT_SETTINGS: Settings = {
   decorativeMotion: true,
   celebrations: true,
   blocklist: ['youtube.com', 'reddit.com', 'instagram.com', 'x.com', 'tiktok.com'],
+  quickLinks: [],
+  nextUp: null,
   version: 1,
 }
 

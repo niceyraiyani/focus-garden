@@ -1,0 +1,248 @@
+/* ===== Launch page =====
+ *
+ * The browser-startup view. Centred, quiet, and mostly empty on purpose: it
+ * should read as a moment of pause with one obvious move, not a dashboard
+ * asking to be tended.
+ */
+.launch {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+}
+.launch-inner {
+  width: 100%;
+  max-width: 940px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.launch-capture {
+  width: 100%;
+  max-width: 460px;
+}
+
+.launch-clock {
+  text-align: center;
+}
+.launch-time {
+  font-family: var(--font-mono, inherit);
+  font-size: clamp(3.5rem, 12vw, 6rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.launch-date {
+  margin-top: var(--space-2);
+  font-size: 0.95rem;
+  color: var(--fg-muted);
+}
+
+/* The one move. Big enough that it's the obvious thing to do next. */
+.launch-go {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--primary);
+  color: var(--primary-fg);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.launch-go:hover {
+  background: var(--primary-hover);
+}
+.launch-go:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.launch-go-note {
+  font-size: 0.78rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.launch-next {
+  margin: 0;
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+  max-width: 46ch;
+}
+.launch-next-label {
+  color: var(--fg-subtle);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-right: var(--space-2);
+}
+
+/* --- Quick links --- */
+.quicklinks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.quicklinks-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.quicklink {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0.3rem 0.7rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-pill);
+  font-size: 0.85rem;
+}
+.quicklink a {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.quicklink:hover {
+  border-color: var(--link);
+}
+.quicklink:hover a {
+  color: var(--link);
+}
+.quicklink--add {
+  background: none;
+  color: var(--fg-subtle);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-style: dashed;
+}
+.quicklink-x {
+  display: inline-flex;
+  background: none;
+  border: 0;
+  padding: 0 0 0 2px;
+  color: var(--fg-subtle);
+  cursor: pointer;
+}
+.quicklink-x:hover {
+  color: var(--danger, var(--link));
+}
+.quicklinks-add {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 340px;
+}
+.quicklinks-add .input {
+  min-width: 0;
+  flex: 1;
+}
+
+/* --- Heatmap --- */
+.launch-heat {
+  width: 100%;
+  padding: var(--space-4);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+}
+
+.launch-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+  font-size: 0.82rem;
+}
+.launch-nav a {
+  color: var(--fg-subtle);
+  text-decoration: none;
+}
+.launch-nav a:hover {
+  color: var(--link);
+}
+
+/* --- "What's first next time?" on the session review --- */
+.next-up-form {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.next-up-form .input {
+  flex: 1;
+  min-width: 0;
+}
+.next-up-saved {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: 1.05rem;
+  color: var(--fg);
+}
+
+@media (max-width: 560px) {
+  .launch-heat {
+    padding: var(--space-3);
+  }
+  .launch-go {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===== Floating (picture-in-picture) timer =====
+ *
+ * Lives in its own OS window, so it has to carry its own body styling — it
+ * doesn't inherit anything from the page.
+ */
+.pip-root {
+  height: 100%;
+}
+.pip-timer {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body, ui-monospace, monospace);
+  text-align: center;
+  padding: 0.75rem;
+  box-sizing: border-box;
+}
+.pip-clock {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--link);
+}
+.pip-task {
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pip-flag {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-mint);
+}
+.pip-timer--over .pip-clock {
+  color: var(--accent-mint);
+}

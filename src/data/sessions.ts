@@ -63,6 +63,9 @@ export async function startSession(queue: ID[], minMinutes: number): Promise<Foc
     await db.sessions.add(session)
     await openSegment(session.id, activeTaskId)
   })
+  // Starting is acting on the intention, so it's spent — otherwise the launch
+  // page keeps advertising a "first up" from days ago.
+  await db.settings.update('app', { nextUp: null })
   return session
 }
 

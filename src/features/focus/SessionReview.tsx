@@ -7,6 +7,7 @@ import { Button } from '../../components/Button'
 import { Icon } from '../../components/Icon'
 import { Flourish } from '../../components/Flourish'
 import { useSessionSegments, useTasksByIds } from './useFocusSession'
+import { NextUp } from './NextUp'
 
 export function SessionReview({ sessionId, onClose }: { sessionId: string; onClose: () => void }) {
   const navigate = useNavigate()
@@ -83,6 +84,8 @@ export function SessionReview({ sessionId, onClose }: { sessionId: string; onClo
           </ul>
         </section>
       )}
+
+      <NextUp />
 
       <div className="review-actions">
         <Button variant="subtle" onClick={() => navigate('/')}>

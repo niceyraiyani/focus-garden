@@ -23,6 +23,8 @@ import { useSessionSegments, useNow, useTasksByIds } from './useFocusSession'
 import { useSubtasks } from '../tasks/hooks'
 import { updateSubtask } from '../../data/tasks'
 import { notify } from '../../lib/notify'
+import { usePipWindow } from './usePipWindow'
+import { PipTimer } from './PipTimer'
 
 function notifyMinReached(minutes: number, enabled: boolean) {
   if (!enabled) return
@@ -68,6 +70,9 @@ export function ActiveSession({
 
   const activeTask = queueTasks.find((t) => t.id === session.activeTaskId) ?? null
   const upcoming = queueTasks.filter((t) => t.id !== session.activeTaskId)
+
+  // Optional floating window so the clock stays visible in another app.
+  const floating = usePipWindow()
 
   // Gentle nudge exactly once when the minimum is first reached.
   useEffect(() => {
@@ -137,7 +142,21 @@ export function ActiveSession({
         <Button variant="danger" onClick={end}>
           <Icon name="stop" /> End session
         </Button>
+        {floating.supported && (
+          <Button variant="ghost" onClick={floating.toggle}>
+            <Icon name="target" /> {floating.open ? 'Close float' : 'Float timer'}
+          </Button>
+        )}
       </div>
+
+      {floating.container && (
+        <PipTimer
+          container={floating.container}
+          elapsedMs={elapsed}
+          overtime={over}
+          taskTitle={activeTask?.title ?? null}
+        />
+      )}
 
       {!running && <p className="paused-note">Paused — the clock is resting. Resume when you’re ready.</p>}
 
