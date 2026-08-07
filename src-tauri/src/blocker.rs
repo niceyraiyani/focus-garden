@@ -55,8 +55,43 @@ pub fn hosts_path() -> PathBuf {
     }
 }
 
+/// Whether a string is a plausible hostname and nothing else.
+///
+/// This is the security boundary for the whole blocker. `normalize_domain`
+/// used to sanitise by *removing* the characters it knew about, which meant
+/// anything it hadn't thought of — a newline, most obviously — passed through
+/// and became extra lines in a file we write to as root. Rejecting anything
+/// that isn't a hostname is the only version of this that's safe by default.
+///
+/// Deliberately strict: ASCII letters, digits and hyphens, in dot-separated
+/// labels, at least two labels. Whitespace, control characters and anything
+/// exotic are simply not hostnames.
+pub fn is_valid_hostname(host: &str) -> bool {
+    if host.is_empty() || host.len() > 253 {
+        return false;
+    }
+    let labels: Vec<&str> = host.split('.').collect();
+    // Require a dot: a bare word is never a site you meant to block, and it
+    // keeps single-token junk out of the hosts file.
+    if labels.len() < 2 {
+        return false;
+    }
+    labels.iter().all(|label| {
+        !label.is_empty()
+            && label.len() <= 63
+            && label.starts_with(|c: char| c.is_ascii_alphanumeric())
+            && label.ends_with(|c: char| c.is_ascii_alphanumeric())
+            && label
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || c == '-')
+    })
+}
+
 /// Normalize a user-entered domain to a bare host, e.g.
 /// "https://www.YouTube.com/watch" -> "youtube.com".
+///
+/// Returns an empty string for anything that isn't a hostname once trimmed.
+/// Callers skip empties, so invalid input is dropped rather than written.
 pub fn normalize_domain(input: &str) -> String {
     let mut d = input.trim().to_lowercase();
     if let Some(rest) = d.strip_prefix("https://") {
@@ -81,8 +116,14 @@ pub fn normalize_domain(input: &str) -> String {
         .split(':')
         .next()
         .unwrap_or("")
+        .trim()
         .to_string();
-    d
+
+    if is_valid_hostname(&d) {
+        d
+    } else {
+        String::new()
+    }
 }
 
 /// Build the block section text for a set of domains (no surrounding blank lines).
@@ -158,8 +199,46 @@ fn read_hosts() -> Result<String, String> {
     std::fs::read_to_string(hosts_path()).map_err(|e| format!("Couldn't read the hosts file: {e}"))
 }
 
+/// Write a system file without ever leaving it half-written.
+///
+/// `fs::write` truncates first, so a crash, a full disk or a power cut between
+/// truncate and write leaves a *shortened* `/etc/hosts` — no `localhost`, no
+/// `broadcasthost` — and a machine whose networking is subtly broken in a way
+/// that has nothing obviously to do with a focus timer. Writing a sibling temp
+/// file and renaming over the target makes the swap atomic on POSIX, so the
+/// file is either the old contents or the new ones and never something between.
+pub fn write_atomic(path: &std::path::Path, content: &str) -> std::io::Result<()> {
+    let dir = path.parent().unwrap_or_else(|| std::path::Path::new("."));
+    let name = path
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("lockin");
+    let tmp = dir.join(format!(".{name}.lockin.tmp"));
+    std::fs::write(&tmp, content)?;
+    // Rename replaces the destination on both Unix and Windows.
+    match std::fs::rename(&tmp, path) {
+        Ok(()) => Ok(()),
+        Err(e) => {
+            let _ = std::fs::remove_file(&tmp);
+            Err(e)
+        }
+    }
+}
+
+/// Keep one pristine copy of the hosts file, made before we first touch it.
+///
+/// If our section ever can't be removed cleanly, this is what a human can
+/// restore from. Written once and then left alone, so it can't be overwritten
+/// with an already-modified version.
+fn backup_hosts_once(original: &str) {
+    let path = hosts_path().with_extension("lockin-original");
+    if !path.exists() {
+        let _ = std::fs::write(path, original);
+    }
+}
+
 fn write_hosts(content: &str) -> Result<(), String> {
-    std::fs::write(hosts_path(), content).map_err(|e| {
+    write_atomic(&hosts_path(), content).map_err(|e| {
         format!(
             "Couldn't write the hosts file ({e}). The app needs administrator/root \
              permission to change site blocking."
@@ -170,7 +249,13 @@ fn write_hosts(content: &str) -> Result<(), String> {
 fn flush_dns() {
     #[cfg(windows)]
     {
-        let _ = std::process::Command::new("ipconfig").arg("/flushdns").output();
+        // Absolute path: this runs as Administrator, and Windows' executable
+        // search includes the working directory before System32. A bare name
+        // would let an `ipconfig.exe` sitting in Downloads run elevated.
+        let root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_string());
+        let _ = std::process::Command::new(format!("{root}\\System32\\ipconfig.exe"))
+            .arg("/flushdns")
+            .output();
     }
     #[cfg(target_os = "macos")]
     {
@@ -212,12 +297,17 @@ fn apply_to_vpn_hosts(domains: &[String], blocking: bool) {
         let Ok(content) = std::fs::read_to_string(p) else {
             continue;
         };
+        // Don't rewrite a file we've never touched: `lines()` drops \r, so
+        // reflowing a CRLF shadow hosts file would silently rewrite it whole.
+        if !blocking && !has_section(&content) {
+            continue;
+        }
         let updated = if blocking {
             apply(&content, domains)
         } else {
             strip_section(&content)
         };
-        let _ = std::fs::write(p, updated);
+        let _ = write_atomic(p, &updated);
     }
 }
 
@@ -229,6 +319,11 @@ fn apply_to_vpn_hosts(_domains: &[String], _blocking: bool) {}
 #[tauri::command]
 pub fn start_block(domains: Vec<String>) -> Result<(), String> {
     let content = read_hosts()?;
+    // Keep a pristine copy before the first ever modification, so there's
+    // something to restore from if our section can't be removed cleanly.
+    if !has_section(&content) {
+        backup_hosts_once(&content);
+    }
     let updated = apply(&content, &domains);
     write_hosts(&updated)?;
     apply_to_vpn_hosts(&domains, true);
@@ -304,6 +399,76 @@ mod tests {
         assert_eq!(normalize_domain("Reddit.com"), "reddit.com");
         assert_eq!(normalize_domain("  http://x.com:443/  "), "x.com");
         assert_eq!(normalize_domain(""), "");
+    }
+
+    #[test]
+    fn a_newline_cannot_smuggle_extra_hosts_entries() {
+        // The whole point of validating rather than stripping. This string is
+        // a legal hosts line, so a sanitiser that only removed `/?#:` let it
+        // through and wrote an attacker's mapping to /etc/hosts as root --
+        // reachable by importing a shared backup, which never re-normalises.
+        let payload = "x.test\n0.0.0.0 accounts.google.com";
+        assert_eq!(normalize_domain(payload), "");
+
+        let section = build_section(&[payload.to_string()]);
+        assert!(!section.contains("accounts.google.com"));
+        // Only the two markers and the comment remain -- nothing was written.
+        assert_eq!(section.lines().filter(|l| l.starts_with("0.0.0.0")).count(), 0);
+    }
+
+    #[test]
+    fn rejects_anything_that_is_not_a_hostname() {
+        for bad in [
+            "x.test\nevil.com",       // newline
+            "x.test\revil.com",       // carriage return
+            "x.test\tevil.com",       // tab
+            "has space.com",
+            "localhost",              // single label
+            "-lead.com",              // label may not start with a hyphen
+            "trail-.com",             // ...or end with one
+            "..",
+            ".com",
+            "a..b.com",               // empty label
+            "*.wildcard.com",
+            "emoji😀.com",
+        ] {
+            assert_eq!(normalize_domain(bad), "", "should have rejected {bad:?}");
+        }
+    }
+
+    #[test]
+    fn still_accepts_ordinary_domains() {
+        for good in [
+            "youtube.com",
+            "news.ycombinator.com",
+            "sub.domain.co.uk",
+            "x-y.example.com",
+            "123.example.com",
+        ] {
+            assert_eq!(normalize_domain(good), good, "should have accepted {good:?}");
+        }
+    }
+
+    #[test]
+    fn writes_are_atomic_and_leave_no_temp_file_behind() {
+        let dir = std::env::temp_dir().join(format!("lockin-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let target = dir.join("hosts");
+
+        write_atomic(&target, "first\n").unwrap();
+        assert_eq!(std::fs::read_to_string(&target).unwrap(), "first\n");
+
+        // Overwriting must replace cleanly, not append or half-write.
+        write_atomic(&target, "second\n").unwrap();
+        assert_eq!(std::fs::read_to_string(&target).unwrap(), "second\n");
+
+        let leftovers: Vec<_> = std::fs::read_dir(&dir)
+            .unwrap()
+            .filter_map(|e| e.ok())
+            .filter(|e| e.file_name().to_string_lossy().contains("tmp"))
+            .collect();
+        assert!(leftovers.is_empty(), "temp file was left behind");
+        std::fs::remove_dir_all(&dir).ok();
     }
 
     #[test]
