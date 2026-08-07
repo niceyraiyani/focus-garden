@@ -1,4 +1,6 @@
 mod blocker;
+#[cfg(target_os = "macos")]
+mod pf;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -16,7 +18,8 @@ pub fn run() {
     .invoke_handler(tauri::generate_handler![
       blocker::start_block,
       blocker::stop_block,
-      blocker::is_blocking
+      blocker::is_blocking,
+      blocker::reassert_block
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

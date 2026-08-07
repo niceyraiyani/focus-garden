@@ -1,0 +1,39 @@
+name: Rust site blocker
+
+# The blocker is macOS-first and can't be compiled on every dev machine, so CI
+# is where it actually gets checked. Runs on macOS because that's the platform
+# the PF firewall code targets.
+on:
+  push:
+    paths:
+      - 'src-tauri/src/**'
+      - 'src-tauri/Cargo.toml'
+      - 'src-tauri/Cargo.lock'
+      - '.github/workflows/rust.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('src-tauri/Cargo.lock') }}
+
+      - name: Test
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: Clippy
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
