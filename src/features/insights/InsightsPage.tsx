@@ -11,6 +11,7 @@ import {
   focusHeatmap,
 } from './aggregations'
 import { formatMinutes } from '../../lib/time'
+import { buildObservations } from './observations'
 import { Icon } from '../../components/Icon'
 import { FocusHeatmap } from '../../components/FocusHeatmap'
 import { Panel } from '../../components/Panel'
@@ -64,6 +65,19 @@ export function InsightsPage() {
         </div>
       ) : (
         <>
+          <section className="card observation-panel">
+            <h3 className="group-title">
+              <Icon name="sparkle" className="view-icon" /> What we notice
+            </h3>
+            <ul className="observation-list">
+              {buildObservations({ segments, sessions, nowTs: Date.now() }).map((o) => (
+                <li key={o.id} className={`observation-item observation-item--${o.kind}`}>
+                  {o.text}
+                </li>
+              ))}
+            </ul>
+          </section>
+
           <div className="insight-cards">
             <div className="card stat-card">
               <span className="stat-big">{formatMinutes(todayMs / 60000)}</span>

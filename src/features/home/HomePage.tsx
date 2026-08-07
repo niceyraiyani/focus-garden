@@ -12,7 +12,8 @@ import { Burst } from '../../components/Burst'
 import { Icon, greetingIconFor } from '../../components/Icon'
 import { WeekStrip } from '../../components/WeekStrip'
 import { InboxTriage } from './InboxTriage'
-import { todayFocusedMs, currentStreak, weekBars } from '../insights/aggregations'
+import { todayFocusedMs, weekBars } from '../insights/aggregations'
+import { ObservationLine } from '../insights/ObservationLine'
 import { rollOverdueToToday, restoreDueDates } from '../../data/tasks'
 import { localDateKey } from '../../lib/date'
 import { useToast } from '../../components/ToastContext'
@@ -47,7 +48,6 @@ export function HomePage() {
   const focusedMs = todayFocusedMs(segments, nowTs)
   const goalMs = settings.dailyGoalMinutes * 60000
   const goalPct = Math.min(100, goalMs > 0 ? (focusedMs / goalMs) * 100 : 0)
-  const streak = currentStreak(segments, settings)
   const bars = weekBars(segments, settings, nowTs)
 
   // Undated Inbox tasks — the ones that quietly pile up and get forgotten.
@@ -102,15 +102,7 @@ export function HomePage() {
           </div>
           <WeekStrip bars={bars} />
           <div className="home-progress-foot">
-            <span>
-              {streak > 0 ? (
-                <>
-                  {streak} <Icon name="flame" /> workday streak
-                </>
-              ) : (
-                'Start a streak today!'
-              )}
-            </span>
+            <ObservationLine />
             {goalPct >= 100 && <span className="goal-met">Goal met</span>}
           </div>
         </div>
