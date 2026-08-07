@@ -28,7 +28,7 @@ tasks is paralyzing. lock.in is built around how that actually feels:
   — not the whole overwhelming backlog.
 - **A place for stray thoughts.** When your brain throws a random idea mid-focus,
   park it and keep going. It's saved, you can forget it.
-- **Gentle, never punishing.** Timers flex, streaks respect your rest days, and
+- **Gentle, never punishing.** Timers flex, there are no streaks to break, and
   when overdue tasks pile up you can sweep them all onto today in one click
   (undoable) instead of scrolling past a wall of red.
 
@@ -67,11 +67,51 @@ day** to schedule it — drag it back off to unschedule.
 ![Calendar](docs/screenshots/calendar.png)
 
 ### 📊 Insights that motivate, not shame
-Focused hours today and this week, a workday streak that **never breaks on your
-rest days**, a year-of-focus heatmap, a 14-day chart, time-by-list breakdown, and
-your session history.
+Focused hours today and this week, a year-of-focus heatmap, a 14-day chart,
+time-by-list breakdown, and your session history.
+
+There's deliberately **no streak**. A streak is predictable (so it stops
+motivating), pays off late, and has a cliff at the end that tends to take the
+whole habit with it when it breaks — a bad fit for a brain whose inconsistency
+isn't a choice. Instead, Today shows **one true observation at a time**, rotating
+on its own:
+
+> *Your longest session so far was 1h 43m.*
+> *You've focused on 18 of the last 30 days.*
+> *Afternoons are when you focus most.*
+> *You're 20m off your best week.*
+
+Two rules, both enforced by tests: it never says anything the data doesn't
+support, and it never shames — an empty day simply isn't remarked on. It's also
+never silent. Tap it for another; the full set lives on Insights.
 
 ![Insights](docs/screenshots/insights.png)
+
+### 🚀 A launch page that starts you off
+Habits fire from *context*, not good intentions — so lock.in puts itself where
+"I'm about to work" already happens. Set **`#/start`** as your browser's startup
+page and you get a clock, your quick links, a brain-dump box, your year of focus,
+and one button.
+
+Pressing **Lock in** queues what's already due and starts a session — no task
+picker, no duration prompt. Every decision between *"I want to focus"* and a
+running timer is somewhere the intention can leak away.
+
+At the end of a session it asks **"What's first next time?"**, and that's waiting
+for you on the launch page next time. Deciding is cheap while the work is still
+in your head, and expensive tomorrow morning when it's the only thing standing
+between you and starting.
+
+![Launch page](docs/screenshots/start.png)
+
+### ⏱️ A timer that floats over everything
+Hit **Float timer** during a session and the clock moves into a small
+always-on-top window that stays visible while you work in another app.
+
+This isn't decoration. ADHD is partly a broken internal clock — time is "now" or
+"not now" — and the standard answer is to put the clock *outside your head*. A
+timer you have to switch tabs to see isn't doing that. (Chrome, Edge and Firefox;
+Safari doesn't support it yet, so the button simply doesn't appear there.)
 
 ### 🔎 Find it — or dump it — in one keystroke
 Hit <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd> (or just <kbd>/</kbd>) anywhere to search
@@ -81,11 +121,31 @@ place.
 
 ![Search and capture](docs/screenshots/search.png)
 
-### 🚫 Site blocker (desktop app)
-Name the sites that pull you away (YouTube, Reddit, socials…). In the desktop
-app they're blocked **only while a focus session is running**, and work normally
-the rest of the time — the same idea as
+### 🚫 Site blocker (desktop app, macOS-first)
+Name the sites that pull you away (YouTube, Reddit, socials…). In the desktop app
+they're blocked **only while a focus session is running**, and work normally the
+rest of the time — the same idea as
 [SelfControl](https://github.com/SelfControlApp/selfcontrol), built right in.
+
+A hosts file alone is porous, so lock.in blocks at two layers:
+
+- **Hosts file** — every domain and its `www.` form, on IPv4 *and* IPv6, pointed
+  at `0.0.0.0`/`::` so the connection is refused instantly rather than timing out
+  (and never at `127.0.0.1`, where a local dev server would happily answer).
+- **PF firewall** — the resolved addresses are blocked at the packet level, which
+  also catches raw IPs and connections that were already open.
+- **DNS-over-HTTPS resolvers are blocked on port 443**, so browsers fall back to
+  system DNS where the hosts file applies. Port 53 is left alone. *SelfControl
+  itself leaves this open.*
+- The block is **re-asserted every 15 seconds**, so editing `/etc/hosts` back
+  buys you a few seconds rather than the afternoon.
+
+It's layered, never load-bearing: if PF fails the session still starts with hosts
+blocking. It only appends its own anchor to `pf.conf` and releases PF with the
+token `pfctl` handed it, so it can't switch off a firewall something else turned
+on.
+
+**Honest limits:** a VPN reroutes around PF, and your phone isn't affected.
 
 ### 🔔 One gentle reminder a day
 The hardest part of a focus app is remembering it exists. Pick a time and lock.in
@@ -147,11 +207,28 @@ no server, no tracking. That means it's fast and completely private. It also mea
   between them.
 
 Want it on your laptop *and* your desktop? Turn on **cloud sync**: sign in with
-Google or an email & password, and lock.in keeps your tasks in step across
-devices. Signing in is all it takes — there's nothing to configure. It's opt-in,
-free, and row-level security means **only you** can read your own tasks. Running
-your own copy of lock.in? See **[docs/CLOUD_SYNC.md](docs/CLOUD_SYNC.md)** for the
-5-minute Supabase setup. Not signed in? Nothing ever leaves your browser.
+an email & password (Google too, if it's been enabled) and lock.in keeps your
+tasks in step across devices. Signing in is all it takes — there's nothing to
+configure. It's opt-in, free, and row-level security means **only you** can read
+your own tasks. Running your own copy of lock.in? See
+**[docs/CLOUD_SYNC.md](docs/CLOUD_SYNC.md)** for the 5-minute Supabase setup. Not
+signed in? Nothing ever leaves your browser.
+
+Uploads are **revision-checked**: if another device wrote first, the upload is
+refused rather than overwriting it and lock.in asks which copy to keep. Deleting
+things counts as a change, so clearing tasks on one device is never mistaken for
+a fresh install and quietly undone by the old cloud copy.
+
+### Your data survives updates
+
+The app changes often; the data doesn't move. The IndexedDB schema has never left
+version 1, because every field added since is unindexed — so **no migration has
+ever run on your data, and none has ever had the chance to go wrong**.
+
+That's not a promise on trust: `src/data/compat.test.ts` writes records in the
+shape the *first* version of the app produced and asserts the current build can
+read, edit, sweep, observe and back them up without losing a character. If a
+future change would eat existing data, CI fails instead of your laptop.
 
 lock.in is an installable **PWA**: open it in your browser and it works offline;
 click *Install* to run it in its own window like a native app.
@@ -163,6 +240,11 @@ click *Install* to run it in its own window like a native app.
 ### Use it in your browser (nothing to install)
 Just open **<https://niceyraiyani.github.io/lock.in/>**. To keep it handy,
 click the install icon in your address bar to pin it as an app.
+
+**Make it your startup page.** Chrome → Settings → *On startup* → **Open a
+specific page** → `https://niceyraiyani.github.io/lock.in/#/start`. Opening the
+browser then *is* opening lock.in, which is the whole point — it's a separate
+setting from your new tab page, so whatever you use for that stays as it is.
 
 ### Download the desktop app (adds real site blocking)
 Grab the latest installer from the

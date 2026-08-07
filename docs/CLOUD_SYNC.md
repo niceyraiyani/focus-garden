@@ -90,9 +90,30 @@ by design; without your login it can't touch your data.
 10. Paste both values and click **Connect**.
 
 **Only want email + password?** You're done — click **Need an account?**, enter an email and
-password, and you're syncing.
+password, and you're syncing. See *Turn off email confirmation* below first; it saves a
+detour.
 
 > This connects *this device only*. To make it the default for everyone, do Part 6 as well.
+
+---
+
+## Part 3b — Turn off email confirmation (30 sec, recommended)
+
+Out of the box Supabase emails you a confirmation link before a new account works. The link
+returns to your project's **Site URL**, which defaults to `localhost:3000` — so you confirm
+successfully and then land on a dead page. For a personal app it's pure friction.
+
+**Authentication → Sign In / Providers → Email → turn off *Confirm email* → Save.**
+
+Sign-up then works instantly. (If you'd rather keep confirmation on, set
+**Authentication → URL Configuration → Site URL** to
+`https://niceyraiyani.github.io/lock.in/` first, so the link lands somewhere real.)
+
+> Once your own account exists, consider turning **off** *Allow new users to sign up* on the
+> same screen. The app is public and the key ships in the JavaScript, so anyone who finds it
+> could otherwise create an account in your project. Row-level security means they could never
+> see your data — but there's no reason to host strangers. Turning it off doesn't affect you:
+> **signing in on a new device still works**, it just blocks new accounts.
 
 ---
 
@@ -171,11 +192,18 @@ For local development, copy `.env.example` to `.env.local` and fill in the same 
 
 ## Test it
 
-**Settings → Account & cloud sync → Continue with Google.** After signing in you should see your
-email and **"Synced just now"**.
+**Settings → Account & cloud sync.**
 
-To bring in another device: open the same address there, sign in with the same account, and your
-tasks download automatically.
+1. **First device:** click **Need an account?**, enter an email and a password, then
+   **Create account**. You should see your email and **"Synced just now"**.
+2. **Every other device:** open the same address, same screen, enter the same details and
+   click **Sign in**. Your tasks download automatically.
+
+Only providers your project has enabled are offered, so if you don't see **Continue with
+Google**, Google isn't switched on (Part 4) — email and password work regardless.
+
+To move an existing device's data up: sign in there *first*. A device with tasks and an empty
+cloud uploads; a signed-in empty device downloads.
 
 ---
 
